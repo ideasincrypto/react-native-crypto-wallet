@@ -57,7 +57,6 @@ const CreateWalletStep1 = ({
   }
 
   const onCheckboxPress = (checkbox: number) => {
-    console.log(checkbox)
     if (checkbox === 1){
       setCheckbox1(!checkbox1)
     } else if (checkbox === 2){
