@@ -9,12 +9,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 export const DataContext = createContext({
   loading: true,
   wallets: [],
+  seed: [],
   setLoading: (loading: boolean) => {},
   setWallets: (newWallet: object) => {},
+  setSeed: (seed: string[]) => {},
 })
 
 export const DataProvider = ({ children }): JSX.Element => {
   const [loading, setLoading] = useState(true)
+  const [seed, setSeed] = useState([])
   const [wallets, setWallets] = useState([])
 
   const getData = async () => {
@@ -29,7 +32,9 @@ export const DataProvider = ({ children }): JSX.Element => {
   }, [])
 
   return (
-    <DataContext.Provider value={{ loading, setLoading, wallets, setWallets }}>
+    <DataContext.Provider
+      value={{ loading, setLoading, wallets, setWallets, seed, setSeed }}
+    >
       {children}
     </DataContext.Provider>
   )

@@ -1,11 +1,45 @@
-import React, { useContext } from "react"
-import { StyleSheet, Text, View, Button } from "react-native"
+import React, { useContext, useEffect, useState } from "react"
+import { StyleSheet, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Button, Text, Input, Icon } from "native-base"
+import ordinal from "ordinal"
+import { Ionicons } from "@expo/vector-icons"
 
 import { DataContext } from "../../providers/DataProvider"
+import { useColorScheme } from "react-native"
+
+const randomUniqueIntegers = (total, quantity): number[] => {
+  const numbers = Array(total)
+    .fill(null)
+    .map((_, i) => i + 1)
+
+  return numbers
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value)
+    .slice(0, quantity)
+}
 
 const CreateWalletStep3 = (): JSX.Element => {
-  const { wallets, setWallets } = useContext(DataContext)
+  const { wallets, setWallets, seed } = useContext(DataContext)
+  const [input1, setInput1] = useState("")
+  const [input2, setInput2] = useState("")
+  const [input3, setInput3] = useState("")
+
+  const [seedArrayIndexes, setSeedArrayIndexes] = useState<number[]>([])
+  const [seedArrayValues, setSeedArrayValues] = useState<string[]>([])
+
+  const [walletName, setWalletName] = useState("")
+
+  useEffect(() => {
+    // Generate Random Seed Phrase
+    const arrayIndexes = randomUniqueIntegers(12, 3)
+    setSeedArrayIndexes(randomUniqueIntegers(12, 3))
+    const arrayValues = (): string[] => arrayIndexes.map((idx) => seed[idx - 1])
+    setSeedArrayValues(arrayValues())
+    console.log(arrayIndexes)
+    console.log(arrayValues())
+  }, [seed])
 
   const addWallet = (): void => {
     const newWalletObject = {}
@@ -18,13 +52,89 @@ const CreateWalletStep3 = (): JSX.Element => {
     setWallets(newWalletArray)
     AsyncStorage.setItem("wallets", JSON.stringify(newWalletArray))
   }
+  const validInputtedSeed =
+    input1 === seedArrayValues[0] &&
+    input2 === seedArrayValues[1] &&
+    input3 === seedArrayValues[2] &&
+    walletName !== ""
+
+  const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
 
   return (
     <View style={styles.container}>
-      <Text>CreateWalletStep3</Text>
       <View>
-        <Button title="Continue" onPress={() => addWallet()} />
+        <Text color={textColor} fontSize="2xl" bold>
+          Verify your new phrase
+        </Text>
       </View>
+      {seedArrayValues.length !== 0 && (
+        <View style={styles.inputContainerWrapper}>
+          <View style={styles.inputContainerWrapper}>
+            <View style={styles.inputContainer}>
+              <Input
+                autoCapitalize="none"
+                placeholder={`${ordinal(seedArrayIndexes[0])} word`}
+                size="lg"
+                variant="outline"
+                onChangeText={(e) => setInput1(e)}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Input
+                autoCapitalize="none"
+                placeholder={`${ordinal(seedArrayIndexes[1])} word`}
+                size="lg"
+                variant="outline"
+                onChangeText={(e) => setInput2(e)}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Input
+                autoCapitalize="none"
+                placeholder={`${ordinal(seedArrayIndexes[2])} word`}
+                size="lg"
+                variant="outline"
+                onChangeText={(e) => setInput3(e)}
+              />
+            </View>
+          </View>
+          <View style={styles.walletName}>
+            <View style={styles.walletNameView}>
+              <Text color={textColor} fontSize="2xl" bold>
+                Wallet Name
+              </Text>
+            </View>
+            <View style={styles.walletNameInput}>
+              <Input
+                autoCapitalize="none"
+                placeholder="Wallet 1"
+                size="lg"
+                variant="outline"
+                onChangeText={(e) => setWalletName(e)}
+              />
+            </View>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button
+              isDisabled={!validInputtedSeed}
+              leftIcon={
+                <Icon
+                  as={Ionicons}
+                  name={
+                    validInputtedSeed
+                      ? "checkmark-circle-outline"
+                      : "warning-outline"
+                  }
+                  size="sm"
+                />
+              }
+              onPress={() => addWallet()}
+            >
+              Continue
+            </Button>
+          </View>
+        </View>
+      )}
     </View>
   )
 }
@@ -37,30 +147,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 20,
   },
-  inputBox: {
-    width: "85%",
-    margin: 10,
-    padding: 15,
-    fontSize: 16,
-    borderColor: "#d3d3d3",
-    color: "#333",
-    borderBottomWidth: 1,
+  inputContainerWrapper: {
+    width: "100%",
+  },
+  inputContainer: {
+    paddingTop: 40,
+  },
+  buttonContainer: {
+    paddingTop: 40,
+    justifyContent: "center",
     textAlign: "center",
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
+  walletName: {
+    paddingTop: 60,
+    paddingBottom: 20,
+    justifyContent: "center",
+    textAlign: "center",
   },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
+  walletNameInput: {
+    paddingTop: 40,
   },
-  linkText: {
-    fontSize: 14,
-    color: "#2e78b7",
-  },
-  buttonWrap: {
-    marginTop: 10,
+  walletNameView: {
+    alignItems: "center",
+    justifyContent: "center",
   },
 })
 
