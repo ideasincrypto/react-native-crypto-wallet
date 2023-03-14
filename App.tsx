@@ -9,6 +9,7 @@ import { DataProvider } from "./providers/DataProvider"
 import useCachedResources from "./hooks/useCachedResources"
 import useColorScheme from "./hooks/useColorScheme"
 import Navigation from "./navigation"
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 
 const App = (): JSX.Element | null => {
   const isLoadingComplete = useCachedResources()
@@ -23,7 +24,9 @@ const App = (): JSX.Element | null => {
         <NativeBaseProvider
           config={{ dependencies: { "linear-gradient": LinearGradient } }}
         >
-          <Navigation colorScheme={colorScheme} />
+          <BottomSheetModalProvider>
+            <Navigation colorScheme={colorScheme} />
+          </BottomSheetModalProvider>
         </NativeBaseProvider>
       </DataProvider>
       <StatusBar />

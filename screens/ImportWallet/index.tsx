@@ -1,15 +1,21 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { StyleSheet, View, Dimensions } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { Button, TextArea, Input } from "native-base"
+import { Button, TextArea, Input, Icon } from "native-base"
 
 import { DataContext } from "../../providers/DataProvider"
+import { Ionicons } from "@expo/vector-icons"
 
 const ImportWallet = (): JSX.Element => {
   const { wallets, setWallets } = useContext(DataContext)
+  const [walletName, setWalletName] = useState("")
+  const [walletSeed, setWalletSeed] = useState("")
 
   const importWallet = (): void => {
-    const newWalletObject = {}
+    const newWalletObject = {
+      walletName,
+      walletSeed,
+    }
     let newWalletArray = []
     if (wallets.length > 0) {
       newWalletArray = [...wallets, newWalletObject]
@@ -20,10 +26,24 @@ const ImportWallet = (): JSX.Element => {
     AsyncStorage.setItem("wallets", JSON.stringify(newWalletArray))
   }
 
+  const validSeedPhrase = (): boolean => {
+    // run seed phrase validation here,
+    // return true if valid seed phrase
+    return walletSeed !== ""
+  }
+
+  const valid = walletName !== "" && validSeedPhrase()
+
   return (
     <View style={styles.componentContainer}>
       <View style={styles.walletNameContainer}>
-        <Input mx="3" placeholder="Wallet Name" size="2xl" w="100%" />
+        <Input
+          mx="3"
+          placeholder="Wallet Name"
+          size="2xl"
+          w="100%"
+          onChangeText={(e) => setWalletName(e)}
+        />
       </View>
       <View style={styles.walletSeedContainer}>
         <TextArea
@@ -33,10 +53,22 @@ const ImportWallet = (): JSX.Element => {
           maxW="100%"
           placeholder="Wallet Seed Phrase"
           w="100%"
+          onChangeText={(e) => setWalletSeed(e)}
         />
       </View>
       <View style={styles.buttonContainer}>
-        <Button size="lg" onPress={() => importWallet()}>
+        <Button
+          isDisabled={!valid}
+          leftIcon={
+            <Icon
+              as={Ionicons}
+              name={valid ? "checkmark-circle-outline" : "warning-outline"}
+              size="sm"
+            />
+          }
+          size="lg"
+          onPress={() => importWallet()}
+        >
           Import Wallet
         </Button>
       </View>

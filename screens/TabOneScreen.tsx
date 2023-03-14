@@ -24,7 +24,12 @@ const TabOneScreen = (): JSX.Element => {
         style={styles.separator}
       />
       <EditScreenInfo path="/screens/TabOneScreen.tsx" />
-
+      {wallets[0] && (
+        <View style={{ padding: 100 }}>
+          <Text>{`Wallet Name: ${wallets[0].walletName}`}</Text>
+          <Text>{`Wallet Seed: ${wallets[0].walletSeed}`}</Text>
+        </View>
+      )}
       <Button title="Logout" onPress={() => removeWallet()} />
     </View>
   )

@@ -33,16 +33,22 @@ const CreateWalletStep3 = (): JSX.Element => {
 
   useEffect(() => {
     // Generate Random Seed Phrase
+
+    // pick 3 random indexes between 0 and 11 (1-12)
     const arrayIndexes = randomUniqueIntegers(12, 3)
-    setSeedArrayIndexes(randomUniqueIntegers(12, 3))
+    setSeedArrayIndexes(arrayIndexes)
+    // those 3 random indexes will be used as the
+    // nth seed value for the user to input and match
     const arrayValues = (): string[] => arrayIndexes.map((idx) => seed[idx - 1])
     setSeedArrayValues(arrayValues())
-    console.log(arrayIndexes)
-    console.log(arrayValues())
   }, [seed])
 
+  // dirt cash post pause use beyond actual view autumn near panel empower
   const addWallet = (): void => {
-    const newWalletObject = {}
+    const newWalletObject = {
+      walletName,
+      walletSeed: seed.join(" "),
+    }
     let newWalletArray = []
     if (wallets.length > 0) {
       newWalletArray = [...wallets, newWalletObject]
@@ -59,7 +65,9 @@ const CreateWalletStep3 = (): JSX.Element => {
     walletName !== ""
 
   const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
-
+  console.log("seedArrayIndexes", seedArrayIndexes)
+  console.log("seedArrayValues", seedArrayValues)
+  console.log("\n")
   return (
     <View style={styles.container}>
       <View>
@@ -67,7 +75,7 @@ const CreateWalletStep3 = (): JSX.Element => {
           Verify your new phrase
         </Text>
       </View>
-      {seedArrayValues.length !== 0 && (
+      {seedArrayValues.length !== 0 && seedArrayIndexes.length !== 0 && (
         <View style={styles.inputContainerWrapper}>
           <View style={styles.inputContainerWrapper}>
             <View style={styles.inputContainer}>
