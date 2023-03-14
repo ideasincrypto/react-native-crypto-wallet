@@ -162,10 +162,10 @@ const CreateWalletStep1 = ({
                             <Text style={styles.checkboxText}>If I lose my secret phrase, I will not be able to recover this wallet</Text>
                           </Checkbox>
                           <Checkbox value="two" isChecked={checkbox2} onChange={() => onCheckboxPress(2)} _text={{ width: '100%',  }} width={'100%'}>
-                            <Text style={styles.checkboxText}>I am responsible for an issue that happens when using this wallet.</Text>
+                            <Text style={styles.checkboxText}>I am responsible for any issue that happens when using this wallet.</Text>
                           </Checkbox>
                           <Checkbox value="three" isChecked={checkbox3} onChange={() => onCheckboxPress(3)} _text={{ width: '100%', }} width={'100%'}>
-                            <Text style={styles.checkboxText}> I am responsible for an issue that happens when using this wallet.</Text> 
+                            <Text style={styles.checkboxText}>I am ready to create my new wallet.</Text> 
                           </Checkbox>
                         </Box>
                       </View>
