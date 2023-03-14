@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useRef, useEffect } from 'react';
-import { StyleSheet, TextInput, View, Dimensions, Animated } from 'react-native';
+import React, {useState, useRef, useEffect } from 'react';
+import { StyleSheet, View, Dimensions, Animated, useColorScheme } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Button, Box, Text, Checkbox } from "native-base";
 import {
@@ -11,7 +11,7 @@ import {
 import { Easing } from 'react-native-reanimated';
 
 import { RootStackParamList } from '../../types';
-import { background } from 'native-base/lib/typescript/theme/styled-system';
+
 
 
 const CreateWalletStep1 = ({
@@ -77,18 +77,16 @@ const CreateWalletStep1 = ({
   const DARK_COLORS = ["#4c669f", "#3b5998", "#192f6a"];
   const LIGHT_COLORS = ["#0077c2", "#00a1ff", "#00c2ff"];
 
+  const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
+
 
   return (
     <View style={{position: "relative", flex: 1}}>
       <BottomSheetModalProvider>
-        {/* {bottomSheetOpen && (
-          <View style={{height: "100%", width: "100%", opacity: .75, zIndex: 1, position: "absolute", top: 0}}></View>
-        )} */}
         {bottomSheetOpen && <Animated.View style={[styles.backdrop, {opacity: opacity}]}/>}
         <View style={styles.componentContainer}>
           <View style={styles.logoContainer}>
             <Box 
-              // opacity={ bottomSheetOpen ? Number.parseInt(JSON.stringify(opacity)) : 1}
               bg={{
                 linearGradient: {
                   colors: bottomSheetOpen ? DARK_COLORS : LIGHT_COLORS,
@@ -109,9 +107,20 @@ const CreateWalletStep1 = ({
             </Box>
           </View>
           <View style={styles.textAndButtonContainer}>
-            <View style={styles.textContainer}>
-              <Text fontSize="2xl" bold>Back up secret phrase</Text>
-              <Text fontSize="md">Your secret phrase is the key to your wallet. Never share it and do not lose it.</Text>
+            <View style={styles.textContainer} >
+              <Text 
+                color={textColor}
+                fontSize="2xl" 
+                bold
+              >
+                  Back up secret phrase
+              </Text>
+              <Text 
+                color={textColor}
+                fontSize="md"
+              >
+                Your secret phrase is the key to your wallet. Never share it and do not lose it.
+              </Text>
             </View>
             <View style={styles.buttonContainer}>
               <Button 
@@ -135,13 +144,6 @@ const CreateWalletStep1 = ({
                 <Button variant="link" size="lg" onPress={()=> closeBottomSheet()}>Back</Button>
               </View>
             )}
-            // backdropComponent={(props) => (
-            //   <BottomSheetBackdrop
-            //     {...props}
-            //     pressBehavior="none"
-            //     opacity={0.5}
-            //   />
-            // )}
             ref={bottomSheetModalRef}
             snapPoints={['80%']}
             enablePanDownToClose={false}
@@ -156,15 +158,17 @@ const CreateWalletStep1 = ({
                     style={styles.boxCheckbox}
                     >
                       <View style={styles.boxCheckboxView}>
-                        <Checkbox value="one" isChecked={checkbox1} onChange={() => onCheckboxPress(1)}>
-                          If I lose my secret phrase, I will not be able to recover this wallet
-                        </Checkbox>
-                        <Checkbox value="two" isChecked={checkbox2} onChange={() => onCheckboxPress(2)}>
-                          I am responsible for an issue that happens when using this wallet. 
-                        </Checkbox>
-                        <Checkbox value="three" isChecked={checkbox3} onChange={() => onCheckboxPress(3)}>
-                          I am responsible for an issue that happens when using this wallet. 
-                        </Checkbox>
+                        <Box width="100%" style={{gap: 40}}>
+                          <Checkbox value="one" isChecked={checkbox1} onChange={() => onCheckboxPress(1)} _text={{ width: '100%', }} width={'100%'}>
+                            <Text style={styles.checkboxText}>If I lose my secret phrase, I will not be able to recover this wallet</Text>
+                          </Checkbox>
+                          <Checkbox value="two" isChecked={checkbox2} onChange={() => onCheckboxPress(2)} _text={{ width: '100%',  }} width={'100%'}>
+                            <Text style={styles.checkboxText}>I am responsible for an issue that happens when using this wallet.</Text>
+                          </Checkbox>
+                          <Checkbox value="three" isChecked={checkbox3} onChange={() => onCheckboxPress(3)} _text={{ width: '100%', }} width={'100%'}>
+                            <Text style={styles.checkboxText}> I am responsible for an issue that happens when using this wallet.</Text> 
+                          </Checkbox>
+                        </Box>
                       </View>
                   </Box>
                 </View>
@@ -219,10 +223,17 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   boxCheckboxView: {
-    padding: 20,
     justifyContent: "flex-start",
     alignItems: "flex-start",
-    gap: 30
+    gap: 30,
+    padding: 20,
+  },
+  checkboxText: {
+    flexWrap: "wrap",
+    paddingLeft: 20,
+    paddingRight: 20,
+    flexGrow: 1, 
+    flexShrink: 1, 
   },
   contentContainer: {
     flex: 1,
@@ -249,7 +260,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: '#000',
-  }
+  },
 });
 
 export default CreateWalletStep1;
