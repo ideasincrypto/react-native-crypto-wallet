@@ -1,0 +1,6 @@
+/.github/
+/build/
+/node_modules/
+/assets/
+/.expo/
+/.expo-shared/

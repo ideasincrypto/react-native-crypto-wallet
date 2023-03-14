@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import React from "react"
+import { StyleSheet, View, ActivityIndicator } from "react-native"
 
-import { RootStackParamList } from '../../types';
-
-const Loading = ({
-  navigation,
-}: StackScreenProps<RootStackParamList, 'Loading'>) => {
+const Loading = (): JSX.Element => {
   return (
     <View style={styles.container}>
       <ActivityIndicator size="large" />
     </View>
-  );
+  )
 }
 
 export default Loading
@@ -19,14 +14,14 @@ export default Loading
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   link: {
     marginTop: 15,
@@ -34,6 +29,6 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 14,
-    color: '#2e78b7',
+    color: "#2e78b7",
   },
-});
+})

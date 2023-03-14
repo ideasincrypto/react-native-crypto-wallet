@@ -1,24 +1,17 @@
-import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, TextInput, View, Dimensions } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button, TextArea, Input } from "native-base";
+import React, { useContext } from "react"
+import { StyleSheet, View, Dimensions } from "react-native"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Button, TextArea, Input } from "native-base"
 
+import { DataContext } from "../../providers/DataProvider"
 
-import { RootStackParamList } from '../../types';
-import { DataContext } from '../../providers/DataProvider';
+const ImportWallet = (): JSX.Element => {
+  const { wallets, setWallets } = useContext(DataContext)
 
-
-const ImportWallet = ({
-  navigation,
-}: StackScreenProps<RootStackParamList, 'ImportWallet'>) => {
-
-  const {wallets, setWallets} = useContext(DataContext)
-
-  const importWallet = () => {
+  const importWallet = (): void => {
     const newWalletObject = {}
     let newWalletArray = []
-    if (wallets.length > 0){
+    if (wallets.length > 0) {
       newWalletArray = [...wallets, newWalletObject]
     } else {
       newWalletArray.push(newWalletObject)
@@ -30,30 +23,32 @@ const ImportWallet = ({
   return (
     <View style={styles.componentContainer}>
       <View style={styles.walletNameContainer}>
-        <Input size="2xl" mx="3" placeholder="Wallet Name" w="100%"/>
+        <Input mx="3" placeholder="Wallet Name" size="2xl" w="100%" />
       </View>
       <View style={styles.walletSeedContainer}>
-        <TextArea 
-          h={(Dimensions.get('window').height / 3)} 
-          placeholder="Wallet Seed Phrase" 
-          w="100%" 
-          maxW="100%"
+        <TextArea
           autoCompleteType={false}
-          fontSize='lg'
+          fontSize="lg"
+          h={Dimensions.get("window").height / 3}
+          maxW="100%"
+          placeholder="Wallet Seed Phrase"
+          w="100%"
         />
       </View>
       <View style={styles.buttonContainer}>
-        <Button size="lg" onPress={()=> importWallet()}>Import Wallet</Button>
+        <Button size="lg" onPress={() => importWallet()}>
+          Import Wallet
+        </Button>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   componentContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
   },
   walletNameContainer: {
@@ -64,8 +59,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: "100%",
-    paddingTop: 40
-  }
-});
+    paddingTop: 40,
+  },
+})
 
-export default ImportWallet;
+export default ImportWallet

@@ -1,23 +1,25 @@
-import React, {useState, useRef, useEffect } from 'react';
-import { StyleSheet, View, Dimensions, Animated, useColorScheme } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
-import { Button, Box, Text, Checkbox } from "native-base";
+import React, { useState, useRef, useEffect } from "react"
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  Animated,
+  useColorScheme,
+} from "react-native"
+import { StackScreenProps } from "@react-navigation/stack"
+import { Button, Box, Text, Checkbox } from "native-base"
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
-  BottomSheetBackdrop,
-  useBottomSheetTimingConfigs
-} from '@gorhom/bottom-sheet';
-import { Easing } from 'react-native-reanimated';
+  useBottomSheetTimingConfigs,
+} from "@gorhom/bottom-sheet"
 
-import { RootStackParamList } from '../../types';
-
-
+import { RootStackParamList } from "../../types"
 
 const CreateWalletStep1 = ({
   navigation,
-}: StackScreenProps<RootStackParamList, 'CreateWalletStep1'>) => {
-
+}: StackScreenProps<RootStackParamList, "CreateWalletStep1">): JSX.Element => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [opacity, setOpacity] = useState(new Animated.Value(0))
 
   const [checkbox1, setCheckbox1] = useState(false)
@@ -26,40 +28,39 @@ const CreateWalletStep1 = ({
 
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false)
 
-
   // ref
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
   // const handleSheetChanges = () => {
   //   setBottomSheetOpen(!bottomSheetOpen)
   // };
 
-  const openBottomSheet = () => {
+  const openBottomSheet = (): void => {
     setBottomSheetOpen(true)
-      bottomSheetModalRef.current?.present()
+    bottomSheetModalRef.current?.present()
     Animated.timing(opacity, {
       toValue: 0.7,
       duration: 300,
       useNativeDriver: true,
-    }).start();
+    }).start()
   }
 
-  const closeBottomSheet = () => {
+  const closeBottomSheet = (): void => {
     Animated.timing(opacity, {
       toValue: 0,
       duration: 350,
       useNativeDriver: true,
-    }).start();
+    }).start()
     setTimeout(() => {
       setBottomSheetOpen(false)
       bottomSheetModalRef.current?.dismiss()
-    }, 50);
+    }, 50)
   }
 
-  const onCheckboxPress = (checkbox: number) => {
-    if (checkbox === 1){
+  const onCheckboxPress = (checkbox: number): void => {
+    if (checkbox === 1) {
       setCheckbox1(!checkbox1)
-    } else if (checkbox === 2){
+    } else if (checkbox === 2) {
       setCheckbox2(!checkbox2)
     } else {
       setCheckbox3(!checkbox3)
@@ -72,134 +73,159 @@ const CreateWalletStep1 = ({
     setCheckbox3(false)
   }, [bottomSheetOpen])
 
-
-  const DARK_COLORS = ["#4c669f", "#3b5998", "#192f6a"];
-  const LIGHT_COLORS = ["#0077c2", "#00a1ff", "#00c2ff"];
+  const DARK_COLORS = ["#4c669f", "#3b5998", "#192f6a"]
+  const LIGHT_COLORS = ["#0077c2", "#00a1ff", "#00c2ff"]
 
   const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
 
-
   return (
-    <View style={{position: "relative", flex: 1}}>
+    <View style={{ position: "relative", flex: 1 }}>
       <BottomSheetModalProvider>
-        {bottomSheetOpen && <Animated.View style={[styles.backdrop, {opacity: opacity}]}/>}
+        {bottomSheetOpen && (
+          <Animated.View style={[styles.backdrop, { opacity }]} />
+        )}
         <View style={styles.componentContainer}>
           <View style={styles.logoContainer}>
-            <Box 
+            <Box
+              _text={{
+                fontSize: "md",
+                fontWeight: "medium",
+                color: "warmGray.50",
+              }}
               bg={{
                 linearGradient: {
                   colors: bottomSheetOpen ? DARK_COLORS : LIGHT_COLORS,
                   start: [0, 0],
-                  end: [1, 0]
-                }
-              }} 
-              p="12" 
+                  end: [1, 0],
+                },
+              }}
+              p="12"
               rounded="xl"
-              _text={{
-                fontSize: 'md',
-                fontWeight: 'medium',
-                color: 'warmGray.50',
-              }} 
               style={[styles.boxLogo]}
-              >
-            Vault Logo
+            >
+              Vault Logo
             </Box>
           </View>
           <View style={styles.textAndButtonContainer}>
-            <View style={styles.textContainer} >
-              <Text 
-                color={textColor}
-                fontSize="2xl" 
-                bold
-              >
-                  Back up secret phrase
+            <View style={styles.textContainer}>
+              <Text color={textColor} fontSize="2xl" bold>
+                Back up secret phrase
               </Text>
-              <Text 
-                color={textColor}
-                fontSize="md"
-              >
-                Your secret phrase is the key to your wallet. Never share it and do not lose it.
+              <Text color={textColor} fontSize="md">
+                Your secret phrase is the key to your wallet. Never share it and
+                do not lose it.
               </Text>
             </View>
             <View style={styles.buttonContainer}>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                onPress={()=> openBottomSheet()}
+              <Button
+                size="lg"
+                variant="outline"
+                onPress={() => openBottomSheet()}
               >
                 Create Wallet
               </Button>
             </View>
           </View>
           <BottomSheetModal
-            animationConfigs={
-              useBottomSheetTimingConfigs({
-                duration: 100,
-              })
-            }
-            style={{ zIndex: 5}}
+            animationConfigs={useBottomSheetTimingConfigs({
+              duration: 100,
+            })}
+            enableHandlePanningGesture={false}
+            enablePanDownToClose={false}
             handleComponent={() => (
               <View style={styles.headerContainer}>
-                <Button variant="link" size="lg" onPress={()=> closeBottomSheet()}>Back</Button>
+                <Button
+                  size="lg"
+                  variant="link"
+                  onPress={() => closeBottomSheet()}
+                >
+                  Back
+                </Button>
               </View>
             )}
             ref={bottomSheetModalRef}
-            snapPoints={['80%']}
-            enablePanDownToClose={false}
-            enableHandlePanningGesture={false}
+            snapPoints={["80%"]}
+            style={{ zIndex: 5 }}
           >
             <View style={styles.contentContainer}>
               <View>
                 <View>
-                  <Box 
-                    bg="gray.100"
-                    rounded="xl"
-                    style={styles.boxCheckbox}
-                    >
-                      <View style={styles.boxCheckboxView}>
-                        <Box width="100%" style={{gap: 40}}>
-                          <Checkbox value="one" isChecked={checkbox1} onChange={() => onCheckboxPress(1)} _text={{ width: '100%', }} width={'100%'}>
-                            <Text style={styles.checkboxText}>If I lose my secret phrase, I will not be able to recover this wallet</Text>
-                          </Checkbox>
-                          <Checkbox value="two" isChecked={checkbox2} onChange={() => onCheckboxPress(2)} _text={{ width: '100%',  }} width={'100%'}>
-                            <Text style={styles.checkboxText}>I am responsible for any issue that happens when using this wallet.</Text>
-                          </Checkbox>
-                          <Checkbox value="three" isChecked={checkbox3} onChange={() => onCheckboxPress(3)} _text={{ width: '100%', }} width={'100%'}>
-                            <Text style={styles.checkboxText}>I am ready to create my new wallet.</Text> 
-                          </Checkbox>
-                        </Box>
-                      </View>
+                  <Box bg="gray.100" rounded="xl" style={styles.boxCheckbox}>
+                    <View style={styles.boxCheckboxView}>
+                      <Box style={{ gap: 40 }} width="100%">
+                        <Checkbox
+                          _text={{ width: "100%" }}
+                          isChecked={checkbox1}
+                          value="one"
+                          width={"100%"}
+                          onChange={() => onCheckboxPress(1)}
+                        >
+                          <Text style={styles.checkboxText}>
+                            If I lose my secret phrase, I will not be able to
+                            recover this wallet
+                          </Text>
+                        </Checkbox>
+                        <Checkbox
+                          _text={{ width: "100%" }}
+                          isChecked={checkbox2}
+                          value="two"
+                          width={"100%"}
+                          onChange={() => onCheckboxPress(2)}
+                        >
+                          <Text style={styles.checkboxText}>
+                            I am responsible for any issue that happens when
+                            using this wallet.
+                          </Text>
+                        </Checkbox>
+                        <Checkbox
+                          _text={{ width: "100%" }}
+                          isChecked={checkbox3}
+                          value="three"
+                          width={"100%"}
+                          onChange={() => onCheckboxPress(3)}
+                        >
+                          <Text style={styles.checkboxText}>
+                            I am ready to create my new wallet.
+                          </Text>
+                        </Checkbox>
+                      </Box>
+                    </View>
                   </Box>
                 </View>
               </View>
               <View style={styles.continueButton}>
-                <Button isDisabled={!(checkbox1 && checkbox2 && checkbox3)} onPress={()=> navigation.navigate("CreateWalletStep2")}>Continue</Button>
+                <Button
+                  isDisabled={!(checkbox1 && checkbox2 && checkbox3)}
+                  onPress={() => navigation.navigate("CreateWalletStep2")}
+                >
+                  Continue
+                </Button>
               </View>
             </View>
           </BottomSheetModal>
         </View>
       </BottomSheetModalProvider>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   componentContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     height: "100%",
     padding: 20,
-    zIndex: 0
+    zIndex: 0,
   },
   logoContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     width: "100%",
     paddingTop: 40,
     paddingBottom: 40,
-    backgroundColor : 'transparent',
+    backgroundColor: "transparent",
   },
   textAndButtonContainer: {
     flex: 1,
@@ -214,9 +240,9 @@ const styles = StyleSheet.create({
   boxLogo: {
     flex: 1,
     width: "100%",
-    height: (Dimensions.get('window').height / 3),
-    justifyContent: 'center',
-    alignItems: 'center'
+    height: Dimensions.get("window").height / 3,
+    justifyContent: "center",
+    alignItems: "center",
   },
   boxCheckbox: {
     width: "100%",
@@ -231,18 +257,18 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     paddingLeft: 20,
     paddingRight: 20,
-    flexGrow: 1, 
-    flexShrink: 1, 
+    flexGrow: 1,
+    flexShrink: 1,
   },
   contentContainer: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: "lightgrey",
-    padding: 40
+    padding: 40,
   },
-  headerContainer:{
+  headerContainer: {
     backgroundColor: "lightgrey",
-    flex:1,
+    flex: 1,
     alignItems: "flex-start",
     paddingLeft: 20,
     borderTopLeftRadius: 10,
@@ -250,16 +276,16 @@ const styles = StyleSheet.create({
   },
   continueButton: {
     width: "100%",
-    paddingTop: 40
+    paddingTop: 40,
   },
   backdrop: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: '#000',
+    backgroundColor: "#000",
   },
-});
+})
 
-export default CreateWalletStep1;
+export default CreateWalletStep1
