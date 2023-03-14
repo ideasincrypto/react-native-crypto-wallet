@@ -42,18 +42,18 @@ const Stack = createStackNavigator<RootStackParamList>()
 
 const RootNavigator = (): JSX.Element => {
   const { loading, wallets } = useContext(DataContext)
-  if (!loading) {
-    return (
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen component={Loading} name="Loading" />
-      </Stack.Navigator>
-    )
-  }
   return (
     <Stack.Navigator>
+      {(wallets.length === 0 || !loading) && (
+        <Stack.Screen component={Loading} name="Loading" />
+      )}
       {wallets.length > 0 ? (
         <>
-          <Stack.Screen component={BottomTabNavigator} name="Root" />
+          <Stack.Screen
+            component={BottomTabNavigator}
+            name="Root"
+            options={{ title: "Kaspa Wallet" }}
+          />
           <Stack.Screen
             component={NotFoundScreen}
             name="NotFound"

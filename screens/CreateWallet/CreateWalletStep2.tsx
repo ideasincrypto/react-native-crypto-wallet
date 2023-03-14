@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react"
-import { StyleSheet, View, Dimensions } from "react-native"
+import { StyleSheet, View, Dimensions, useColorScheme } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { Button, Text, Alert, VStack, HStack } from "native-base"
 
@@ -11,6 +11,8 @@ const CreateWalletStep2 = ({
   navigation,
 }: StackScreenProps<RootStackParamList, "CreateWalletStep2">): JSX.Element => {
   const { seed, setSeed } = useContext(DataContext)
+
+  const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
 
   useEffect(() => {
     const seedArray = generateNewSeed()
@@ -36,7 +38,10 @@ const CreateWalletStep2 = ({
             >
               <HStack alignItems="center" flexShrink={1} space={2}>
                 <Alert.Icon />
-                <Text style={{ paddingLeft: 20, flex: 1, flexWrap: "wrap" }}>
+                <Text
+                  color={textColor}
+                  style={{ paddingLeft: 20, flex: 1, flexWrap: "wrap" }}
+                >
                   Never share your secret seed phrase. Write this seed phrase
                   down and put it in a safe and secure place.
                 </Text>
@@ -66,7 +71,7 @@ const CreateWalletStep2 = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    // backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     padding: 20,

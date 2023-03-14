@@ -1,12 +1,11 @@
 import React, { useContext } from "react"
 import { StyleSheet, Button } from "react-native"
+import { DataContext } from "../../providers/DataProvider"
+import EditScreenInfo from "../../components/EditScreenInfo"
+import { Text, View } from "../../components/Themed"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-import EditScreenInfo from "../components/EditScreenInfo"
-import { Text, View } from "../components/Themed"
-import { DataContext } from "../providers/DataProvider"
-
-const TabOneScreen = (): JSX.Element => {
+const TransactionsTab = (): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { wallets, setWallets } = useContext(DataContext)
 
@@ -14,28 +13,21 @@ const TabOneScreen = (): JSX.Element => {
     setWallets([])
     AsyncStorage.setItem("wallets", JSON.stringify([]))
   }
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
+      <Text style={styles.title}>Tab Two</Text>
       <View
         darkColor="rgba(255,255,255,0.1)"
         lightColor="#eee"
         style={styles.separator}
       />
-      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
-      {wallets[0] && (
-        <View style={{ padding: 100 }}>
-          <Text>{`Wallet Name: ${wallets[0].walletName}`}</Text>
-          <Text>{`Wallet Seed: ${wallets[0].walletSeed}`}</Text>
-        </View>
-      )}
+      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
       <Button title="Logout" onPress={() => removeWallet()} />
     </View>
   )
 }
 
-export default TabOneScreen
+export default TransactionsTab
 
 const styles = StyleSheet.create({
   container: {

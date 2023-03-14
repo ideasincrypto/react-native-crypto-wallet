@@ -5,8 +5,8 @@ import * as React from "react"
 
 import Colors from "../constants/Colors"
 import useColorScheme from "../hooks/useColorScheme"
-import TabOneScreen from "../screens/TabOneScreen"
-import TabTwoScreen from "../screens/TabTwoScreen"
+import WalletsTab from "../screens/WalletsTab"
+import TransactionsTab from "../screens/TransactionsTab"
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from "../types"
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
@@ -16,7 +16,7 @@ const BottomTabNavigator = (): JSX.Element => {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="WalletTab"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
         headerShown: false,
@@ -24,8 +24,9 @@ const BottomTabNavigator = (): JSX.Element => {
     >
       <BottomTab.Screen
         component={TabOneNavigator}
-        name="TabOne"
+        name="WalletTab"
         options={{
+          title: "",
           tabBarIcon: ({ color }) => (
             <TabBarIcon color={color} name="ios-wallet" />
           ),
@@ -36,6 +37,7 @@ const BottomTabNavigator = (): JSX.Element => {
         component={TabTwoNavigator}
         name="TabTwo"
         options={{
+          title: "",
           tabBarIcon: ({ color }) => (
             <TabBarIcon color={color} name="ios-list" />
           ),
@@ -58,9 +60,9 @@ const TabOneNavigator = (): JSX.Element => {
   return (
     <TabOneStack.Navigator screenOptions={{ headerShown: false }}>
       <TabOneStack.Screen
-        component={TabOneScreen}
-        name="TabOneScreen"
-        options={{ headerTitle: "Tab One Title" }}
+        component={WalletsTab}
+        name="WalletsTab"
+        options={{ title: "" }}
       />
     </TabOneStack.Navigator>
   )
@@ -72,9 +74,9 @@ const TabTwoNavigator = (): JSX.Element => {
   return (
     <TabTwoStack.Navigator screenOptions={{ headerShown: false }}>
       <TabTwoStack.Screen
-        component={TabTwoScreen}
-        name="TabTwoScreen"
-        options={{ headerTitle: "Tab Two Title" }}
+        component={TransactionsTab}
+        name="TransactionsTab"
+        options={{ title: "" }}
       />
     </TabTwoStack.Navigator>
   )

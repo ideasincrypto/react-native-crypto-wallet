@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from "react"
 import { StyleSheet, View, Dimensions, useColorScheme } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
-import { Button, Box, Text, Checkbox } from "native-base"
+import { Button, Box, Text } from "native-base"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
+import * as Haptics from "expo-haptics"
 
 import { RootStackParamList } from "../../types"
 import BottomSheet from "../../components/BottomSheet"
+import UserResponsibility from "../../components/UserResponsibility"
 
 const CreateWalletStep1 = ({
   navigation,
@@ -39,6 +41,7 @@ const CreateWalletStep1 = ({
     } else {
       setCheckbox3(!checkbox3)
     }
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
   }
 
   useEffect(() => {
@@ -99,7 +102,6 @@ const CreateWalletStep1 = ({
         </View>
         <BottomSheet
           bottomSheetModalRef={bottomSheetModalRef}
-          bottomSheetOpen={bottomSheetOpen}
           handleComponent={() => (
             <View style={styles.headerContainer}>
               <Button
@@ -113,51 +115,12 @@ const CreateWalletStep1 = ({
           )}
         >
           <View style={styles.contentContainer}>
-            <View>
-              <View>
-                <Box bg="gray.100" rounded="xl" style={styles.boxCheckbox}>
-                  <View style={styles.boxCheckboxView}>
-                    <Box style={{ gap: 40 }} width="100%">
-                      <Checkbox
-                        _text={{ width: "100%" }}
-                        isChecked={checkbox1}
-                        value="one"
-                        width={"100%"}
-                        onChange={() => onCheckboxPress(1)}
-                      >
-                        <Text style={styles.checkboxText}>
-                          If I lose my secret phrase, I will not be able to
-                          recover this wallet
-                        </Text>
-                      </Checkbox>
-                      <Checkbox
-                        _text={{ width: "100%" }}
-                        isChecked={checkbox2}
-                        value="two"
-                        width={"100%"}
-                        onChange={() => onCheckboxPress(2)}
-                      >
-                        <Text style={styles.checkboxText}>
-                          I am responsible for any issue that happens when using
-                          this wallet.
-                        </Text>
-                      </Checkbox>
-                      <Checkbox
-                        _text={{ width: "100%" }}
-                        isChecked={checkbox3}
-                        value="three"
-                        width={"100%"}
-                        onChange={() => onCheckboxPress(3)}
-                      >
-                        <Text style={styles.checkboxText}>
-                          I am ready to create my new wallet.
-                        </Text>
-                      </Checkbox>
-                    </Box>
-                  </View>
-                </Box>
-              </View>
-            </View>
+            <UserResponsibility
+              checkbox1={checkbox1}
+              checkbox2={checkbox2}
+              checkbox3={checkbox3}
+              onCheckboxPress={onCheckboxPress}
+            />
             <View style={styles.continueButton}>
               <Button
                 isDisabled={!(checkbox1 && checkbox2 && checkbox3)}

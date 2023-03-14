@@ -1,13 +1,16 @@
 import { Ionicons } from "@expo/vector-icons"
 import * as Font from "expo-font"
 import * as SplashScreen from "expo-splash-screen"
-import * as React from "react"
+import React, { useEffect, useContext } from "react"
+import { DataContext } from "../providers/DataProvider"
 
-const useCachedResources = (): boolean => {
-  const [isLoadingComplete, setLoadingComplete] = React.useState(false)
+const useCachedResources = (): void => {
+  // const [isLoadingComplete, setLoadingComplete] = React.useState(false)
+  const { setLoading } = useContext(DataContext)
+  setLoading(true)
 
   // Load any resources or data that we need prior to rendering the app
-  React.useEffect(() => {
+  useEffect(() => {
     const loadResourcesAndDataAsync = async (): Promise<void> => {
       try {
         SplashScreen.preventAutoHideAsync()
@@ -21,15 +24,17 @@ const useCachedResources = (): boolean => {
         // add code here for error reporting service
         console.warn(e)
       } finally {
-        setLoadingComplete(true)
         SplashScreen.hideAsync()
+        setLoading(false)
       }
     }
 
     loadResourcesAndDataAsync()
-  }, [])
-
-  return isLoadingComplete
+    // setTimeout(() => {
+    //   console.log("here")
+    //   setLoading(false)
+    // }, 1000)
+  }, [setLoading])
 }
 
 export default useCachedResources

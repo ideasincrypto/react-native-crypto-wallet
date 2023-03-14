@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react"
-import { StyleSheet, View, Dimensions } from "react-native"
+import { StyleSheet, View, Dimensions, useColorScheme } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Button, TextArea, Input, Icon } from "native-base"
 
@@ -34,12 +34,16 @@ const ImportWallet = (): JSX.Element => {
 
   const valid = walletName !== "" && validSeedPhrase()
 
+  const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
+
   return (
     <View style={styles.componentContainer}>
       <View style={styles.walletNameContainer}>
         <Input
+          color={textColor}
           mx="3"
           placeholder="Wallet Name"
+          returnKeyType="done"
           size="2xl"
           w="100%"
           onChangeText={(e) => setWalletName(e)}
@@ -48,10 +52,13 @@ const ImportWallet = (): JSX.Element => {
       <View style={styles.walletSeedContainer}>
         <TextArea
           autoCompleteType={false}
+          blurOnSubmit={true}
+          color={textColor}
           fontSize="lg"
           h={Dimensions.get("window").height / 3}
           maxW="100%"
           placeholder="Wallet Seed Phrase"
+          returnKeyType="done"
           w="100%"
           onChangeText={(e) => setWalletSeed(e)}
         />

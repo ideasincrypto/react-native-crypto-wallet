@@ -1,29 +1,37 @@
-import React, { useState } from "react"
+import React, { useState, useCallback } from "react"
 import { StyleSheet, View, Animated } from "react-native"
 
 import {
   BottomSheetModal,
   useBottomSheetTimingConfigs,
+  BottomSheetBackdrop,
 } from "@gorhom/bottom-sheet"
 
 const BottomSheet = ({
   children,
   handleComponent,
   bottomSheetModalRef,
-  bottomSheetOpen,
 }): JSX.Element => {
-  const [opacity] = useState(new Animated.Value(0))
   return (
     <View style={{ position: "relative", flex: 1 }}>
       <View style={styles.componentContainer}>
         <View>
-          {bottomSheetOpen && (
-            <Animated.View style={[styles.backdrop, { opacity }]} />
-          )}
           <BottomSheetModal
             animationConfigs={useBottomSheetTimingConfigs({
               duration: 100,
             })}
+            backdropComponent={useCallback(
+              (props) => (
+                <BottomSheetBackdrop
+                  {...props}
+                  animatedIndex={{
+                    value: 1,
+                  }}
+                  appearsOnIndex={1}
+                />
+              ),
+              []
+            )}
             enableHandlePanningGesture={false}
             enablePanDownToClose={false}
             handleComponent={handleComponent}

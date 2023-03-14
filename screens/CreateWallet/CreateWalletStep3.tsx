@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { StyleSheet, View } from "react-native"
+import { StyleSheet, View, KeyboardAvoidingView } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Button, Text, Input, Icon } from "native-base"
 import ordinal from "ordinal"
@@ -69,7 +69,7 @@ const CreateWalletStep3 = (): JSX.Element => {
   console.log("seedArrayValues", seedArrayValues)
   console.log("\n")
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <View>
         <Text color={textColor} fontSize="2xl" bold>
           Verify your new phrase
@@ -81,7 +81,9 @@ const CreateWalletStep3 = (): JSX.Element => {
             <View style={styles.inputContainer}>
               <Input
                 autoCapitalize="none"
+                color={textColor}
                 placeholder={`${ordinal(seedArrayIndexes[0])} word`}
+                returnKeyType="done"
                 size="lg"
                 variant="outline"
                 onChangeText={(e) => setInput1(e)}
@@ -90,7 +92,9 @@ const CreateWalletStep3 = (): JSX.Element => {
             <View style={styles.inputContainer}>
               <Input
                 autoCapitalize="none"
+                color={textColor}
                 placeholder={`${ordinal(seedArrayIndexes[1])} word`}
+                returnKeyType="done"
                 size="lg"
                 variant="outline"
                 onChangeText={(e) => setInput2(e)}
@@ -99,7 +103,9 @@ const CreateWalletStep3 = (): JSX.Element => {
             <View style={styles.inputContainer}>
               <Input
                 autoCapitalize="none"
+                color={textColor}
                 placeholder={`${ordinal(seedArrayIndexes[2])} word`}
+                returnKeyType="done"
                 size="lg"
                 variant="outline"
                 onChangeText={(e) => setInput3(e)}
@@ -115,7 +121,9 @@ const CreateWalletStep3 = (): JSX.Element => {
             <View style={styles.walletNameInput}>
               <Input
                 autoCapitalize="none"
+                color={textColor}
                 placeholder="Wallet 1"
+                returnKeyType="done"
                 size="lg"
                 variant="outline"
                 onChangeText={(e) => setWalletName(e)}
@@ -143,14 +151,14 @@ const CreateWalletStep3 = (): JSX.Element => {
           </View>
         </View>
       )}
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    // backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
