@@ -44,9 +44,9 @@ const RootNavigator = (): JSX.Element => {
   const { loading, wallets } = useContext(DataContext)
   return (
     <Stack.Navigator>
-      {(wallets.length === 0 || !loading) && (
+      {/* {loading && (
         <Stack.Screen component={Loading} name="Loading" />
-      )}
+      )} */}
       {wallets.length > 0 ? (
         <>
           <Stack.Screen
