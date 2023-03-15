@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from "react"
-import { StyleSheet, View, Animated } from "react-native"
+import React, { useCallback } from "react"
+import { StyleSheet, View } from "react-native"
 
 import {
   BottomSheetModal,

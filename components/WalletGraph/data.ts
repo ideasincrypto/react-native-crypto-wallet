@@ -1,5 +1,6 @@
 import gaussian from "gaussian"
 import { useColorScheme } from "react-native"
+import { GraphPoint } from "./types"
 
 function weightedRandom(mean: number, variance: number): number {
   const distribution = gaussian(mean, variance)
@@ -7,7 +8,7 @@ function weightedRandom(mean: number, variance: number): number {
   return distribution.ppf(Math.random())
 }
 
-export function generateRandomGraphData(length: number): any {
+export function generateRandomGraphData(length: number): GraphPoint[] {
   return Array<number>(length)
     .fill(0)
     .map((_, index) => ({
@@ -15,15 +16,6 @@ export function generateRandomGraphData(length: number): any {
         new Date(2000, 0, 1).getTime() + 1000 * 60 * 60 * 24 * index
       ),
       value: weightedRandom(10, Math.pow(index + 1, 2)),
-    }))
-}
-
-export function generateSinusGraphData(length: number): any {
-  return Array<number>(length)
-    .fill(0)
-    .map((_, index) => ({
-      date: new Date(index),
-      value: Math.sin(index),
     }))
 }
 

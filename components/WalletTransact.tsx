@@ -1,18 +1,17 @@
 import React from "react"
 import { StyleSheet, View, useColorScheme } from "react-native"
-import { IconButton } from "native-base"
 import { Ionicons } from "@expo/vector-icons"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
 const WalletTransact = ({ openBottomSheetTransact }): JSX.Element => {
-  const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
+  const color = useColorScheme() === "dark" ? "#fff" : "#000"
   return (
     <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.iconContainer}>
           <TouchableOpacity onPress={() => openBottomSheetTransact("send")}>
             <Ionicons
-              color="#fff"
+              color={color}
               name="arrow-up-circle"
               size={80}
               style={{ marginBottom: -3 }}
@@ -22,7 +21,7 @@ const WalletTransact = ({ openBottomSheetTransact }): JSX.Element => {
         <View style={styles.iconContainer}>
           <TouchableOpacity onPress={() => openBottomSheetTransact("receive")}>
             <Ionicons
-              color="#fff"
+              color={color}
               name="arrow-down-circle"
               size={80}
               style={{ marginBottom: -3 }}

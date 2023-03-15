@@ -6,7 +6,6 @@ import WalletTransact from "../../components/WalletTransact"
 import { WalletGraph } from "../../components/WalletGraph"
 
 const WalletsTab = (): JSX.Element => {
-
   const openBottomSheetTransact = (): boolean => {
     return true
   }

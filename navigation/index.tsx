@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { ColorSchemeName } from "react-native"
 import {
   NavigationContainer,
@@ -20,6 +20,10 @@ import {
   CreateWalletStep2,
 } from "../screens/CreateWallet"
 
+import { Ionicons } from "@expo/vector-icons"
+import * as Font from "expo-font"
+import * as SplashScreen from "expo-splash-screen"
+
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
 const Navigation = ({
@@ -27,6 +31,31 @@ const Navigation = ({
 }: {
   colorScheme: ColorSchemeName
 }): JSX.Element => {
+  const { setLoading } = useContext(DataContext)
+
+  useEffect(() => {
+    const loadResourcesAndDataAsync = async (): Promise<void> => {
+      try {
+        SplashScreen.preventAutoHideAsync()
+
+        // Load fonts
+        await Font.loadAsync({
+          ...Ionicons.font,
+          "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
+        })
+      } catch (e) {
+        // add code here for error reporting service
+        console.warn(e)
+      } finally {
+        console.log("finished useEffect")
+        SplashScreen.hideAsync()
+        setLoading(false)
+      }
+    }
+
+    loadResourcesAndDataAsync()
+  }, [setLoading])
+
   return (
     <NavigationContainer
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
@@ -42,11 +71,15 @@ const Stack = createStackNavigator<RootStackParamList>()
 
 const RootNavigator = (): JSX.Element => {
   const { loading, wallets } = useContext(DataContext)
+  if (loading) {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen component={Loading} name="Loading" />
+      </Stack.Navigator>
+    )
+  }
   return (
     <Stack.Navigator>
-      {/* {loading && (
-        <Stack.Screen component={Loading} name="Loading" />
-      )} */}
       {wallets.length > 0 ? (
         <>
           <Stack.Screen

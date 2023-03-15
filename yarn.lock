@@ -1778,6 +1778,16 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
+"@rainbow-me/animated-charts@^1.0.0-alpha.6":
+  version "1.0.0-alpha.6"
+  resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/@rainbow-me/animated-charts/-/animated-charts-1.0.0-alpha.6.tgz#b21a6886d4f662b7c12c10d3d2398f9e0d73d5bc"
+  integrity sha512-mJMKiHLxuU5FPIn/WR+klzA4Ug68zI+eCaqiBjd+s1QGfO2EF/za1PgN0GtCmm5iFDqdnE8FEoRk8RAI5p9WtQ==
+  dependencies:
+    react-native-gesture-handler "^1.7.0"
+    react-native-haptic-feedback "^1.10.0"
+    react-native-reanimated "^2.0.0-alpha.5"
+    react-native-svg "^12.1.0"
+
 "@react-aria/checkbox@^3.2.1":
   version "3.8.0"
   resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/@react-aria/checkbox/-/checkbox-3.8.0.tgz#bded3e1238901c6cac109c8d1a0b2a66d452f8be"
@@ -8500,6 +8510,17 @@ react-native-codegen@^0.71.5:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
+react-native-gesture-handler@^1.7.0:
+  version "1.10.3"
+  resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/react-native-gesture-handler/-/react-native-gesture-handler-1.10.3.tgz#942bbf2963bbf49fa79593600ee9d7b5dab3cfc0"
+  integrity sha512-cBGMi1IEsIVMgoox4RvMx7V2r6bNKw0uR1Mu1o7NbuHS6BRSVLq0dP34l2ecnPlC+jpWd3le6Yg1nrdCjby2Mw==
+  dependencies:
+    "@egjs/hammerjs" "^2.0.17"
+    fbjs "^3.0.0"
+    hoist-non-react-statics "^3.3.0"
+    invariant "^2.2.4"
+    prop-types "^15.7.2"
+
 react-native-gesture-handler@^2.9.0:
   version "2.9.0"
   resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/react-native-gesture-handler/-/react-native-gesture-handler-2.9.0.tgz#2f63812e523c646f25b9ad660fc6f75948e51241"
@@ -8521,7 +8542,12 @@ react-native-graph@^1.0.1:
   resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/react-native-graph/-/react-native-graph-1.0.1.tgz#4fdd3a85f172d05af3290632a0f6dfd99a790626"
   integrity sha512-Z0bacgmMApr2AUtOqUHj/Ny1sMQksxpcndM2OFpna90nZOqDXg+Ip500fNqG+HSX/n7bH1FcLISuC4cuHvgQbw==
 
-react-native-reanimated@~2.14.4:
+react-native-haptic-feedback@^1.10.0:
+  version "1.14.0"
+  resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/react-native-haptic-feedback/-/react-native-haptic-feedback-1.14.0.tgz#b50f49dedda4980b3c37c5780823f753cf3ee717"
+  integrity sha512-dSXZ6gAzl+W/L7BPjOpnT0bx0cgQiSr0sB3DjyDJbGIdVr4ISaktZC6gC9xYFTv2kMq0+KtbKi+dpd0WtxYZMw==
+
+react-native-reanimated@^2.0.0-alpha.5, react-native-reanimated@~2.14.4:
   version "2.14.4"
   resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/react-native-reanimated/-/react-native-reanimated-2.14.4.tgz#3fa3da4e7b99f5dfb28f86bcf24d9d1024d38836"
   integrity sha512-DquSbl7P8j4SAmc+kRdd75Ianm8G+IYQ9T4AQ6lrpLVeDkhZmjWI0wkutKWnp6L7c5XNVUrFDUf69dwETLCItQ==
@@ -8556,6 +8582,14 @@ react-native-svg@13.4.0:
   version "13.4.0"
   resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/react-native-svg/-/react-native-svg-13.4.0.tgz#82399ba0956c454144618aa581e2d748dd3f010a"
   integrity sha512-B3TwK+H0+JuRhYPzF21AgqMt4fjhCwDZ9QUtwNstT5XcslJBXC0FoTkdZo8IEb1Sv4suSqhZwlAY6lwOv3tHag==
+  dependencies:
+    css-select "^5.1.0"
+    css-tree "^1.1.3"
+
+react-native-svg@^12.1.0:
+  version "12.5.1"
+  resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/react-native-svg/-/react-native-svg-12.5.1.tgz#7dfd9daf2f8ed7843c0f3e7a16af193bd5f9b287"
+  integrity sha512-c374ENsq2MWCfr+7jC7TGwSeOAuC1Dp0osh2pw8PjpYFxmmB/toFIwcnCLz+SgBd6iLJClRhbATealqM05HOGg==
   dependencies:
     css-select "^5.1.0"
     css-tree "^1.1.3"

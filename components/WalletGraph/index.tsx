@@ -1,19 +1,17 @@
-import React, { useCallback, useMemo, useState } from "react"
-import { View, StyleSheet, Text, Button, ScrollView } from "react-native"
+import React, { useMemo, useState } from "react"
+import { View, StyleSheet } from "react-native"
 import * as Haptics from "expo-haptics"
 
 import { LineGraph } from "react-native-graph"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { SelectionDot } from "./selectiondot"
-import { generateRandomGraphData, generateSinusGraphData } from "./data"
-import { useColors } from "./data"
+import { generateRandomGraphData } from "./data"
 import { ChartSwitcher } from "./chartswitcher"
+import { GraphRange } from "./types"
 
 const POINT_COUNT = 70
 const POINTS = generateRandomGraphData(POINT_COUNT)
 const COLOR = "#6a7ee7"
 const GRADIENT_FILL_COLORS = ["#7476df5D", "#7476df4D", "#7476df00"]
-const SMALL_POINTS = generateSinusGraphData(9)
 
 type GraphIntervalType =
   | typeof GRAPH_INTERVAL_1H_PARAM
@@ -31,42 +29,28 @@ const GRAPH_INTERVAL_1Y_PARAM = "&interval=1y"
 const GRAPH_INTERVAL_ALL_PARAM = "&interval=3m"
 
 export const WalletGraph = (): JSX.Element => {
-  const colors = useColors()
-
-  const [isAnimated, setIsAnimated] = useState(true)
-  const [enablePanGesture, setEnablePanGesture] = useState(true)
-  const [enableFadeInEffect, setEnableFadeInEffect] = useState(false)
-  const [enableCustomSelectionDot, setEnableCustomSelectionDot] = useState(true)
-  const [enableGradient, setEnableGradient] = useState(true)
-  const [enableRange, setEnableRange] = useState(false)
-  const [enableIndicator, setEnableIndicator] = useState(true)
-
-  const [points, setPoints] = useState(POINTS)
+  const [points] = useState(POINTS)
+  const [enableRange] = useState(false)
 
   const [graphInterval, setGraphInterval] = useState<GraphIntervalType>(
     GRAPH_INTERVAL_1H_PARAM
   )
 
-  const refreshData = useCallback(() => {
-    setPoints(generateRandomGraphData(POINT_COUNT))
-    // hapticFeedback("impactLight")
-  }, [])
-
   const highestDate = useMemo(
     () =>
-      points.length !== 0 && points[points.length - 1] != null
-        ? points[points.length - 1]!.date
+      points.length !== 0 && points[points.length - 1] !== null
+        ? points[points.length - 1]?.date
         : undefined,
     [points]
   )
-  const range: any | undefined = useMemo(() => {
+  const range: GraphRange | undefined = useMemo(() => {
     // if range is disabled, default to infinite range (undefined)
     if (!enableRange) return undefined
 
     if (points.length !== 0 && highestDate != null) {
       return {
         x: {
-          min: points[0]!.date,
+          min: points[0]?.date,
           max: new Date(highestDate.getTime() + 50 * 1000 * 60 * 60 * 24),
         },
         y: {
@@ -82,28 +66,11 @@ export const WalletGraph = (): JSX.Element => {
         },
       }
     }
-  }, [enableRange, highestDate, points])
+  }, [highestDate, points])
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          // height: "100%",
-          // flex: 1,
-          // backgroundColor: colors.background,
-        },
-      ]}
-    >
-      <View
-        style={{
-          // flex: 1,
-          flexDirection: "row",
-          justifyContent: "space-evenly",
-          width: "100%",
-          // paddingBottom: 20,
-        }}
-      >
+    <View style={[styles.container]}>
+      <View style={styles.chartContainer}>
         <ChartSwitcher
           enabled={graphInterval === GRAPH_INTERVAL_1H_PARAM}
           label="1H"
@@ -138,21 +105,20 @@ export const WalletGraph = (): JSX.Element => {
       </View>
       <View>
         <LineGraph
-          animated={isAnimated}
+          animated={true}
           color={COLOR}
-          enableFadeInMask={enableFadeInEffect}
-          enableIndicator={enableIndicator}
-          enablePanGesture={enablePanGesture}
-          gradientFillColors={enableGradient ? GRADIENT_FILL_COLORS : undefined}
-          // horizontalPadding={enableIndicator ? 15 : 0}
+          enableFadeInMask={true}
+          enableIndicator={true}
+          enablePanGesture={true}
+          gradientFillColors={GRADIENT_FILL_COLORS}
           points={points}
           range={range}
-          SelectionDot={enableCustomSelectionDot ? SelectionDot : undefined}
+          SelectionDot={SelectionDot}
           style={styles.graph}
           onGestureStart={() =>
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
           }
-          onPointSelected={(p) => null}
+          // onPointSelected={(p) => null}
         />
       </View>
     </View>
@@ -162,7 +128,11 @@ export const WalletGraph = (): JSX.Element => {
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
-    // backgroundColor:"red"
+  },
+  chartContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    width: "100%",
   },
   spacer: {
     flexGrow: 1,
