@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 // exposed context for doing awesome things directly in React
 export const DataContext = createContext({
   loading: true,
+  pickedColor: "#6a7ee7",
   wallets: [],
   seed: [],
   setLoading: (loading: boolean) => {},
@@ -19,6 +20,7 @@ export const DataProvider = ({ children }): JSX.Element => {
   const [loading, setLoading] = useState(true)
   const [seed, setSeed] = useState([])
   const [wallets, setWallets] = useState([])
+  const [pickedColor, setPickedColor] = useState("#6a7ee7")
 
   const getData = async () => {
     const walletData = await AsyncStorage.getItem("wallets")
@@ -33,7 +35,16 @@ export const DataProvider = ({ children }): JSX.Element => {
 
   return (
     <DataContext.Provider
-      value={{ loading, setLoading, wallets, setWallets, seed, setSeed }}
+      value={{
+        loading,
+        setLoading,
+        wallets,
+        setWallets,
+        seed,
+        setSeed,
+        pickedColor,
+        setPickedColor,
+      }}
     >
       {children}
     </DataContext.Provider>

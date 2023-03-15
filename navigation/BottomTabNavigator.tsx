@@ -1,24 +1,26 @@
 import { Ionicons } from "@expo/vector-icons"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { createStackNavigator } from "@react-navigation/stack"
-import * as React from "react"
+import React, { useContext } from "react"
 
 import Colors from "../constants/Colors"
 import useColorScheme from "../hooks/useColorScheme"
 import WalletsTab from "../screens/WalletsTab"
 import TransactionsTab from "../screens/TransactionsTab"
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from "../types"
+import { DataContext } from "../providers/DataProvider"
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
 const BottomTabNavigator = (): JSX.Element => {
   const colorScheme = useColorScheme()
+  const { pickedColor } = useContext(DataContext)
 
   return (
     <BottomTab.Navigator
-      initialRouteName="WalletTab"
+      initialRouteName="WalletsTab"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarActiveTintColor: pickedColor,
         headerShown: false,
       }}
     >

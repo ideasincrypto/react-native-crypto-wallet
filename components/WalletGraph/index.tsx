@@ -1,16 +1,21 @@
-import React, { useMemo, useState } from "react"
-import { View, StyleSheet } from "react-native"
+import React, { useMemo, useState, useContext, useEffect } from "react"
+import { View, StyleSheet, Text, useColorScheme } from "react-native"
 import * as Haptics from "expo-haptics"
+import * as Device from "expo-device"
 
-import { LineGraph } from "react-native-graph"
+import { GraphPoint, LineGraph } from "react-native-graph"
 import { SelectionDot } from "./selectiondot"
 import { generateRandomGraphData } from "./data"
 import { ChartSwitcher } from "./chartswitcher"
 import { GraphRange } from "./types"
+import { DataContext } from "../../providers/DataProvider"
+import dayjs from "dayjs"
+import moment from "moment"
+import Loading from "../../screens/Loading"
 
 const POINT_COUNT = 70
 const POINTS = generateRandomGraphData(POINT_COUNT)
-const COLOR = "#6a7ee7"
+// const COLOR = "#6a7ee7"
 const GRADIENT_FILL_COLORS = ["#7476df5D", "#7476df4D", "#7476df00"]
 
 type GraphIntervalType =
@@ -28,9 +33,74 @@ const GRAPH_INTERVAL_1M_PARAM = "&interval=1m"
 const GRAPH_INTERVAL_1Y_PARAM = "&interval=1y"
 const GRAPH_INTERVAL_ALL_PARAM = "&interval=3m"
 
+const minute = 60 * 1000
+const hour = 60 * minute
+const day = 24 * hour
+const week = 7 * day
+const month = 30 * day
+const year = 12 * month
+
 export const WalletGraph = (): JSX.Element => {
-  const [points] = useState(POINTS)
+  const [points, setPoints] = useState([{ date: new Date(), value: 0 }])
   const [enableRange] = useState(false)
+
+  const getData = async (range): void => {
+    const rangeObj = {
+      to: moment().unix(),
+      from: moment().unix(),
+    }
+    switch (range) {
+      case "1D":
+        rangeObj.from = moment().subtract(1, "days").unix()
+        break
+      case "1W":
+        rangeObj.from = moment().subtract(1, "weeks").unix()
+        break
+      case "1M":
+        rangeObj.from = moment().subtract(1, "months").unix()
+        break
+      case "1Y":
+        rangeObj.from = moment().subtract(1, "years").unix()
+        break
+      case "ALL":
+        rangeObj.from = 10000
+        break
+      default:
+        // 1hr
+        rangeObj.from = moment().subtract(1, "hours").unix()
+        break
+    }
+    try {
+      // eslint-disable-next-line max-len
+      const url = `https://api.coingecko.com/api/v3/coins/kaspa/market_chart/range?vs_currency=usd&from=${rangeObj.from}&to=${rangeObj.to}`
+      console.log(url)
+      const response = await fetch(url)
+      const { prices } = await response.json()
+      const arrayOfObjects: GraphPoint[] = prices?.map((x: number | Date) => ({
+        date: new Date(x[0]),
+        value: x[1],
+      }))
+      // console.log(prices)
+      console.log(arrayOfObjects)
+      setPoints(arrayOfObjects)
+      // return json.movies
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    getData("1H")
+  }, [])
+
+  const { pickedColor } = useContext(DataContext)
+
+  const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
+
+  const [value, setValue] = useState<GraphPoint>({
+    date: new Date("2000-02-10T08:00:00.000Z"),
+    value: 0,
+  })
 
   const [graphInterval, setGraphInterval] = useState<GraphIntervalType>(
     GRAPH_INTERVAL_1H_PARAM
@@ -66,61 +136,87 @@ export const WalletGraph = (): JSX.Element => {
         },
       }
     }
-  }, [highestDate, points])
-
+  }, [enableRange, highestDate, points])
+  // console.log(POINTS)
   return (
     <View style={[styles.container]}>
       <View style={styles.chartContainer}>
         <ChartSwitcher
           enabled={graphInterval === GRAPH_INTERVAL_1H_PARAM}
           label="1H"
-          onPress={() => setGraphInterval(GRAPH_INTERVAL_1H_PARAM)}
+          onPress={() => {
+            setGraphInterval(GRAPH_INTERVAL_1H_PARAM)
+            getData("1H")
+          }}
         />
         <ChartSwitcher
           enabled={graphInterval === GRAPH_INTERVAL_1D_PARAM}
           label="1D"
-          onPress={() => setGraphInterval(GRAPH_INTERVAL_1D_PARAM)}
+          onPress={() => {
+            setGraphInterval(GRAPH_INTERVAL_1D_PARAM)
+            getData("1D")
+          }}
         />
         <ChartSwitcher
           enabled={graphInterval === GRAPH_INTERVAL_1W_PARAM}
           label="1W"
-          onPress={() => setGraphInterval(GRAPH_INTERVAL_1W_PARAM)}
+          onPress={() => {
+            setGraphInterval(GRAPH_INTERVAL_1W_PARAM)
+            getData("1W")
+          }}
         />
 
         <ChartSwitcher
           enabled={graphInterval === GRAPH_INTERVAL_1M_PARAM}
           label="1M"
-          onPress={() => setGraphInterval(GRAPH_INTERVAL_1M_PARAM)}
+          onPress={() => {
+            setGraphInterval(GRAPH_INTERVAL_1M_PARAM)
+            getData("1M")
+          }}
         />
         <ChartSwitcher
           enabled={graphInterval === GRAPH_INTERVAL_1Y_PARAM}
           label="1Y"
-          onPress={() => setGraphInterval(GRAPH_INTERVAL_1Y_PARAM)}
+          onPress={() => {
+            setGraphInterval(GRAPH_INTERVAL_1Y_PARAM)
+            getData("1Y")
+          }}
         />
         <ChartSwitcher
           enabled={graphInterval === GRAPH_INTERVAL_ALL_PARAM}
           label="ALL"
-          onPress={() => setGraphInterval(GRAPH_INTERVAL_ALL_PARAM)}
+          onPress={() => {
+            setGraphInterval(GRAPH_INTERVAL_ALL_PARAM)
+            getData("ALL")
+          }}
         />
       </View>
       <View>
-        <LineGraph
-          animated={true}
-          color={COLOR}
-          enableFadeInMask={true}
-          enableIndicator={true}
-          enablePanGesture={true}
-          gradientFillColors={GRADIENT_FILL_COLORS}
-          points={points}
-          range={range}
-          SelectionDot={SelectionDot}
-          style={styles.graph}
-          onGestureStart={() =>
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-          }
-          // onPointSelected={(p) => null}
-        />
+        {!points ? (
+          <Loading />
+        ) : (
+          <LineGraph
+            animated={true}
+            color={pickedColor}
+            enableFadeInMask={true}
+            enableIndicator={true}
+            enablePanGesture={true}
+            gradientFillColors={GRADIENT_FILL_COLORS}
+            panGestureDelay={0}
+            points={points}
+            range={range}
+            SelectionDot={SelectionDot}
+            style={styles.graph}
+            onGestureStart={() =>
+              Device.isDevice &&
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+            }
+            onPointSelected={(p) => setValue(p)}
+          />
+        )}
       </View>
+      <Text style={{ color: textColor }}>Test</Text>
+      <Text style={{ color: textColor }}>{value.value}</Text>
     </View>
   )
 }
