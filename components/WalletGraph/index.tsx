@@ -13,85 +13,46 @@ import dayjs from "dayjs"
 import moment from "moment"
 import Loading from "../../screens/Loading"
 
-const POINT_COUNT = 70
-const POINTS = generateRandomGraphData(POINT_COUNT)
+// const POINT_COUNT = 70
+// const POINTS = generateRandomGraphData(POINT_COUNT)
 // const COLOR = "#6a7ee7"
 const GRADIENT_FILL_COLORS = ["#7476df5D", "#7476df4D", "#7476df00"]
 
-type GraphIntervalType =
-  | typeof GRAPH_INTERVAL_1H_PARAM
+export type GraphIntervalType =
   | typeof GRAPH_INTERVAL_1D_PARAM
   | typeof GRAPH_INTERVAL_1W_PARAM
   | typeof GRAPH_INTERVAL_1M_PARAM
   | typeof GRAPH_INTERVAL_1Y_PARAM
   | typeof GRAPH_INTERVAL_ALL_PARAM
 
-const GRAPH_INTERVAL_1H_PARAM = "&interval=1h"
-const GRAPH_INTERVAL_1D_PARAM = "&interval=1d"
-const GRAPH_INTERVAL_1W_PARAM = "&interval=1w"
-const GRAPH_INTERVAL_1M_PARAM = "&interval=1m"
-const GRAPH_INTERVAL_1Y_PARAM = "&interval=1y"
-const GRAPH_INTERVAL_ALL_PARAM = "&interval=3m"
-
-const minute = 60 * 1000
-const hour = 60 * minute
-const day = 24 * hour
-const week = 7 * day
-const month = 30 * day
-const year = 12 * month
+const GRAPH_INTERVAL_1D_PARAM = "1D"
+const GRAPH_INTERVAL_1W_PARAM = "1W"
+const GRAPH_INTERVAL_1M_PARAM = "1M"
+const GRAPH_INTERVAL_1Y_PARAM = "1Y"
+const GRAPH_INTERVAL_ALL_PARAM = "ALL"
 
 export const WalletGraph = (): JSX.Element => {
-  const [points, setPoints] = useState([{ date: new Date(), value: 0 }])
+  // const [points, setPoints] = useState([{ date: new Date(), value: 0 }])
+
+  const {
+    points1D,
+    points1W,
+    points1M,
+    points1Y,
+    pointsALL,
+    selectedPoints,
+    setSelectedPoints,
+  } = useContext(DataContext)
+
+  const isReady =
+    selectedPoints!= undefined &&
+    points1D !== undefined &&
+    points1W !== undefined &&
+    points1M !== undefined &&
+    points1Y !== undefined &&
+    pointsALL !== undefined
+
   const [enableRange] = useState(false)
-
-  const getData = async (range): void => {
-    const rangeObj = {
-      to: moment().unix(),
-      from: moment().unix(),
-    }
-    switch (range) {
-      case "1D":
-        rangeObj.from = moment().subtract(1, "days").unix()
-        break
-      case "1W":
-        rangeObj.from = moment().subtract(1, "weeks").unix()
-        break
-      case "1M":
-        rangeObj.from = moment().subtract(1, "months").unix()
-        break
-      case "1Y":
-        rangeObj.from = moment().subtract(1, "years").unix()
-        break
-      case "ALL":
-        rangeObj.from = 10000
-        break
-      default:
-        // 1hr
-        rangeObj.from = moment().subtract(1, "hours").unix()
-        break
-    }
-    try {
-      // eslint-disable-next-line max-len
-      const url = `https://api.coingecko.com/api/v3/coins/kaspa/market_chart/range?vs_currency=usd&from=${rangeObj.from}&to=${rangeObj.to}`
-      console.log(url)
-      const response = await fetch(url)
-      const { prices } = await response.json()
-      const arrayOfObjects: GraphPoint[] = prices?.map((x: number | Date) => ({
-        date: new Date(x[0]),
-        value: x[1],
-      }))
-      // console.log(prices)
-      console.log(arrayOfObjects)
-      setPoints(arrayOfObjects)
-      // return json.movies
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  useEffect(() => {
-    getData("1H")
-  }, [])
 
   const { pickedColor } = useContext(DataContext)
 
@@ -103,24 +64,28 @@ export const WalletGraph = (): JSX.Element => {
   })
 
   const [graphInterval, setGraphInterval] = useState<GraphIntervalType>(
-    GRAPH_INTERVAL_1H_PARAM
+    GRAPH_INTERVAL_1D_PARAM
   )
+
+  // console.log(points)
 
   const highestDate = useMemo(
     () =>
-      points.length !== 0 && points[points.length - 1] !== null
-        ? points[points.length - 1]?.date
+      selectedPoints !== undefined &&
+      selectedPoints.length !== 0 &&
+      selectedPoints[selectedPoints.length - 1] !== null
+        ? selectedPoints[selectedPoints.length - 1]?.date
         : undefined,
-    [points]
+    [selectedPoints]
   )
   const range: GraphRange | undefined = useMemo(() => {
     // if range is disabled, default to infinite range (undefined)
     if (!enableRange) return undefined
 
-    if (points.length !== 0 && highestDate != null) {
+    if (selectedPoints.length !== 0 && highestDate != null) {
       return {
         x: {
-          min: points[0]?.date,
+          min: selectedPoints[0]?.date,
           max: new Date(highestDate.getTime() + 50 * 1000 * 60 * 60 * 24),
         },
         y: {
@@ -136,25 +101,40 @@ export const WalletGraph = (): JSX.Element => {
         },
       }
     }
-  }, [enableRange, highestDate, points])
-  // console.log(POINTS)
+  }, [enableRange, highestDate, selectedPoints])
+
+  const setPointsInInterval = (interval): void => {
+    switch (interval) {
+      case "1W":
+        setSelectedPoints(points1W)
+        break
+      case "1M":
+        setSelectedPoints(points1M)
+        break
+      case "1Y":
+        setSelectedPoints(points1Y)
+        break
+      case "ALL":
+        setSelectedPoints(pointsALL)
+        break
+      default:
+        // 1D
+        setSelectedPoints(points1D)
+        break
+    }
+  }
+
+  console.log("selectedPoints", selectedPoints)
+
   return (
     <View style={[styles.container]}>
       <View style={styles.chartContainer}>
-        <ChartSwitcher
-          enabled={graphInterval === GRAPH_INTERVAL_1H_PARAM}
-          label="1H"
-          onPress={() => {
-            setGraphInterval(GRAPH_INTERVAL_1H_PARAM)
-            getData("1H")
-          }}
-        />
         <ChartSwitcher
           enabled={graphInterval === GRAPH_INTERVAL_1D_PARAM}
           label="1D"
           onPress={() => {
             setGraphInterval(GRAPH_INTERVAL_1D_PARAM)
-            getData("1D")
+            setPointsInInterval("1D")
           }}
         />
         <ChartSwitcher
@@ -162,7 +142,7 @@ export const WalletGraph = (): JSX.Element => {
           label="1W"
           onPress={() => {
             setGraphInterval(GRAPH_INTERVAL_1W_PARAM)
-            getData("1W")
+            setPointsInInterval("1W")
           }}
         />
 
@@ -171,7 +151,7 @@ export const WalletGraph = (): JSX.Element => {
           label="1M"
           onPress={() => {
             setGraphInterval(GRAPH_INTERVAL_1M_PARAM)
-            getData("1M")
+            setPointsInInterval("1M")
           }}
         />
         <ChartSwitcher
@@ -179,7 +159,7 @@ export const WalletGraph = (): JSX.Element => {
           label="1Y"
           onPress={() => {
             setGraphInterval(GRAPH_INTERVAL_1Y_PARAM)
-            getData("1Y")
+            setPointsInInterval("1Y")
           }}
         />
         <ChartSwitcher
@@ -187,12 +167,12 @@ export const WalletGraph = (): JSX.Element => {
           label="ALL"
           onPress={() => {
             setGraphInterval(GRAPH_INTERVAL_ALL_PARAM)
-            getData("ALL")
+            setPointsInInterval("ALL")
           }}
         />
       </View>
       <View>
-        {!points ? (
+        {!isReady ? (
           <Loading />
         ) : (
           <LineGraph
@@ -203,7 +183,7 @@ export const WalletGraph = (): JSX.Element => {
             enablePanGesture={true}
             gradientFillColors={GRADIENT_FILL_COLORS}
             panGestureDelay={0}
-            points={points}
+            points={selectedPoints}
             range={range}
             SelectionDot={SelectionDot}
             style={styles.graph}
