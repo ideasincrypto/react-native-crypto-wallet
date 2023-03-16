@@ -62,7 +62,6 @@ export const ChartSwitcherList = ({
           label="1D"
           onPress={() => {
             switchFunction("1D")
-            
           }}
         />
         <ChartSwitcher

@@ -48,6 +48,9 @@ export const WalletGraph = ({ graphInterval, graphLoading }): JSX.Element => {
   const [min, setMin] = useState({})
   const [max, setMax] = useState({})
 
+  const [graphHeight, setGraphHeight] = useState(0)
+
+
   useEffect(() => {
     if (selectedPoints?.length > 1) {
       let maxVal = (selectedPoints[0] as MaxMinType).value
@@ -191,7 +194,7 @@ export const WalletGraph = ({ graphInterval, graphLoading }): JSX.Element => {
     <View style={[styles.container]}>
       <View>
         {!isReady || graphLoading ? (
-          <View style={styles.loadingView}>
+          <View style={[styles.loadingView, { height: graphHeight }]}>
             <Loading />
           </View>
         ) : (
@@ -214,7 +217,7 @@ export const WalletGraph = ({ graphInterval, graphLoading }): JSX.Element => {
             points={selectedPoints}
             range={range}
             SelectionDot={SelectionDot}
-            style={[styles.graph, graphLoading && { opacity: 0 }]}
+            style={[styles.graph, !graphLoading && { opacity: 1 }]}
             TopAxisLabel={() => (
               <AxisLabel
                 index={(max as MaxMinType).index}
@@ -227,6 +230,10 @@ export const WalletGraph = ({ graphInterval, graphLoading }): JSX.Element => {
               Device.isDevice &&
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
             }
+            onLayout={(event) => {
+              const { height } = event.nativeEvent.layout
+              setGraphHeight(height)
+            }}
             onPointSelected={onPointSelected}
           />
         )}
@@ -283,6 +290,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get("screen").width,
     justifyContent: "center",
     aspectRatio: 1.4,
+    opacity: 0,
   },
   miniGraph: {
     width: 40,
@@ -294,7 +302,6 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 15,
   },
   loadingView: {
-    height: 260,
     width: "100%",
   },
   controlsScrollViewContent: {
