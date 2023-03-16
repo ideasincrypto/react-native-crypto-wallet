@@ -9,7 +9,7 @@ export const AxisLabel = ({ value, index, selectedPoints }): JSX.Element => {
   return (
     value && (
       <View style={{ transform: [{ translateX: Math.max(location - 40, 5) }] }}>
-        <Text color={textColor}>{`${value.toFixed(6)}`}</Text>
+        <Text color={textColor}>{`$${value.toFixed(6)}`}</Text>
       </View>
     )
   )

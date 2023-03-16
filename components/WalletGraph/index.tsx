@@ -16,6 +16,7 @@ import { GraphRange } from "./types"
 import { DataContext } from "../../providers/DataProvider"
 import Loading from "../../screens/Loading"
 import { AxisLabel } from "./AxisLabel"
+import moment from "moment"
 
 const GRADIENT_FILL_COLORS = ["#7476df5D", "#7476df4D", "#7476df00"]
 
@@ -84,10 +85,17 @@ export const WalletGraph = (): JSX.Element => {
     pointsALL !== undefined
 
   const [enableRange] = useState(false)
-  const [selectedCoinValue, setSelectedCoinValue] = useState(currentUSDValue)
+
+  const [selectedPointValues, setSelectedPointValues] = useState({
+    value: currentUSDValue,
+    date: moment(new Date()).format("M/D/Y LT"),
+  })
 
   useEffect(() => {
-    setSelectedCoinValue(currentUSDValue)
+    setSelectedPointValues({
+      value: currentUSDValue,
+      date: moment(new Date()).format("M/D/Y LT"),
+    })
   }, [currentUSDValue])
 
   const { pickedColor } = useContext(DataContext)
@@ -153,11 +161,18 @@ export const WalletGraph = (): JSX.Element => {
   }
 
   const onPointSelected = useCallback((p) => {
-    setSelectedCoinValue(p.value)
+    // console.log("here", p.date)
+    setSelectedPointValues({
+      value: p.value,
+      date: moment(p.date).format("M/D/Y LT"),
+    })
   }, [])
 
   const onGestureEnd = useCallback(() => {
-    setSelectedCoinValue(currentUSDValue)
+    setSelectedPointValues({
+      value: currentUSDValue,
+      date: moment(new Date()).format("M/D/Y LT"),
+    })
   }, [currentUSDValue])
 
   type MaxMinType = {
@@ -231,6 +246,7 @@ export const WalletGraph = (): JSX.Element => {
             enableIndicator={true}
             enablePanGesture={true}
             gradientFillColors={GRADIENT_FILL_COLORS}
+            horizontalPadding={20}
             panGestureDelay={0}
             points={selectedPoints}
             range={range}
@@ -260,7 +276,17 @@ export const WalletGraph = (): JSX.Element => {
           textAlign: "center",
         }}
       >
-        {`1 KASPA ≈ $${selectedCoinValue.toFixed(6)}`}
+        {`1 KASPA ≈ $${selectedPointValues.value.toFixed(6)}`}
+      </Text>
+      <Text
+        color={textColor}
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+        }}
+      >
+        {selectedPointValues.date}
       </Text>
     </View>
   )
