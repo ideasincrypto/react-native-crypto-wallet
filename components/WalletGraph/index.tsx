@@ -243,7 +243,7 @@ export const WalletGraph = (): JSX.Element => {
             onGestureEnd={onGestureEnd}
             onGestureStart={() =>
               Device.isDevice &&
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
             }
             onPointSelected={onPointSelected}
           />
