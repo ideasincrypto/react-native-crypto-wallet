@@ -267,9 +267,7 @@ export const WalletGraph = (): JSX.Element => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-  },
+  container: {},
   chartContainer: {
     flexDirection: "row",
     justifyContent: "space-evenly",
@@ -285,13 +283,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: "700",
-    // paddingHorizontal: 15,
   },
   graph: {
     alignSelf: "center",
     width: "100%",
     aspectRatio: 1.4,
-    // backgroundColor: 'green',
   },
   miniGraph: {
     width: 40,
