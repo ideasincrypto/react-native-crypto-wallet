@@ -49,10 +49,10 @@ export const ChartSwitcherList = ({
 }): JSX.Element => {
   const switchFunction = (interval): void => {
     setGraphInterval(interval)
-    // setGraphLoading(true)
-    // setTimeout(() => {
-    //   setGraphLoading(false)
-    // }, 500)
+    setGraphLoading(true)
+    setTimeout(() => {
+      setGraphLoading(false)
+    }, 1000)
   }
   return (
     <View style={styles.container}>

@@ -214,7 +214,7 @@ export const WalletGraph = ({ graphInterval, graphLoading }): JSX.Element => {
             points={selectedPoints}
             range={range}
             SelectionDot={SelectionDot}
-            style={styles.graph}
+            style={[styles.graph, graphLoading && { opacity: 0 }]}
             TopAxisLabel={() => (
               <AxisLabel
                 index={(max as MaxMinType).index}
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 15,
   },
   loadingView: {
-    height: 250,
+    height: 260,
     width: "100%",
   },
   controlsScrollViewContent: {
