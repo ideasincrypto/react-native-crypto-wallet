@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { StyleSheet, View, useColorScheme } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { DataContext } from "../providers/DataProvider"

@@ -29,6 +29,12 @@ export const DataContext = createContext({
   setPoints1Y: (points: GraphPoint[]) => {},
   pointsALL: [],
   setPointsALL: (points: GraphPoint[]) => {},
+
+  selectedUSDValue: 0,
+  setSelectedUSDValue: (value: number) => {},
+
+  currentUSDValue: 0,
+  setCurrentUSDValue: (value: number) => {},
 })
 
 export const DataProvider = ({ children }): JSX.Element => {
@@ -45,6 +51,9 @@ export const DataProvider = ({ children }): JSX.Element => {
 
   const [selectedPoints, setSelectedPoints] = useState<GraphPoint[]>()
 
+  const [selectedUSDValue, setSelectedUSDValue] = useState(0)
+
+  const [currentUSDValue, setCurrentUSDValue] = useState(0)
 
   const getData = async () => {
     const walletData = await AsyncStorage.getItem("wallets")
@@ -82,6 +91,12 @@ export const DataProvider = ({ children }): JSX.Element => {
 
         selectedPoints,
         setSelectedPoints,
+
+        selectedUSDValue,
+        setSelectedUSDValue,
+
+        currentUSDValue,
+        setCurrentUSDValue,
       }}
     >
       {children}

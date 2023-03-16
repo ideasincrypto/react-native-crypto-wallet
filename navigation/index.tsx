@@ -47,7 +47,6 @@ const Navigation = ({
         // add code here for error reporting service
         console.warn(e)
       } finally {
-        console.log("finished useEffect")
         SplashScreen.hideAsync()
         setLoading(false)
       }
@@ -72,6 +71,13 @@ const Stack = createStackNavigator<RootStackParamList>()
 const RootNavigator = (): JSX.Element => {
   const { loading, wallets } = useContext(DataContext)
   if (loading) {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen component={Loading} name="Loading" />
+      </Stack.Navigator>
+    )
+  }
+  if (loading && wallets[0]) {
     return (
       <Stack.Navigator>
         <Stack.Screen component={Loading} name="Loading" />

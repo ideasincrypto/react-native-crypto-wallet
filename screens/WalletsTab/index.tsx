@@ -1,20 +1,26 @@
-import React from "react"
+import React, { useContext } from "react"
 import { StyleSheet } from "react-native"
 import { View } from "../../components/Themed"
 import WalletAmount from "../../components/WalletAmount"
 import WalletTransact from "../../components/WalletTransact"
 import { WalletGraph } from "../../components/WalletGraph"
+import { DataContext } from "../../providers/DataProvider"
 
 const WalletsTab = (): JSX.Element => {
   const openBottomSheetTransact = (): boolean => {
     return true
   }
 
+  const { currentUSDValue } = useContext(DataContext)
+
   return (
     <View style={styles.container}>
       {/* Wallet Picker */}
       <View style={{ paddingBottom: 30, paddingTop: 30 }}>
-        <WalletAmount currentPrice={"5.00"} walletTotal={"1.2"} />
+        <WalletAmount
+          currentPrice={`${currentUSDValue}`}
+          walletTotal={"10238948.212312"}
+        />
       </View>
       <View style={{ paddingBottom: 60 }}>
         <WalletTransact openBottomSheetTransact={openBottomSheetTransact} />

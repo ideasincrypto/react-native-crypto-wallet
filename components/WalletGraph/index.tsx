@@ -1,17 +1,21 @@
-import React, { useMemo, useState, useContext, useEffect } from "react"
-import { View, StyleSheet, Text, useColorScheme } from "react-native"
+import React, {
+  useMemo,
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+} from "react"
+import { View, StyleSheet, useColorScheme } from "react-native"
+import { Text } from "native-base"
 import * as Haptics from "expo-haptics"
 import * as Device from "expo-device"
 
-import { GraphPoint, LineGraph } from "react-native-graph"
-import { SelectionDot } from "./selectiondot"
-import { generateRandomGraphData } from "./data"
-import { ChartSwitcher } from "./chartswitcher"
+import { LineGraph, SelectionDot } from "react-native-graph"
+import { ChartSwitcher } from "./ChartSwitcher"
 import { GraphRange } from "./types"
 import { DataContext } from "../../providers/DataProvider"
-import dayjs from "dayjs"
-import moment from "moment"
 import Loading from "../../screens/Loading"
+import { AxisLabel } from "./AxisLabel"
 
 // const POINT_COUNT = 70
 // const POINTS = generateRandomGraphData(POINT_COUNT)
@@ -32,8 +36,6 @@ const GRAPH_INTERVAL_1Y_PARAM = "1Y"
 const GRAPH_INTERVAL_ALL_PARAM = "ALL"
 
 export const WalletGraph = (): JSX.Element => {
-  // const [points, setPoints] = useState([{ date: new Date(), value: 0 }])
-
   const {
     points1D,
     points1W,
@@ -41,11 +43,43 @@ export const WalletGraph = (): JSX.Element => {
     points1Y,
     pointsALL,
     selectedPoints,
+    currentUSDValue,
     setSelectedPoints,
   } = useContext(DataContext)
 
+  const [min, setMin] = useState({})
+  const [max, setMax] = useState({})
+
+  useEffect(() => {
+    if (selectedPoints?.length > 1) {
+      let maxVal = selectedPoints[0].value
+      let minVal = selectedPoints[0].value
+      let minIndex = 0
+      let maxIndex = 0
+
+      for (let i = 0; i < selectedPoints.length; i++) {
+        if (selectedPoints[i].value > maxVal) {
+          maxVal = selectedPoints[i].value
+          maxIndex = i
+        } else if (selectedPoints[i].value < minVal) {
+          minVal = selectedPoints[i].value
+          minIndex = i
+        }
+      }
+
+      setMin({
+        value: minVal,
+        index: minIndex,
+      })
+      setMax({
+        value: maxVal,
+        index: maxIndex,
+      })
+    }
+  }, [selectedPoints])
+
   const isReady =
-    selectedPoints!= undefined &&
+    selectedPoints != undefined &&
     points1D !== undefined &&
     points1W !== undefined &&
     points1M !== undefined &&
@@ -53,21 +87,19 @@ export const WalletGraph = (): JSX.Element => {
     pointsALL !== undefined
 
   const [enableRange] = useState(false)
+  const [selectedCoinValue, setSelectedCoinValue] = useState(currentUSDValue)
+
+  useEffect(() => {
+    setSelectedCoinValue(currentUSDValue)
+  }, [currentUSDValue])
 
   const { pickedColor } = useContext(DataContext)
 
   const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
 
-  const [value, setValue] = useState<GraphPoint>({
-    date: new Date("2000-02-10T08:00:00.000Z"),
-    value: 0,
-  })
-
   const [graphInterval, setGraphInterval] = useState<GraphIntervalType>(
     GRAPH_INTERVAL_1D_PARAM
   )
-
-  // console.log(points)
 
   const highestDate = useMemo(
     () =>
@@ -79,7 +111,6 @@ export const WalletGraph = (): JSX.Element => {
     [selectedPoints]
   )
   const range: GraphRange | undefined = useMemo(() => {
-    // if range is disabled, default to infinite range (undefined)
     if (!enableRange) return undefined
 
     if (selectedPoints.length !== 0 && highestDate != null) {
@@ -124,7 +155,13 @@ export const WalletGraph = (): JSX.Element => {
     }
   }
 
-  console.log("selectedPoints", selectedPoints)
+  const onPointSelected = useCallback((p) => {
+    setSelectedCoinValue(p.value)
+  }, [])
+
+  const onGestureEnd = useCallback(() => {
+    setSelectedCoinValue(currentUSDValue)
+  }, [currentUSDValue])
 
   return (
     <View style={[styles.container]}>
@@ -173,10 +210,19 @@ export const WalletGraph = (): JSX.Element => {
       </View>
       <View>
         {!isReady ? (
-          <Loading />
+          <View style={styles.loadingView}>
+            <Loading />
+          </View>
         ) : (
           <LineGraph
             animated={true}
+            BottomAxisLabel={() => (
+              <AxisLabel
+                index={min.index}
+                selectedPoints={selectedPoints}
+                value={min.value}
+              />
+            )}
             color={pickedColor}
             enableFadeInMask={true}
             enableIndicator={true}
@@ -187,16 +233,32 @@ export const WalletGraph = (): JSX.Element => {
             range={range}
             SelectionDot={SelectionDot}
             style={styles.graph}
+            TopAxisLabel={() => (
+              <AxisLabel
+                index={max.index}
+                selectedPoints={selectedPoints}
+                value={max.value}
+              />
+            )}
+            onGestureEnd={onGestureEnd}
             onGestureStart={() =>
               Device.isDevice &&
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
             }
-            onPointSelected={(p) => setValue(p)}
+            onPointSelected={onPointSelected}
           />
         )}
       </View>
-      <Text style={{ color: textColor }}>Test</Text>
-      <Text style={{ color: textColor }}>{value.value}</Text>
+      <Text
+        color={textColor}
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+        }}
+      >
+        {`1 KASPA ≈ $${selectedCoinValue.toFixed(6)}`}
+      </Text>
     </View>
   )
 }
@@ -236,6 +298,10 @@ const styles = StyleSheet.create({
   controlsScrollView: {
     flexGrow: 1,
     // paddingHorizontal: 15,
+  },
+  loadingView: {
+    height: 250,
+    width: "100%",
   },
   controlsScrollViewContent: {
     justifyContent: "center",
