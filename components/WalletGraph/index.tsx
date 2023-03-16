@@ -33,7 +33,7 @@ const GRAPH_INTERVAL_1M_PARAM = "1M"
 const GRAPH_INTERVAL_1Y_PARAM = "1Y"
 const GRAPH_INTERVAL_ALL_PARAM = "ALL"
 
-export const WalletGraph = (): JSX.Element => {
+export const WalletGraph = ({ graphInterval, graphLoading }): JSX.Element => {
   const {
     points1D,
     points1W,
@@ -102,10 +102,6 @@ export const WalletGraph = (): JSX.Element => {
 
   const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
 
-  const [graphInterval, setGraphInterval] = useState<GraphIntervalType>(
-    GRAPH_INTERVAL_1D_PARAM
-  )
-
   const highestDate = useMemo(
     () =>
       selectedPoints !== undefined &&
@@ -139,26 +135,36 @@ export const WalletGraph = (): JSX.Element => {
     }
   }, [enableRange, highestDate, selectedPoints])
 
-  const setPointsInInterval = (interval): void => {
-    switch (interval) {
-      case "1W":
-        setSelectedPoints(points1W)
-        break
-      case "1M":
-        setSelectedPoints(points1M)
-        break
-      case "1Y":
-        setSelectedPoints(points1Y)
-        break
-      case "ALL":
-        setSelectedPoints(pointsALL)
-        break
-      default:
-        // 1D
-        setSelectedPoints(points1D)
-        break
-    }
-  }
+  useEffect(() => {
+    setTimeout(() => {
+      switch (graphInterval) {
+        case "1W":
+          setSelectedPoints(points1W)
+          break
+        case "1M":
+          setSelectedPoints(points1M)
+          break
+        case "1Y":
+          setSelectedPoints(points1Y)
+          break
+        case "ALL":
+          setSelectedPoints(pointsALL)
+          break
+        default:
+          // 1D
+          setSelectedPoints(points1D)
+          break
+      }
+    }, 500)
+  }, [
+    graphInterval,
+    points1D,
+    points1M,
+    points1W,
+    points1Y,
+    pointsALL,
+    setSelectedPoints,
+  ])
 
   const onPointSelected = useCallback((p) => {
     // console.log("here", p.date)
@@ -183,51 +189,8 @@ export const WalletGraph = (): JSX.Element => {
 
   return (
     <View style={[styles.container]}>
-      <View style={styles.chartContainer}>
-        <ChartSwitcher
-          enabled={graphInterval === GRAPH_INTERVAL_1D_PARAM}
-          label="1D"
-          onPress={() => {
-            setGraphInterval(GRAPH_INTERVAL_1D_PARAM)
-            setPointsInInterval("1D")
-          }}
-        />
-        <ChartSwitcher
-          enabled={graphInterval === GRAPH_INTERVAL_1W_PARAM}
-          label="1W"
-          onPress={() => {
-            setGraphInterval(GRAPH_INTERVAL_1W_PARAM)
-            setPointsInInterval("1W")
-          }}
-        />
-
-        <ChartSwitcher
-          enabled={graphInterval === GRAPH_INTERVAL_1M_PARAM}
-          label="1M"
-          onPress={() => {
-            setGraphInterval(GRAPH_INTERVAL_1M_PARAM)
-            setPointsInInterval("1M")
-          }}
-        />
-        <ChartSwitcher
-          enabled={graphInterval === GRAPH_INTERVAL_1Y_PARAM}
-          label="1Y"
-          onPress={() => {
-            setGraphInterval(GRAPH_INTERVAL_1Y_PARAM)
-            setPointsInInterval("1Y")
-          }}
-        />
-        <ChartSwitcher
-          enabled={graphInterval === GRAPH_INTERVAL_ALL_PARAM}
-          label="ALL"
-          onPress={() => {
-            setGraphInterval(GRAPH_INTERVAL_ALL_PARAM)
-            setPointsInInterval("ALL")
-          }}
-        />
-      </View>
       <View>
-        {!isReady ? (
+        {!isReady || graphLoading ? (
           <View style={styles.loadingView}>
             <Loading />
           </View>

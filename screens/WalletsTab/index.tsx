@@ -1,9 +1,12 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import WalletAmount from "../../components/WalletAmount"
 import WalletTransact from "../../components/WalletTransact"
-import { WalletGraph } from "../../components/WalletGraph"
+import { GraphIntervalType, WalletGraph } from "../../components/WalletGraph"
 import { DataContext } from "../../providers/DataProvider"
+import { ChartSwitcherList } from "../../components/WalletGraph/ChartSwitcher"
+
+const GRAPH_INTERVAL_1D_PARAM = "1D"
 
 const WalletsTab = (): JSX.Element => {
   const openBottomSheetTransact = (): boolean => {
@@ -11,6 +14,12 @@ const WalletsTab = (): JSX.Element => {
   }
 
   const { currentUSDValue } = useContext(DataContext)
+
+  const [graphInterval, setGraphInterval] = useState<GraphIntervalType>(
+    GRAPH_INTERVAL_1D_PARAM
+  )
+
+  const [graphLoading, setGraphLoading] = useState(false)
 
   return (
     <View style={styles.container}>
@@ -24,8 +33,16 @@ const WalletsTab = (): JSX.Element => {
       <View style={{ paddingBottom: 60 }}>
         <WalletTransact openBottomSheetTransact={openBottomSheetTransact} />
       </View>
-      <View>
-        <WalletGraph />
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <ChartSwitcherList
+          graphInterval={graphInterval}
+          setGraphInterval={setGraphInterval}
+          setGraphLoading={setGraphLoading}
+        />
+        <WalletGraph
+          graphInterval={graphInterval}
+          graphLoading={graphLoading}
+        />
       </View>
     </View>
   )
