@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useCallback,
 } from "react"
-import { View, StyleSheet, useColorScheme } from "react-native"
+import { View, StyleSheet, useColorScheme, Dimensions } from "react-native"
 import { Text } from "native-base"
 import * as Haptics from "expo-haptics"
 import * as Device from "expo-device"
@@ -293,10 +293,15 @@ export const WalletGraph = (): JSX.Element => {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   chartContainer: {
     flexDirection: "row",
     justifyContent: "space-evenly",
+    alignItems: "center",
     width: "100%",
   },
   spacer: {
@@ -312,7 +317,8 @@ const styles = StyleSheet.create({
   },
   graph: {
     alignSelf: "center",
-    width: "100%",
+    width: Dimensions.get("screen").width,
+    justifyContent: "center",
     aspectRatio: 1.4,
   },
   miniGraph: {
