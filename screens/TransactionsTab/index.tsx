@@ -1,8 +1,7 @@
 import React, { useContext } from "react"
-import { StyleSheet, Button } from "react-native"
+import { StyleSheet, Button, View } from "react-native"
+import { Text } from "native-base"
 import { DataContext } from "../../providers/DataProvider"
-import EditScreenInfo from "../../components/EditScreenInfo"
-import { Text, View } from "../../components/Themed"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 const TransactionsTab = (): JSX.Element => {
@@ -21,7 +20,6 @@ const TransactionsTab = (): JSX.Element => {
         lightColor="#eee"
         style={styles.separator}
       />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
       <Button title="Logout" onPress={() => removeWallet()} />
     </View>
   )

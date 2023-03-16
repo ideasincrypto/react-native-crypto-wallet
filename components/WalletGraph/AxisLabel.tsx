@@ -8,7 +8,7 @@ export const AxisLabel = ({ value, index, selectedPoints }): JSX.Element => {
     (index / selectedPoints.length) * (Dimensions.get("window").width - 40) || 0
   return (
     value && (
-      <View style={{ transform: [{ translateX: Math.max(location - 22, 5) }] }}>
+      <View style={{ transform: [{ translateX: Math.max(location - 40, 5) }] }}>
         <Text color={textColor}>{`${value.toFixed(6)}`}</Text>
       </View>
     )

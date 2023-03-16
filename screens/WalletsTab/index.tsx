@@ -1,6 +1,5 @@
 import React, { useContext } from "react"
-import { StyleSheet } from "react-native"
-import { View } from "../../components/Themed"
+import { StyleSheet, View } from "react-native"
 import WalletAmount from "../../components/WalletAmount"
 import WalletTransact from "../../components/WalletTransact"
 import { WalletGraph } from "../../components/WalletGraph"
