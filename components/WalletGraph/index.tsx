@@ -17,9 +17,6 @@ import { DataContext } from "../../providers/DataProvider"
 import Loading from "../../screens/Loading"
 import { AxisLabel } from "./AxisLabel"
 
-// const POINT_COUNT = 70
-// const POINTS = generateRandomGraphData(POINT_COUNT)
-// const COLOR = "#6a7ee7"
 const GRADIENT_FILL_COLORS = ["#7476df5D", "#7476df4D", "#7476df00"]
 
 export type GraphIntervalType =
@@ -52,17 +49,17 @@ export const WalletGraph = (): JSX.Element => {
 
   useEffect(() => {
     if (selectedPoints?.length > 1) {
-      let maxVal = selectedPoints[0].value
-      let minVal = selectedPoints[0].value
+      let maxVal = (selectedPoints[0] as MaxMinType).value
+      let minVal = (selectedPoints[0] as MaxMinType).value
       let minIndex = 0
       let maxIndex = 0
 
       for (let i = 0; i < selectedPoints.length; i++) {
-        if (selectedPoints[i].value > maxVal) {
-          maxVal = selectedPoints[i].value
+        if ((selectedPoints[i] as MaxMinType).value > maxVal) {
+          maxVal = (selectedPoints[i] as MaxMinType).value
           maxIndex = i
-        } else if (selectedPoints[i].value < minVal) {
-          minVal = selectedPoints[i].value
+        } else if ((selectedPoints[i] as MaxMinType).value < minVal) {
+          minVal = (selectedPoints[i] as MaxMinType).value
           minIndex = i
         }
       }
@@ -106,7 +103,7 @@ export const WalletGraph = (): JSX.Element => {
       selectedPoints !== undefined &&
       selectedPoints.length !== 0 &&
       selectedPoints[selectedPoints.length - 1] !== null
-        ? selectedPoints[selectedPoints.length - 1]?.date
+        ? (selectedPoints[selectedPoints.length - 1] as MaxMinType)?.date
         : undefined,
     [selectedPoints]
   )
@@ -116,7 +113,7 @@ export const WalletGraph = (): JSX.Element => {
     if (selectedPoints.length !== 0 && highestDate != null) {
       return {
         x: {
-          min: selectedPoints[0]?.date,
+          min: (selectedPoints[0] as MaxMinType)?.date,
           max: new Date(highestDate.getTime() + 50 * 1000 * 60 * 60 * 24),
         },
         y: {
@@ -162,6 +159,12 @@ export const WalletGraph = (): JSX.Element => {
   const onGestureEnd = useCallback(() => {
     setSelectedCoinValue(currentUSDValue)
   }, [currentUSDValue])
+
+  type MaxMinType = {
+    index: number
+    value: number
+    date: Date
+  }
 
   return (
     <View style={[styles.container]}>
@@ -218,9 +221,9 @@ export const WalletGraph = (): JSX.Element => {
             animated={true}
             BottomAxisLabel={() => (
               <AxisLabel
-                index={min.index}
+                index={(min as MaxMinType).index}
                 selectedPoints={selectedPoints}
-                value={min.value}
+                value={(min as MaxMinType).value}
               />
             )}
             color={pickedColor}
@@ -235,9 +238,9 @@ export const WalletGraph = (): JSX.Element => {
             style={styles.graph}
             TopAxisLabel={() => (
               <AxisLabel
-                index={max.index}
+                index={(max as MaxMinType).index}
                 selectedPoints={selectedPoints}
-                value={max.value}
+                value={(max as MaxMinType).value}
               />
             )}
             onGestureEnd={onGestureEnd}
