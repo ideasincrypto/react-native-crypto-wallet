@@ -21,12 +21,12 @@ app.use(logger("dev"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(express.static(path.join(`${__dirname}`, "public")))
-app.use(express.static(path.join(`${__dirname}`, "data")))
+app.use(express.static(path.join(__dirname, "public")))
 
 if (!fs.existsSync(`${__dirname}/data`)) {
   fs.mkdirSync(`${__dirname}/data`)
 }
+app.use(express.static(path.join(__dirname, "data")))
 
 const getCurrentPrice = async () => {
   try {
