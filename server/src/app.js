@@ -78,26 +78,16 @@ const getGraphData = async (timestamp) => {
 }
 
 const getData = async () => {
-  return await Promise.all({
-    dataALL: await getGraphData("ALL"),
-    data1Y: await getGraphData("1Y"),
-    data1M: await getGraphData("1M"),
-    data1W: await getGraphData("1W"),
-    data1D: await getGraphData("1D"),
-    currentPrice: await getCurrentPrice(),
-  })
-}
-
-// run at startup
-console.log("---------------------")
-console.log("Data Refresh Occured.")
-console.log("Refreshing data again in one minute.")
-const dataJson = await getData()
-try {
-  fs.writeFileSync(`${__dirname}/public/data.json`, JSON.stringify(dataJson))
-} catch (err) {
-  console.error(err)
-  console.log(err)
+  return await Promise.all([
+    {
+      dataALL: await getGraphData("ALL"),
+      data1Y: await getGraphData("1Y"),
+      data1M: await getGraphData("1M"),
+      data1W: await getGraphData("1W"),
+      data1D: await getGraphData("1D"),
+      currentPrice: await getCurrentPrice(),
+    },
+  ])
 }
 
 cron.schedule("*/2 * * * *", async () => {
