@@ -122,7 +122,7 @@ app.get("/api/data", function (req, res, next) {
   res.sendFile(`${__dirname}/data/data.json`)
 })
 
-app.get("/*", function (req, res, next) {
+app.get("/", function (req, res, next) {
   res.sendFile(`${__dirname}/public/index.html`)
 })
 
