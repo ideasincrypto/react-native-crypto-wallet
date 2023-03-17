@@ -117,7 +117,7 @@ cron.schedule("*/2 * * * *", async () => {
   }
 })
 
-app.get("/getData", function (req, res, next) {
+app.get("/api/data", function (req, res, next) {
   res.sendFile(`${__dirname}/data/data.json`)
 })
 
