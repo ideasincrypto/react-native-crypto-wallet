@@ -120,8 +120,8 @@ app.get("/api/data", function (req, res, next) {
   res.sendFile(path.join(__dirname, "public/data.json"))
 })
 
-app.get("/", function (req, res, next) {
-  res.sendFile(`${__dirname}/index.html`)
-})
+// app.get("/", function (req, res, next) {
+//   res.sendFile(`${__dirname}/index.html`)
+// })
 
 export default app
