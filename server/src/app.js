@@ -94,6 +94,17 @@ const getData = async () => {
   return data
 }
 
+// run at startup
+console.log("---------------------")
+console.log("Data Refresh Occured.")
+console.log("Refreshing data again in one minute.")
+const data = await getData()
+try {
+  fs.writeFileSync(`${__dirname}/data/data.json`, JSON.stringify(data))
+} catch (err) {
+  console.error(err)
+}
+
 cron.schedule("*/2 * * * *", async () => {
   console.log("---------------------")
   console.log("Data Refresh Occured.")
@@ -111,7 +122,7 @@ app.get("/getData", function (req, res, next) {
 })
 
 app.get("/*", function (req, res, next) {
-  res.sendFile(__dirname + "/index.html")
+  res.sendFile(`${__dirname}/public/index.html`)
 })
 
 export default app
