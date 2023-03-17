@@ -1,4 +1,9 @@
 {
+  "exclude": [
+    "./node_modules",
+    "./assets/",
+    "./server/"
+  ],
   "compilerOptions": {
     "target": "es5",
     "lib": [
@@ -21,5 +26,9 @@
     "resolveJsonModule": true,
     "strict": true,
   },
-  "extends": "expo/tsconfig.base"
+  "extends": "expo/tsconfig.base",
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+  }
 }
