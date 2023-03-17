@@ -25,70 +25,30 @@ const BottomTabNavigator = (): JSX.Element => {
     setCurrentUSDValue,
   } = useContext(DataContext)
 
-  const getCoinData = async (timestamp): Promise<GraphPoint[]> => {
-    let timeValue = moment().unix()
-    switch (timestamp) {
-      case "1W":
-        timeValue = moment().subtract(1, "weeks").unix()
-        break
-      case "1M":
-        timeValue = moment().subtract(1, "months").unix()
-        break
-      case "1Y":
-        timeValue = moment().subtract(1, "years").unix()
-        break
-      case "ALL":
-        timeValue = 10000
-        break
-      default:
-        // 1D
-        timeValue = moment().subtract(1, "days").unix()
-        break
-    }
-
-    let arrayOfObjects: GraphPoint[] = []
-
+  const getApiData = async (): Promise<any> => {
     try {
       // eslint-disable-next-line max-len
-      const url = `https://api.coingecko.com/api/v3/coins/kaspa/market_chart/range?vs_currency=usd&from=${timeValue}&to=${moment().unix()}`
+      const url = "https://wallet-server-r6l7o.ondigitalocean.app/api/data"
       console.log(url)
       const response = await fetch(url)
-      const { prices } = await response.json()
-      arrayOfObjects = prices?.map((x: number | Date) => ({
-        date: new Date(x[0]),
-        value: x[1],
-      }))
-      return arrayOfObjects
+      const json = await response.json()
+      return json
     } catch (error) {
       console.error(error)
-      return []
-    }
-  }
-
-  const getCurrentPrice = async (): Promise<number> => {
-    try {
-      const response = await fetch(
-        // eslint-disable-next-line max-len
-        "https://api.coingecko.com/api/v3/simple/price?ids=kaspa&vs_currencies=usd"
-      )
-      const { kaspa } = await response.json()
-      return kaspa.usd
-    } catch (error) {
-      console.error(error)
-      return 0
+      return {}
     }
   }
 
   const getData = async (): Promise<void> => {
-    const currentPrice = await getCurrentPrice()
-    setCurrentUSDValue(currentPrice)
-    setSelectedUSDValue(currentPrice)
+    const apiData = await getApiData()
+    setCurrentUSDValue(apiData.currentPrice)
+    setSelectedUSDValue(apiData.currentPrice)
 
-    const allData = await getCoinData("ALL")
-    const yearData = await getCoinData("1Y")
-    const monthData = await getCoinData("1M")
-    const weekData = await getCoinData("1W")
-    const dayData = await getCoinData("1D")
+    const allData = apiData.dataALL
+    const yearData = apiData.data1Y
+    const monthData = apiData.data1M
+    const weekData = apiData.data1W
+    const dayData = apiData.data1D
 
     setPointsALL(allData)
     setPoints1Y(yearData)

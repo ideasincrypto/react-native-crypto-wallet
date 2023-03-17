@@ -78,16 +78,16 @@ const getGraphData = async (timestamp) => {
 }
 
 const getData = async () => {
-  const data = {
-    currentPrice: await getCurrentPrice(),
-    data1H: await getGraphData("1H"),
-    data1D: await getGraphData("1D"),
-    data1W: await getGraphData("1W"),
-    data1M: await getGraphData("1M"),
-    data1Y: await getGraphData("1M"),
-    dataALL: await getGraphData("ALL"),
-  }
-  return data
+  return await Promise.all([
+    {
+      dataALL: await getGraphData("ALL"),
+      data1Y: await getGraphData("1Y"),
+      data1M: await getGraphData("1M"),
+      data1W: await getGraphData("1W"),
+      data1D: await getGraphData("1D"),
+      currentPrice: await getCurrentPrice(),
+    },
+  ])
 }
 
 // run at startup
