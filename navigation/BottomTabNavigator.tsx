@@ -25,14 +25,28 @@ const BottomTabNavigator = (): JSX.Element => {
     setCurrentUSDValue,
   } = useContext(DataContext)
 
-  const getApiData = async (): Promise<any> => {
+  type DataType = {
+    value: number
+    date: Date
+  }
+
+  type GetDataType = {
+    currentPrice?: number
+    data1D?: [DataType]
+    data1W?: [DataType]
+    data1M?: [DataType]
+    data1Y?: [DataType]
+    dataALL?: [DataType]
+  }
+
+  const getApiData = async (): Promise<GetDataType> => {
     try {
       // eslint-disable-next-line max-len
       const url = "https://wallet-server-r6l7o.ondigitalocean.app/api/data"
       console.log(url)
       const response = await fetch(url)
       const json = await response.json()
-      return json
+      return json[0]
     } catch (error) {
       console.error(error)
       return {}
@@ -41,26 +55,34 @@ const BottomTabNavigator = (): JSX.Element => {
 
   const getData = async (): Promise<void> => {
     const apiData = await getApiData()
-    setCurrentUSDValue(apiData.currentPrice)
-    setSelectedUSDValue(apiData.currentPrice)
+    if (
+      apiData &&
+      apiData.currentPrice &&
+      apiData.dataALL &&
+      apiData.data1Y &&
+      apiData.data1M &&
+      apiData.data1W &&
+      apiData.data1D
+    ) {
+      setCurrentUSDValue(apiData.currentPrice)
+      setSelectedUSDValue(apiData.currentPrice)
+      const allData = apiData.dataALL
+      const yearData = apiData.data1Y
+      const monthData = apiData.data1M
+      const weekData = apiData.data1W
+      const dayData = apiData.data1D
 
-    const allData = apiData.dataALL
-    const yearData = apiData.data1Y
-    const monthData = apiData.data1M
-    const weekData = apiData.data1W
-    const dayData = apiData.data1D
-
-    setPointsALL(allData)
-    setPoints1Y(yearData)
-    setPoints1M(monthData)
-    setPoints1W(weekData)
-    setPoints1D(dayData)
-    setSelectedPoints(dayData)
+      setPointsALL(allData)
+      setPoints1Y(yearData)
+      setPoints1M(monthData)
+      setPoints1W(weekData)
+      setPoints1D(dayData)
+      setSelectedPoints(dayData)
+    }
   }
 
   useEffect(() => {
     getData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
