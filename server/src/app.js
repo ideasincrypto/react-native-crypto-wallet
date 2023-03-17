@@ -109,9 +109,9 @@ cron.schedule("*/2 * * * *", async () => {
   console.log("---------------------")
   console.log("Data Refresh Occured.")
   console.log("Refreshing data again in one minute.")
-  const data = await getData()
+  const val = await getData()
   try {
-    fs.writeFileSync(`${__dirname}/data/data.json`, JSON.stringify(data))
+    fs.writeFileSync(`${__dirname}/data/data.json`, JSON.stringify(val))
   } catch (err) {
     console.error(err)
   }
