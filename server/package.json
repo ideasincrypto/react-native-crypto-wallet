@@ -1,8 +1,7 @@
 {
-  "name": "node-babel-template",
-  "version": "0.0.0",
+  "name": "wallet-server",
+  "version": "0.0.1",
   "private": true,
-  "type":"module" ,
   "scripts": {
     "dev": "babel-node ./src/bin/www.js",
     "clean": "rm -rf dist",
