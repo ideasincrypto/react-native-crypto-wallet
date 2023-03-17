@@ -9,24 +9,17 @@ import fs from "fs"
 
 import { fileURLToPath } from "url"
 
-const __filename = fileURLToPath(import.meta.url)
-
-const __dirname = path.dirname(__filename)
-
-const port = 3000
-
 const app = express()
 
 app.use(logger("dev"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(express.static(path.join(__dirname, "public")))
 
-if (!fs.existsSync(`${__dirname}/data`)) {
-  fs.mkdirSync(`${__dirname}/data`)
-}
-app.use(express.static(path.join(__dirname, "data")))
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+app.use(express.static(path.join(__dirname, "public")))
 
 const getCurrentPrice = async () => {
   try {
@@ -37,6 +30,7 @@ const getCurrentPrice = async () => {
     const { kaspa } = await response.json()
     return kaspa.usd
   } catch (error) {
+    console.log(error)
     console.error(error)
     return 0
   }
@@ -77,6 +71,7 @@ const getGraphData = async (timestamp) => {
     }))
     return arrayOfObjects
   } catch (error) {
+    console.log(error)
     console.error(error)
     return []
   }
@@ -99,11 +94,12 @@ const getData = async () => {
 console.log("---------------------")
 console.log("Data Refresh Occured.")
 console.log("Refreshing data again in one minute.")
-const data = await getData()
+const dataJson = await getData()
 try {
-  fs.writeFileSync(`${__dirname}/data/data.json`, JSON.stringify(data))
+  fs.writeFileSync(`${__dirname}/public/data.json`, JSON.stringify(dataJson))
 } catch (err) {
   console.error(err)
+  console.log(err)
 }
 
 cron.schedule("*/2 * * * *", async () => {
@@ -112,18 +108,20 @@ cron.schedule("*/2 * * * *", async () => {
   console.log("Refreshing data again in one minute.")
   const val = await getData()
   try {
-    fs.writeFileSync(`${__dirname}/data/data.json`, JSON.stringify(val))
+    fs.writeFileSync(`${__dirname}/public/data.json`, JSON.stringify(val))
   } catch (err) {
     console.error(err)
+    console.log(err)
   }
 })
 
 app.get("/api/data", function (req, res, next) {
-  res.sendFile(`${__dirname}/data/data.json`)
+  res.header("Content-Type", "application/json")
+  res.sendFile(path.join(__dirname, "public/data.json"))
 })
 
 app.get("/", function (req, res, next) {
-  res.sendFile(`${__dirname}/public/index.html`)
+  res.sendFile(`${__dirname}/index.html`)
 })
 
 export default app
