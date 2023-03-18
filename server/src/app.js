@@ -125,11 +125,21 @@ app.get("/api/data", async (req, res, next) => {
   res.json({
     data: {
       prices: {
-        day: data1D,
-        week: data1W,
-        month: data1M,
-        year: data1Y,
-        all: dataALL,
+        day: {
+          prices: data1D,
+        },
+        week: {
+          prices: data1W,
+        },
+        month: {
+          prices: data1M,
+        },
+        year: {
+          prices: data1Y,
+        },
+        all: {
+          prices: dataALL,
+        },
       },
     },
   })
