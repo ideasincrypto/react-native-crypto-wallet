@@ -129,7 +129,7 @@ const sleep = async (seconds) => {
   await new Promise((resolve) => setTimeout(resolve, seconds * 1000))
 }
 
-cron.schedule("*/6 * * * *", async () => {
+cron.schedule("*/8 * * * *", async () => {
   console.log("---------------------")
   console.log("Data Refresh Occured.")
   console.log("Refreshing data again in one minute.")
@@ -140,7 +140,7 @@ cron.schedule("*/6 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(10)
+  sleep(20)
   const data1D = await getGraphData("1D")
   try {
     db.set("data1D", JSON.stringify(data1D))
@@ -148,7 +148,7 @@ cron.schedule("*/6 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(10)
+  sleep(20)
   const data1Y = await getGraphData("1Y")
   try {
     db.set("data1Y", JSON.stringify(data1Y))
@@ -156,7 +156,7 @@ cron.schedule("*/6 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(10)
+  sleep(20)
   const data1M = await getGraphData("1M")
   try {
     db.set("data1M", JSON.stringify(data1M))
@@ -164,7 +164,7 @@ cron.schedule("*/6 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(10)
+  sleep(20)
   const data1W = await getGraphData("1W")
   try {
     db.set("data1W", JSON.stringify(data1W))
@@ -181,7 +181,7 @@ cron.schedule("*/6 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(10)
+  sleep(20)
   const hlData1Y = await getHighLowData("1Y")
   try {
     db.set("data1Y-highlow", JSON.stringify(hlData1Y))
@@ -189,7 +189,7 @@ cron.schedule("*/6 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(10)
+  sleep(20)
   const hlData1M = await getHighLowData("1M")
   try {
     db.set("data1M-highlow", JSON.stringify(hlData1M))
@@ -197,7 +197,7 @@ cron.schedule("*/6 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(10)
+  sleep(20)
   const hlData1W = await getHighLowData("1W")
   try {
     db.set("data1W-highlow", JSON.stringify(hlData1W))
@@ -205,7 +205,7 @@ cron.schedule("*/6 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(10)
+  sleep(20)
   const hlData1D = await getHighLowData("1D")
   try {
     db.set("data1D-highlow", JSON.stringify(hlData1D))
@@ -215,15 +215,13 @@ cron.schedule("*/6 * * * *", async () => {
   }
 
   sleep(20)
-  const val = await getHighLowData("1D")
+  const val = await getCurrentPrice()
   try {
     db.set("currentPrice", val)
   } catch (err) {
     console.error(err)
     console.log(err)
   }
-
-  getCurrentPrice
 })
 
 app.get("/api/data", async (req, res, next) => {
