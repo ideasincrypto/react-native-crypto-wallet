@@ -3207,6 +3207,11 @@ side-channel@^1.0.4:
     get-intrinsic "^1.0.2"
     object-inspect "^1.9.0"
 
+simple-json-db@^2.0.0:
+  version "2.0.0"
+  resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/simple-json-db/-/simple-json-db-2.0.0.tgz#5ed27b0ed16f909506a72953f17eda49e278601d"
+  integrity sha512-oTh7gFQzqAe0E8RN3EkisPo0CojkzcKCKibTcJncg0yt47hWTaNwwjX/FsxfXSTDxfMjBFXFVnZe/EskAlJr7w==
+
 slash@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/slash/-/slash-2.0.0.tgz#de552851a1759df3a8f206535442f5ec4ddeab44"

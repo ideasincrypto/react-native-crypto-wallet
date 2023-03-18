@@ -6,9 +6,9 @@ import cron from "node-cron"
 import moment from "moment"
 import fetch from "node-fetch"
 import fs from "fs"
+import JSONdb from "simple-json-db"
 
 const env = process.env.NODE_ENV
-const baseUrl = env === "dev" ? "./src/public/" : "../public/"
 import { fileURLToPath } from "url"
 
 const app = express()
@@ -22,11 +22,14 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 app.use(express.static(path.join(__dirname, "public")))
-app.use(express.static(path.join(__dirname, "public/all.json")))
-app.use(express.static(path.join(__dirname, "public/y.json")))
-app.use(express.static(path.join(__dirname, "public/m.json")))
-app.use(express.static(path.join(__dirname, "public/w.json")))
-app.use(express.static(path.join(__dirname, "public/d.json")))
+
+if (!fs.existsSync("./storage.json")) {
+  fs.writeFileSync("./storage.json", JSON.stringify({}))
+}
+
+const db = new JSONdb("./storage.json")
+
+app.use(express.static(__dirname + "/public"))
 
 const getGraphData = async (timestamp) => {
   let timeValue = moment()
@@ -73,13 +76,13 @@ const sleep = async (seconds) => {
   await new Promise((resolve) => setTimeout(resolve, seconds * 1000))
 }
 
-cron.schedule("*/5 * * * *", async () => {
+cron.schedule("*/1 * * * *", async () => {
   console.log("---------------------")
   console.log("Data Refresh Occured.")
   console.log("Refreshing data again in one minute.")
   const dataALL = await getGraphData("ALL")
   try {
-    fs.writeFileSync(baseUrl + "all.json", JSON.stringify(dataALL))
+    db.set("dataALL", JSON.stringify(dataALL))
   } catch (err) {
     console.error(err)
     console.log(err)
@@ -87,14 +90,14 @@ cron.schedule("*/5 * * * *", async () => {
   // sleep(30)
   const data1D = await getGraphData("1D")
   try {
-    fs.writeFileSync(baseUrl + "d.json", JSON.stringify(data1D))
+    db.set("data1D", JSON.stringify(data1D))
   } catch (err) {
     console.error(err)
     console.log(err)
   }
   const data1Y = await getGraphData("1Y")
   try {
-    fs.writeFileSync(baseUrl + "y.json", JSON.stringify(data1Y))
+    db.set("data1Y", JSON.stringify(data1Y))
   } catch (err) {
     console.error(err)
     console.log(err)
@@ -102,14 +105,14 @@ cron.schedule("*/5 * * * *", async () => {
   // sleep(30)
   const data1M = await getGraphData("1M")
   try {
-    fs.writeFileSync(baseUrl + "m.json", JSON.stringify(data1M))
+    db.set("data1M", JSON.stringify(data1M))
   } catch (err) {
     console.error(err)
     console.log(err)
   }
   const data1W = await getGraphData("1W")
   try {
-    fs.writeFileSync(baseUrl + "w.json", JSON.stringify(data1W))
+    db.set("data1W", JSON.stringify(data1W))
   } catch (err) {
     console.error(err)
     console.log(err)
@@ -117,11 +120,11 @@ cron.schedule("*/5 * * * *", async () => {
 })
 
 app.get("/api/data", async (req, res, next) => {
-  const dataALL = JSON.parse(fs.readFileSync(baseUrl + "all.json"))
-  const data1Y = JSON.parse(fs.readFileSync(baseUrl + "y.json"))
-  const data1M = JSON.parse(fs.readFileSync(baseUrl + "m.json"))
-  const data1W = JSON.parse(fs.readFileSync(baseUrl + "w.json"))
-  const data1D = JSON.parse(fs.readFileSync(baseUrl + "d.json"))
+  const dataALL = JSON.parse(db.get("dataALL"))
+  const data1Y = JSON.parse(db.get("data1Y"))
+  const data1M = JSON.parse(db.get("data1M"))
+  const data1W = JSON.parse(db.get("data1W"))
+  const data1D = JSON.parse(db.get("data1D"))
 
   res.json({
     dataALL,
@@ -133,7 +136,7 @@ app.get("/api/data", async (req, res, next) => {
 })
 
 app.get("/*", function (req, res, next) {
-  res.sendFile(baseUrl + "index.html")
+  res.sendFile(__dirname + "/index.html")
 })
 
 export default app
