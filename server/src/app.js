@@ -117,7 +117,7 @@ const getData = async () => {
   sleep(30)
   const data1D = await getGraphData("1D")
   try {
-    fs.writeFileSync(`${__dirname}/public/all.json`, JSON.stringify(data1D))
+    fs.writeFileSync(`${__dirname}/public/d.json`, JSON.stringify(data1D))
   } catch (err) {
     console.error(err)
     console.log(err)
