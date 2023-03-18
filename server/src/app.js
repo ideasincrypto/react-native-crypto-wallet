@@ -140,7 +140,7 @@ cron.schedule("*/10 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(20)
+  await sleep(20)
   const data1D = await getGraphData("1D")
   try {
     db.set("data1D", JSON.stringify(data1D))
@@ -148,7 +148,7 @@ cron.schedule("*/10 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(40)
+  await sleep(40)
   const data1Y = await getGraphData("1Y")
   try {
     db.set("data1Y", JSON.stringify(data1Y))
@@ -156,7 +156,7 @@ cron.schedule("*/10 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(20)
+  await sleep(20)
   const data1M = await getGraphData("1M")
   try {
     db.set("data1M", JSON.stringify(data1M))
@@ -164,7 +164,7 @@ cron.schedule("*/10 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(20)
+  await sleep(20)
   const data1W = await getGraphData("1W")
   try {
     db.set("data1W", JSON.stringify(data1W))
@@ -173,7 +173,7 @@ cron.schedule("*/10 * * * *", async () => {
     console.log(err)
   }
 
-  sleep(60)
+  await sleep(60)
   const hlDataALL = await getHighLowData("ALL")
   try {
     db.set("dataALL-highlow", JSON.stringify(hlDataALL))
@@ -181,7 +181,7 @@ cron.schedule("*/10 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(20)
+  await sleep(20)
   const hlData1Y = await getHighLowData("1Y")
   try {
     db.set("data1Y-highlow", JSON.stringify(hlData1Y))
@@ -189,7 +189,7 @@ cron.schedule("*/10 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(20)
+  await sleep(20)
   const hlData1M = await getHighLowData("1M")
   try {
     db.set("data1M-highlow", JSON.stringify(hlData1M))
@@ -197,7 +197,7 @@ cron.schedule("*/10 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(40)
+  await sleep(40)
   const hlData1W = await getHighLowData("1W")
   try {
     db.set("data1W-highlow", JSON.stringify(hlData1W))
@@ -205,7 +205,7 @@ cron.schedule("*/10 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  sleep(20)
+  await sleep(20)
   const hlData1D = await getHighLowData("1D")
   try {
     db.set("data1D-highlow", JSON.stringify(hlData1D))
@@ -214,7 +214,7 @@ cron.schedule("*/10 * * * *", async () => {
     console.log(err)
   }
 
-  sleep(40)
+  await sleep(40)
   const val = await getCurrentPrice()
   try {
     db.set("currentPrice", val)
