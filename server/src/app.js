@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import express from "express"
 import path from "path"
 import cookieParser from "cookie-parser"
@@ -129,10 +130,10 @@ const sleep = async (seconds) => {
   await new Promise((resolve) => setTimeout(resolve, seconds * 1000))
 }
 
-cron.schedule("*/10 * * * *", async () => {
+cron.schedule("*/15 * * * *", async () => {
   console.log("---------------------")
   console.log("Data Refresh Occured.")
-  console.log("Refreshing data again in one minute.")
+  console.log("Refreshing data again in 15 minute.")
   const dataALL = await getGraphData("ALL")
   try {
     db.set("dataALL", JSON.stringify(dataALL))
