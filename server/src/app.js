@@ -118,11 +118,11 @@ cron.schedule("*/5 * * * *", async () => {
 })
 
 app.get("/api/data", async (req, res, next) => {
-  const dataALL = JSON.parse(db.get("dataALL"))
-  const data1Y = JSON.parse(db.get("data1Y"))
-  const data1M = JSON.parse(db.get("data1M"))
-  const data1W = JSON.parse(db.get("data1W"))
-  const data1D = JSON.parse(db.get("data1D"))
+  const data1Y = JSON.parse(await db.get("data1Y"))
+  const data1M = JSON.parse(await db.get("data1M"))
+  const data1W = JSON.parse(await db.get("data1W"))
+  const data1D = JSON.parse(await db.get("data1D"))
+  const dataALL = JSON.parse(await db.get("dataALL"))
 
   res.json({
     data: {
