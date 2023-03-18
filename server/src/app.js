@@ -8,8 +8,7 @@ import fetch from "node-fetch"
 import fs from "fs"
 
 const env = process.env.NODE_ENV
-const baseUrl = env === "dev" ? "./src/public/" : "./public/"
-console.log("baseUrl", baseUrl)
+const baseUrl = env === "dev" ? "./src/public/" : "../public/"
 import { fileURLToPath } from "url"
 
 const app = express()
@@ -28,21 +27,6 @@ app.use(express.static(path.join(__dirname, "public/y.json")))
 app.use(express.static(path.join(__dirname, "public/m.json")))
 app.use(express.static(path.join(__dirname, "public/w.json")))
 app.use(express.static(path.join(__dirname, "public/d.json")))
-
-const getCurrentPrice = async () => {
-  try {
-    const response = await fetch(
-      // eslint-disable-next-line max-len
-      "https://api.coingecko.com/api/v3/simple/price?ids=kaspa&vs_currencies=usd"
-    )
-    const { kaspa } = await response.json()
-    return kaspa.usd
-  } catch (error) {
-    console.log(error)
-    console.error(error)
-    return 0
-  }
-}
 
 const getGraphData = async (timestamp) => {
   let timeValue = moment()
