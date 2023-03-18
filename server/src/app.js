@@ -77,20 +77,20 @@ const getHighLowData = async (timestamp) => {
   let days = "1"
   switch (timestamp) {
     case "1W":
-      timeValue = "7"
+      days = "7"
       break
     case "1M":
-      timeValue = "30"
+      days = "30"
       break
     case "1Y":
-      timeValue = "365"
+      days = "365"
       break
     case "ALL":
-      timeValue = "max"
+      days = "max"
       break
     default:
       // 1D
-      timeValue = "1"
+      days = "1"
       break
   }
 
