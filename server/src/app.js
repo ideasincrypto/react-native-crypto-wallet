@@ -86,13 +86,13 @@ const sleep = async (seconds) => {
   await new Promise((resolve) => setTimeout(resolve, seconds * 1000))
 }
 
-cron.schedule("*/10 * * * *", async () => {
+cron.schedule("*/5 * * * *", async () => {
   console.log("---------------------")
   console.log("Data Refresh Occured.")
   console.log("Refreshing data again in one minute.")
   const dataALL = await getGraphData("ALL")
   try {
-    fs.writeFileSync(__dirname + "/public/all.json", JSON.stringify(dataALL))
+    fs.writeFileSync("./src/public/all.json", JSON.stringify(dataALL))
   } catch (err) {
     console.error(err)
     console.log(err)
@@ -100,14 +100,14 @@ cron.schedule("*/10 * * * *", async () => {
   // sleep(30)
   const data1D = await getGraphData("1D")
   try {
-    fs.writeFileSync(__dirname + "/public/d.json", JSON.stringify(data1D))
+    fs.writeFileSync("./src/public/d.json", JSON.stringify(data1D))
   } catch (err) {
     console.error(err)
     console.log(err)
   }
   const data1Y = await getGraphData("1Y")
   try {
-    fs.writeFileSync(__dirname + "/public/y.json", JSON.stringify(data1Y))
+    fs.writeFileSync("./src/public/y.json", JSON.stringify(data1Y))
   } catch (err) {
     console.error(err)
     console.log(err)
@@ -115,14 +115,14 @@ cron.schedule("*/10 * * * *", async () => {
   // sleep(30)
   const data1M = await getGraphData("1M")
   try {
-    fs.writeFileSync(__dirname + "/public/m.json", JSON.stringify(data1M))
+    fs.writeFileSync("./src/public/m.json", JSON.stringify(data1M))
   } catch (err) {
     console.error(err)
     console.log(err)
   }
   const data1W = await getGraphData("1W")
   try {
-    fs.writeFileSync(__dirname + "/public/w.json", JSON.stringify(data1W))
+    fs.writeFileSync("./src/public/w.json", JSON.stringify(data1W))
   } catch (err) {
     console.error(err)
     console.log(err)
