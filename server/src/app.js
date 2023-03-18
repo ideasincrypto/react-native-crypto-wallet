@@ -130,10 +130,7 @@ const sleep = async (seconds) => {
   await new Promise((resolve) => setTimeout(resolve, seconds * 1000))
 }
 
-cron.schedule("*/15 * * * *", async () => {
-  console.log("---------------------")
-  console.log("Data Refresh Occured.")
-  console.log("Updating local database")
+const triggerDataRefresh = async () => {
   const dataALL = await getGraphData("ALL")
   try {
     db.set("dataALL", JSON.stringify(dataALL))
@@ -223,8 +220,16 @@ cron.schedule("*/15 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
+}
+
+cron.schedule("*/15 * * * *", async () => {
+  console.log("---------------------")
+  console.log("Data Refresh Occured.")
+  console.log("Updating local database")
+  await triggerDataRefresh()
   console.log("Data refresh complete.")
   console.log("Refreshing data again in 15 minute.")
+  console.log("---------------------")
 })
 
 app.get("/api/data", async (req, res, next) => {
@@ -291,7 +296,16 @@ app.get("/api/data", async (req, res, next) => {
   })
 })
 
-app.get("/*", function (req, res, next) {
+app.get("/api/refresh", async (req, res, next) => {
+  console.log("---------------------")
+  console.log("A refresh has been manually triggered.")
+  res.json({ message: "A refresh has been manually triggered." })
+  await triggerDataRefresh()
+  console.log("Refreshing data again in 15 minute.")
+  console.log("---------------------")
+})
+
+app.get("/*", (req, res, next) => {
   res.sendFile(__dirname + "/public/index.html")
 })
 
