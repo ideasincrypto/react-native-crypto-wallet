@@ -78,16 +78,20 @@ const getGraphData = async (timestamp) => {
 }
 
 const getData = async () => {
-  return await Promise.all([
-    {
-      dataALL: await getGraphData("ALL"),
-      data1Y: await getGraphData("1Y"),
-      data1M: await getGraphData("1M"),
-      data1W: await getGraphData("1W"),
-      data1D: await getGraphData("1D"),
-      currentPrice: await getCurrentPrice(),
-    },
-  ])
+  const [dataALL, data1Y, data1M, data1W, data1D, currentPrice] =
+    await Promise.all([
+      profileHelper.getUserData(username),
+      tokenHelper.getUserToken(username),
+    ])
+
+  return {
+    dataALL,
+    data1Y,
+    data1M,
+    data1W,
+    data1D,
+    currentPrice,
+  }
 }
 
 cron.schedule("*/2 * * * *", async () => {
