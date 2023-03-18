@@ -6,7 +6,6 @@ import cron from "node-cron"
 import moment from "moment"
 import fetch from "node-fetch"
 import fs from "fs"
-import { readFile } from "fs/promises"
 
 import { fileURLToPath } from "url"
 
@@ -21,6 +20,11 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 app.use(express.static(path.join(__dirname, "public")))
+app.use(express.static(path.join(__dirname, "public/all.json")))
+app.use(express.static(path.join(__dirname, "public/y.json")))
+app.use(express.static(path.join(__dirname, "public/m.json")))
+app.use(express.static(path.join(__dirname, "public/w.json")))
+app.use(express.static(path.join(__dirname, "public/d.json")))
 
 const getCurrentPrice = async () => {
   try {
@@ -82,74 +86,57 @@ const sleep = async (seconds) => {
   await new Promise((resolve) => setTimeout(resolve, seconds * 1000))
 }
 
-const getData = async () => {
-  const dataALL = await getGraphData("ALL")
-  try {
-    fs.writeFileSync(`${__dirname}/public/all.json`, JSON.stringify(dataALL))
-  } catch (err) {
-    console.error(err)
-    console.log(err)
-  }
-  sleep(30)
-  const data1Y = await getGraphData("1Y")
-  try {
-    fs.writeFileSync(`${__dirname}/public/y.json`, JSON.stringify(data1Y))
-  } catch (err) {
-    console.error(err)
-    console.log(err)
-  }
-  sleep(30)
-  const data1M = await getGraphData("1M")
-  try {
-    fs.writeFileSync(`${__dirname}/public/m.json`, JSON.stringify(data1M))
-  } catch (err) {
-    console.error(err)
-    console.log(err)
-  }
-  sleep(30)
-  const data1W = await getGraphData("1W")
-  try {
-    fs.writeFileSync(`${__dirname}/public/w.json`, JSON.stringify(data1W))
-  } catch (err) {
-    console.error(err)
-    console.log(err)
-  }
-  sleep(30)
-  const data1D = await getGraphData("1D")
-  try {
-    fs.writeFileSync(`${__dirname}/public/d.json`, JSON.stringify(data1D))
-  } catch (err) {
-    console.error(err)
-    console.log(err)
-  }
-}
-
 cron.schedule("*/10 * * * *", async () => {
   console.log("---------------------")
   console.log("Data Refresh Occured.")
   console.log("Refreshing data again in one minute.")
-  await getData()
+  const dataALL = await getGraphData("ALL")
+  try {
+    fs.writeFileSync(__dirname + "/public/all.json", JSON.stringify(dataALL))
+  } catch (err) {
+    console.error(err)
+    console.log(err)
+  }
+  // sleep(30)
+  const data1D = await getGraphData("1D")
+  try {
+    fs.writeFileSync(__dirname + "/public/d.json", JSON.stringify(data1D))
+  } catch (err) {
+    console.error(err)
+    console.log(err)
+  }
+  const data1Y = await getGraphData("1Y")
+  try {
+    fs.writeFileSync(__dirname + "/public/y.json", JSON.stringify(data1Y))
+  } catch (err) {
+    console.error(err)
+    console.log(err)
+  }
+  // sleep(30)
+  const data1M = await getGraphData("1M")
+  try {
+    fs.writeFileSync(__dirname + "/public/m.json", JSON.stringify(data1M))
+  } catch (err) {
+    console.error(err)
+    console.log(err)
+  }
+  const data1W = await getGraphData("1W")
+  try {
+    fs.writeFileSync(__dirname + "/public/w.json", JSON.stringify(data1W))
+  } catch (err) {
+    console.error(err)
+    console.log(err)
+  }
 })
 
 app.get("/api/data", async (req, res, next) => {
-  const dataALL = JSON.parse(
-    await readFile(`${__dirname}/public/all.json`, "utf8")
-  )
-  const data1Y = JSON.parse(
-    await readFile(`${__dirname}/public/y.json`, "utf8")
-  )
-  const data1M = JSON.parse(
-    await readFile(`${__dirname}/public/m.json`, "utf8")
-  )
-  const data1W = JSON.parse(
-    await readFile(`${__dirname}/public/w.json`, "utf8")
-  )
-  const data1D = JSON.parse(
-    await readFile(`${__dirname}/public/d.json`, "utf8")
-  )
+  const dataALL = JSON.parse(fs.readFileSync("./src/public/all.json"))
+  const data1Y = JSON.parse(fs.readFileSync("./src/public/y.json"))
+  const data1M = JSON.parse(fs.readFileSync("./src/public/m.json"))
+  const data1W = JSON.parse(fs.readFileSync("./src/public/w.json"))
+  const data1D = JSON.parse(fs.readFileSync("./src/public/d.json"))
 
-  res.header("Content-Type", "application/json")
-  res.sendFile({
+  res.json({
     dataALL,
     data1Y,
     data1M,
@@ -159,7 +146,7 @@ app.get("/api/data", async (req, res, next) => {
 })
 
 app.get("/*", function (req, res, next) {
-  res.sendFile(`${__dirname}/index.html`)
+  res.sendFile(`./src/public/index.html`)
 })
 
 export default app
