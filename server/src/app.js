@@ -243,12 +243,12 @@ app.get("/api/data", async (req, res, next) => {
   res.json({
     data: {
       prices: {
-        latest: currentPrice,
+        latest: `${currentPrice}`,
         latest_price: {
           amount: {
-            amount: currentPrice,
+            amount: `${currentPrice}`,
             currency: "KASPA",
-            scale: 2,
+            scale: "2",
           },
           timestamp: new Date().toISOString(),
           percent_change: {
