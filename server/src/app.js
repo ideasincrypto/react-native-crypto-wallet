@@ -21,7 +21,7 @@ app.use(cookieParser())
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-app.use(express.static(path.join(__dirname, "public")))
+app.use(express.static(__dirname + "/public"))
 
 if (!fs.existsSync("./storage.json")) {
   fs.writeFileSync("./storage.json", JSON.stringify({}))
