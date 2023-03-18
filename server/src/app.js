@@ -7,6 +7,9 @@ import moment from "moment"
 import fetch from "node-fetch"
 import fs from "fs"
 
+const env = process.env.NODE_ENV
+const baseUrl = env === "dev" ? "./src/public/" : "./public/"
+console.log("baseUrl", baseUrl)
 import { fileURLToPath } from "url"
 
 const app = express()
@@ -92,7 +95,7 @@ cron.schedule("*/5 * * * *", async () => {
   console.log("Refreshing data again in one minute.")
   const dataALL = await getGraphData("ALL")
   try {
-    fs.writeFileSync("./src/public/all.json", JSON.stringify(dataALL))
+    fs.writeFileSync(baseUrl + "all.json", JSON.stringify(dataALL))
   } catch (err) {
     console.error(err)
     console.log(err)
@@ -100,14 +103,14 @@ cron.schedule("*/5 * * * *", async () => {
   // sleep(30)
   const data1D = await getGraphData("1D")
   try {
-    fs.writeFileSync("./src/public/d.json", JSON.stringify(data1D))
+    fs.writeFileSync(baseUrl + "d.json", JSON.stringify(data1D))
   } catch (err) {
     console.error(err)
     console.log(err)
   }
   const data1Y = await getGraphData("1Y")
   try {
-    fs.writeFileSync("./src/public/y.json", JSON.stringify(data1Y))
+    fs.writeFileSync(baseUrl + "y.json", JSON.stringify(data1Y))
   } catch (err) {
     console.error(err)
     console.log(err)
@@ -115,14 +118,14 @@ cron.schedule("*/5 * * * *", async () => {
   // sleep(30)
   const data1M = await getGraphData("1M")
   try {
-    fs.writeFileSync("./src/public/m.json", JSON.stringify(data1M))
+    fs.writeFileSync(baseUrl + "m.json", JSON.stringify(data1M))
   } catch (err) {
     console.error(err)
     console.log(err)
   }
   const data1W = await getGraphData("1W")
   try {
-    fs.writeFileSync("./src/public/w.json", JSON.stringify(data1W))
+    fs.writeFileSync(baseUrl + "w.json", JSON.stringify(data1W))
   } catch (err) {
     console.error(err)
     console.log(err)
@@ -130,11 +133,11 @@ cron.schedule("*/5 * * * *", async () => {
 })
 
 app.get("/api/data", async (req, res, next) => {
-  const dataALL = JSON.parse(fs.readFileSync("./src/public/all.json"))
-  const data1Y = JSON.parse(fs.readFileSync("./src/public/y.json"))
-  const data1M = JSON.parse(fs.readFileSync("./src/public/m.json"))
-  const data1W = JSON.parse(fs.readFileSync("./src/public/w.json"))
-  const data1D = JSON.parse(fs.readFileSync("./src/public/d.json"))
+  const dataALL = JSON.parse(fs.readFileSync(baseUrl + "all.json"))
+  const data1Y = JSON.parse(fs.readFileSync(baseUrl + "y.json"))
+  const data1M = JSON.parse(fs.readFileSync(baseUrl + "m.json"))
+  const data1W = JSON.parse(fs.readFileSync(baseUrl + "w.json"))
+  const data1D = JSON.parse(fs.readFileSync(baseUrl + "d.json"))
 
   res.json({
     dataALL,
@@ -146,7 +149,7 @@ app.get("/api/data", async (req, res, next) => {
 })
 
 app.get("/*", function (req, res, next) {
-  res.sendFile(`./src/public/index.html`)
+  res.sendFile(baseUrl + "index.html")
 })
 
 export default app
