@@ -1037,7 +1037,7 @@
 
 abbrev@1:
   version "1.1.1"
-  resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
+  resolved "https://registry.npmjs.org/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
   integrity sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==
 
 accepts@~1.3.5:
@@ -2237,7 +2237,7 @@ has@^1.0.3:
 
 help@~2.0.0:
   version "2.0.0"
-  resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/help/-/help-2.0.0.tgz#87fd9e646c449d6407bc8b413ac5bb22c5f52858"
+  resolved "https://registry.npmjs.org/help/-/help-2.0.0.tgz#87fd9e646c449d6407bc8b413ac5bb22c5f52858"
   integrity sha512-OPqBoJ8CX0VxXaGYiYhxOEa+j8lUOimrVnzwEXqxJ/Xulwd9LEyLiBm36+tV8rl/heB8MfpkLBSSAtaLV9fbrA==
 
 homedir-polyfill@^1.0.1:
@@ -2759,7 +2759,7 @@ node-releases@^2.0.8:
 
 nopt@~3.0.1:
   version "3.0.6"
-  resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/nopt/-/nopt-3.0.6.tgz#c6465dbf08abcd4db359317f79ac68a646b28ff9"
+  resolved "https://registry.npmjs.org/nopt/-/nopt-3.0.6.tgz#c6465dbf08abcd4db359317f79ac68a646b28ff9"
   integrity sha512-4GUt3kSEYmk4ITxzB/b9vaIDfUVWN/Ml1Fwl11IlnIG2iaJ9O6WXZ9SrYM9NLI8OCBieN2Y8SWC2oJV0RQ7qYg==
   dependencies:
     abbrev "1"
@@ -2918,7 +2918,7 @@ path-to-regexp@0.1.7:
 
 percent-change@^1.0.1:
   version "1.0.1"
-  resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/percent-change/-/percent-change-1.0.1.tgz#e27728f44c530f5faf7e6c88d89e743fd4d4131a"
+  resolved "https://registry.npmjs.org/percent-change/-/percent-change-1.0.1.tgz#e27728f44c530f5faf7e6c88d89e743fd4d4131a"
   integrity sha512-LSdFYlMLh7FgdlymwRjXEcFnpKgl92o0LqaoEDLAneD5Zus6t42MGcVLBpYy4bX2AAwk/ql9o+rCGV18/xsuaQ==
   dependencies:
     help "~2.0.0"
