@@ -60,11 +60,7 @@ const getGraphData = async (timestamp) => {
     console.log(url)
     const response = await fetch(url)
     const { prices } = await response.json()
-    arrayOfObjects = prices?.map((x) => ({
-      date: x[0],
-      value: x[1],
-    }))
-    return arrayOfObjects
+    return prices
   } catch (error) {
     console.log(error)
     console.error(error)
@@ -127,16 +123,20 @@ app.get("/api/data", async (req, res, next) => {
   const data1D = JSON.parse(db.get("data1D"))
 
   res.json({
-    dataALL,
-    data1Y,
-    data1M,
-    data1W,
-    data1D,
+    data: {
+      prices: {
+        day: data1D,
+        week: data1W,
+        month: data1M,
+        year: data1Y,
+        all: dataALL,
+      },
+    },
   })
 })
 
 app.get("/*", function (req, res, next) {
-  res.sendFile(__dirname + "/index.html")
+  res.sendFile(__dirname + "/public/index.html")
 })
 
 export default app
