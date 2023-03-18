@@ -52,15 +52,19 @@ const getGraphData = async (timestamp) => {
       break
   }
 
-  let arrayOfObjects = []
-
   try {
     // eslint-disable-next-line max-len
     const url = `https://api.coingecko.com/api/v3/coins/kaspa/market_chart/range?vs_currency=usd&from=${timeValue}&to=${moment().unix()}`
     console.log(url)
     const response = await fetch(url)
     const { prices } = await response.json()
-    return prices
+    // const fixedPrices = prices.map((x) => [])
+    let fixedPrices = []
+    for (var i = 0; i < prices.length; i++) {
+      const item = prices[i]
+      fixedPrices.push([item[1], item[0]])
+    }
+    return fixedPrices
   } catch (error) {
     console.log(error)
     console.error(error)
