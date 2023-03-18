@@ -71,7 +71,7 @@ const getGraphData = async (timestamp) => {
     const response = await fetch(url)
     const { prices } = await response.json()
     arrayOfObjects = prices?.map((x) => ({
-      date: new Date(x[0]),
+      date: x[0],
       value: x[1],
     }))
     return arrayOfObjects
@@ -86,7 +86,7 @@ const sleep = async (seconds) => {
   await new Promise((resolve) => setTimeout(resolve, seconds * 1000))
 }
 
-cron.schedule("*/10 * * * *", async () => {
+cron.schedule("*/1 * * * *", async () => {
   console.log("---------------------")
   console.log("Data Refresh Occured.")
   console.log("Refreshing data again in one minute.")
