@@ -77,17 +77,22 @@ const getGraphData = async (timestamp) => {
   }
 }
 
-const getData = async () => {
-  const [dataALL, data1Y, data1M, data1W, data1D, currentPrice] =
-    await Promise.all([
-      await getGraphData("ALL"),
-      await getGraphData("1Y"),
-      await getGraphData("1M"),
-      await getGraphData("1W"),
-      await getGraphData("1D"),
-      await getCurrentPrice(),
-    ])
+const sleep = async (seconds) => {
+  await new Promise((resolve) => setTimeout(resolve, seconds * 1000))
+}
 
+const getData = async () => {
+  const dataALL = await getGraphData("ALL")
+  sleep(15)
+  const data1Y = await getGraphData("1Y")
+  sleep(15)
+  const data1M = await getGraphData("1M")
+  sleep(15)
+  const data1W = await getGraphData("1W")
+  sleep(15)
+  const data1D = await getGraphData("1D")
+  sleep(15)
+  const currentPrice = await getCurrentPrice()
   return {
     dataALL,
     data1Y,
@@ -98,7 +103,7 @@ const getData = async () => {
   }
 }
 
-cron.schedule("*/2 * * * *", async () => {
+cron.schedule("*/10 * * * *", async () => {
   console.log("---------------------")
   console.log("Data Refresh Occured.")
   console.log("Refreshing data again in one minute.")
