@@ -64,7 +64,7 @@ const getGraphData = async (timestamp) => {
     let fixedPrices = []
     for (var i = 0; i < prices.length; i++) {
       const item = prices[i]
-      fixedPrices.push([item[1], item[0]])
+      fixedPrices.push([`${item[1]}`, item[0]])
     }
     return fixedPrices
   } catch (error) {
@@ -133,7 +133,7 @@ const sleep = async (seconds) => {
 cron.schedule("*/15 * * * *", async () => {
   console.log("---------------------")
   console.log("Data Refresh Occured.")
-  console.log("Refreshing data again in 15 minute.")
+  console.log("Updating local database")
   const dataALL = await getGraphData("ALL")
   try {
     db.set("dataALL", JSON.stringify(dataALL))
@@ -223,6 +223,8 @@ cron.schedule("*/15 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
+  console.log("Data refresh complete.")
+  console.log("Refreshing data again in 15 minute.")
 })
 
 app.get("/api/data", async (req, res, next) => {
@@ -240,6 +242,11 @@ app.get("/api/data", async (req, res, next) => {
 
   const currentPrice = JSON.parse(await db.get("currentPrice"))
 
+  const dayChange = change(data1DPercent[0][1], currentPrice, false)
+  const weekChange = change(data1WPercent[0][1], currentPrice, false)
+  const monthChange = change(data1MPercent[0][1], currentPrice, false)
+  const yearChange = change(data1YPercent[0][1], currentPrice, false)
+  const allChange = change(dataALLPercent[0][1], currentPrice, false)
   res.json({
     data: {
       prices: {
@@ -252,26 +259,31 @@ app.get("/api/data", async (req, res, next) => {
           },
           timestamp: new Date().toISOString(),
           percent_change: {
-            day: change(data1DPercent[0][1], currentPrice, false),
-            week: change(data1WPercent[0][1], currentPrice, false),
-            month: change(data1MPercent[0][1], currentPrice, false),
-            year: change(data1YPercent[0][1], currentPrice, false),
-            all: change(dataALLPercent[0][1], currentPrice, false),
+            day: dayChange,
+            week: weekChange,
+            month: monthChange,
+            year: yearChange,
+            all: allChange,
           },
         },
         day: {
+          percent_change: dayChange,
           prices: data1D,
         },
         week: {
+          percent_change: weekChange,
           prices: data1W,
         },
         month: {
+          percent_change: monthChange,
           prices: data1M,
         },
         year: {
+          percent_change: yearChange,
           prices: data1Y,
         },
         all: {
+          percent_change: allChange,
           prices: dataALL,
         },
       },
