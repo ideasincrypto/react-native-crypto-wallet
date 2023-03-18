@@ -7,6 +7,7 @@ import moment from "moment"
 import fetch from "node-fetch"
 import fs from "fs"
 import JSONdb from "simple-json-db"
+import change from "percent-change"
 
 const env = process.env.NODE_ENV
 import { fileURLToPath } from "url"
@@ -72,11 +73,63 @@ const getGraphData = async (timestamp) => {
   }
 }
 
+const getHighLowData = async (timestamp) => {
+  let days = "1"
+  switch (timestamp) {
+    case "1W":
+      timeValue = "7"
+      break
+    case "1M":
+      timeValue = "30"
+      break
+    case "1Y":
+      timeValue = "365"
+      break
+    case "ALL":
+      timeValue = "max"
+      break
+    default:
+      // 1D
+      timeValue = "1"
+      break
+  }
+
+  try {
+    // eslint-disable-next-line max-len
+    const url = `https://api.coingecko.com/api/v3/coins/kaspa/ohlc?vs_currency=usd&days=${days}`
+    console.log(url)
+    const response = await fetch(url)
+    const data = await response.json()
+    // const fixedPrices = prices.map((x) => [])
+    return data
+  } catch (error) {
+    console.log(error)
+    console.error(error)
+    return []
+  }
+}
+
+const getCurrentPrice = async () => {
+  try {
+    // eslint-disable-next-line max-len
+    const url = `https://api.coingecko.com/api/v3/simple/price?ids=kaspa&vs_currencies=usd`
+    console.log(url)
+    const response = await fetch(url)
+    const { kaspa } = await response.json()
+    // const fixedPrices = prices.map((x) => [])
+    return kaspa.usd
+  } catch (error) {
+    console.log(error)
+    console.error(error)
+    return []
+  }
+}
+
 const sleep = async (seconds) => {
   await new Promise((resolve) => setTimeout(resolve, seconds * 1000))
 }
 
-cron.schedule("*/5 * * * *", async () => {
+cron.schedule("*/6 * * * *", async () => {
   console.log("---------------------")
   console.log("Data Refresh Occured.")
   console.log("Refreshing data again in one minute.")
@@ -119,6 +172,58 @@ cron.schedule("*/5 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
+
+  sleep(60)
+  const hlDataALL = await getHighLowData("ALL")
+  try {
+    db.set("dataALL-highlow", JSON.stringify(hlDataALL))
+  } catch (err) {
+    console.error(err)
+    console.log(err)
+  }
+  sleep(10)
+  const hlData1Y = await getHighLowData("1Y")
+  try {
+    db.set("data1Y-highlow", JSON.stringify(hlData1Y))
+  } catch (err) {
+    console.error(err)
+    console.log(err)
+  }
+  sleep(10)
+  const hlData1M = await getHighLowData("1M")
+  try {
+    db.set("data1M-highlow", JSON.stringify(hlData1M))
+  } catch (err) {
+    console.error(err)
+    console.log(err)
+  }
+  sleep(10)
+  const hlData1W = await getHighLowData("1W")
+  try {
+    db.set("data1W-highlow", JSON.stringify(hlData1W))
+  } catch (err) {
+    console.error(err)
+    console.log(err)
+  }
+  sleep(10)
+  const hlData1D = await getHighLowData("1D")
+  try {
+    db.set("data1D-highlow", JSON.stringify(hlData1D))
+  } catch (err) {
+    console.error(err)
+    console.log(err)
+  }
+
+  sleep(20)
+  const val = await getHighLowData("1D")
+  try {
+    db.set("currentPrice", val)
+  } catch (err) {
+    console.error(err)
+    console.log(err)
+  }
+
+  getCurrentPrice
 })
 
 app.get("/api/data", async (req, res, next) => {
@@ -128,9 +233,33 @@ app.get("/api/data", async (req, res, next) => {
   const data1D = JSON.parse(await db.get("data1D"))
   const dataALL = JSON.parse(await db.get("dataALL"))
 
+  const dataALLPercent = JSON.parse(await db.get("dataALL-highlow"))
+  const data1YPercent = JSON.parse(await db.get("data1Y-highlow"))
+  const data1MPercent = JSON.parse(await db.get("data1M-highlow"))
+  const data1WPercent = JSON.parse(await db.get("data1W-highlow"))
+  const data1DPercent = JSON.parse(await db.get("data1D-highlow"))
+
+  const currentPrice = JSON.parse(await db.get("currentPrice"))
+
   res.json({
     data: {
       prices: {
+        latest: currentPrice,
+        latest_price: {
+          amount: {
+            amount: currentPrice,
+            currency: "KASPA",
+            scale: 2,
+          },
+          timestamp: new Date().toISOString(),
+          percent_change: {
+            day: change(data1DPercent[0][1], currentPrice, false),
+            week: change(data1WPercent[0][1], currentPrice, false),
+            month: change(data1MPercent[0][1], currentPrice, false),
+            year: change(data1YPercent[0][1], currentPrice, false),
+            all: change(dataALLPercent[0][1], currentPrice, false),
+          },
+        },
         day: {
           prices: data1D,
         },
