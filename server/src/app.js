@@ -71,7 +71,7 @@ const getGraphData = async (timestamp) => {
     const response = await fetch(url)
     const { prices } = await response.json()
     arrayOfObjects = prices?.map((x) => ({
-      date: x[0],
+      date: new Date(x[0]),
       value: x[1],
     }))
     return arrayOfObjects
