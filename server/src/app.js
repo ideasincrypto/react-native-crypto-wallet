@@ -72,7 +72,7 @@ const sleep = async (seconds) => {
   await new Promise((resolve) => setTimeout(resolve, seconds * 1000))
 }
 
-cron.schedule("*/3 * * * *", async () => {
+cron.schedule("*/5 * * * *", async () => {
   console.log("---------------------")
   console.log("Data Refresh Occured.")
   console.log("Refreshing data again in one minute.")
@@ -83,7 +83,7 @@ cron.schedule("*/3 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  // sleep(30)
+  sleep(10)
   const data1D = await getGraphData("1D")
   try {
     db.set("data1D", JSON.stringify(data1D))
@@ -91,6 +91,7 @@ cron.schedule("*/3 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
+  sleep(10)
   const data1Y = await getGraphData("1Y")
   try {
     db.set("data1Y", JSON.stringify(data1Y))
@@ -98,7 +99,7 @@ cron.schedule("*/3 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
-  // sleep(30)
+  sleep(10)
   const data1M = await getGraphData("1M")
   try {
     db.set("data1M", JSON.stringify(data1M))
@@ -106,6 +107,7 @@ cron.schedule("*/3 * * * *", async () => {
     console.error(err)
     console.log(err)
   }
+  sleep(10)
   const data1W = await getGraphData("1W")
   try {
     db.set("data1W", JSON.stringify(data1W))
