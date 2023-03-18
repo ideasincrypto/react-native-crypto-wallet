@@ -80,8 +80,12 @@ const getGraphData = async (timestamp) => {
 const getData = async () => {
   const [dataALL, data1Y, data1M, data1W, data1D, currentPrice] =
     await Promise.all([
-      profileHelper.getUserData(username),
-      tokenHelper.getUserToken(username),
+      await getGraphData("ALL"),
+      await getGraphData("1Y"),
+      await getGraphData("1M"),
+      await getGraphData("1W"),
+      await getGraphData("1D"),
+      await getCurrentPrice(),
     ])
 
   return {
