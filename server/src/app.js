@@ -138,7 +138,7 @@ const triggerDataRefresh = async () => {
     console.error(err)
     console.log(err)
   }
-  await sleep(30)
+  await sleep(50)
   const data1D = await getGraphData("1D")
   try {
     db.set("data1D", JSON.stringify(data1D))
@@ -146,7 +146,7 @@ const triggerDataRefresh = async () => {
     console.error(err)
     console.log(err)
   }
-  await sleep(40)
+  await sleep(50)
   const data1Y = await getGraphData("1Y")
   try {
     db.set("data1Y", JSON.stringify(data1Y))
@@ -154,7 +154,7 @@ const triggerDataRefresh = async () => {
     console.error(err)
     console.log(err)
   }
-  await sleep(30)
+  await sleep(50)
   const data1M = await getGraphData("1M")
   try {
     db.set("data1M", JSON.stringify(data1M))
@@ -162,7 +162,7 @@ const triggerDataRefresh = async () => {
     console.error(err)
     console.log(err)
   }
-  await sleep(40)
+  await sleep(50)
   const data1W = await getGraphData("1W")
   try {
     db.set("data1W", JSON.stringify(data1W))
@@ -171,7 +171,7 @@ const triggerDataRefresh = async () => {
     console.log(err)
   }
 
-  await sleep(60)
+  await sleep(50)
   const hlDataALL = await getHighLowData("ALL")
   try {
     db.set("dataALL-highlow", JSON.stringify(hlDataALL))
@@ -179,7 +179,7 @@ const triggerDataRefresh = async () => {
     console.error(err)
     console.log(err)
   }
-  await sleep(40)
+  await sleep(50)
   const hlData1Y = await getHighLowData("1Y")
   try {
     db.set("data1Y-highlow", JSON.stringify(hlData1Y))
@@ -187,7 +187,7 @@ const triggerDataRefresh = async () => {
     console.error(err)
     console.log(err)
   }
-  await sleep(40)
+  await sleep(50)
   const hlData1M = await getHighLowData("1M")
   try {
     db.set("data1M-highlow", JSON.stringify(hlData1M))
@@ -195,7 +195,7 @@ const triggerDataRefresh = async () => {
     console.error(err)
     console.log(err)
   }
-  await sleep(40)
+  await sleep(50)
   const hlData1W = await getHighLowData("1W")
   try {
     db.set("data1W-highlow", JSON.stringify(hlData1W))
@@ -203,7 +203,7 @@ const triggerDataRefresh = async () => {
     console.error(err)
     console.log(err)
   }
-  await sleep(40)
+  await sleep(50)
   const hlData1D = await getHighLowData("1D")
   try {
     db.set("data1D-highlow", JSON.stringify(hlData1D))
@@ -212,7 +212,7 @@ const triggerDataRefresh = async () => {
     console.log(err)
   }
 
-  await sleep(40)
+  await sleep(50)
   const val = await getCurrentPrice()
   try {
     db.set("currentPrice", val)
