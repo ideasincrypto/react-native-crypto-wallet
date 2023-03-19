@@ -309,4 +309,6 @@ app.get("/*", (req, res, next) => {
   res.sendFile(__dirname + "/public/index.html")
 })
 
+triggerDataRefresh()
+
 export default app
