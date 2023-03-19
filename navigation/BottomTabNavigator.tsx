@@ -9,6 +9,7 @@ import { BottomTabParamList, TabOneParamList, TabTwoParamList } from "../types"
 import { DataContext } from "../providers/DataProvider"
 import moment from "moment"
 import { GraphPoint } from "react-native-graph"
+import { buildGraph } from "../components/LineGraph/Model"
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
@@ -16,6 +17,7 @@ const BottomTabNavigator = (): JSX.Element => {
   const {
     pickedColor,
     setApiData,
+    setGraphData,
     setSelectedPoints,
     setSelectedUSDValue,
     setCurrentUSDValue,
@@ -62,25 +64,62 @@ const BottomTabNavigator = (): JSX.Element => {
     }
   }
 
-  const updateData = (array): any => {
-    // console.log(array)
-    return array.map((object) => ({
-      date: new Date(object.date),
-      value: object.value,
-    }))
-  }
-
   const getData = async (): Promise<void> => {
-    const currentPrice = await getCurrentPrice()
     const apiData = await getApiData()
     // console.log("apiData", apiData)
 
-    const goodToGo = apiData !== undefined && currentPrice !== undefined
     // console.log("goodToGo", goodToGo)
     if (apiData) {
-      setCurrentUSDValue(currentPrice)
-      setSelectedUSDValue(currentPrice)
-      apiData.data.prices.latest = currentPrice
+      const graphs = async () => {
+        return [
+          {
+            label: "1D",
+            value: 0,
+            data: await buildGraph(
+              apiData.data.prices.day,
+              "Today",
+              apiData.data.prices.latest
+            ),
+          },
+          {
+            label: "1W",
+            value: 1,
+            data: await buildGraph(
+              apiData.data.prices.week,
+              "Last Week",
+              apiData.data.prices.latest
+            ),
+          },
+          {
+            label: "1M",
+            value: 2,
+            data: await buildGraph(
+              apiData.data.prices.month,
+              "Last Month",
+              apiData.data.prices.latest
+            ),
+          },
+          {
+            label: "1Y",
+            value: 3,
+            data: await buildGraph(
+              apiData.data.prices.year,
+              "This Year",
+              apiData.data.prices.latest
+            ),
+          },
+          {
+            label: "All",
+            value: 4,
+            data: await buildGraph(
+              apiData.data.prices.all,
+              "All time",
+              apiData.data.prices.latest
+            ),
+          },
+        ] as const 
+      }
+      setGraphData(await graphs())
       setApiData(apiData)
     }
   }

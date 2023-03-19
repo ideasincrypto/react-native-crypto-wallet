@@ -1,16 +1,12 @@
-import moment from "moment"
 import React from "react"
-import { StyleSheet, Text, View, useColorScheme } from "react-native"
+import { StyleSheet, View, useColorScheme } from "react-native"
 import Animated, {
   interpolate,
-  runOnJS,
-  SharedValue,
   useAnimatedStyle,
   useDerivedValue,
 } from "react-native-reanimated"
 import { ReText, Vector, round } from "react-native-redash"
 
-import ETH from "./components/ETH"
 import { SIZE, GraphIndex } from "./Model"
 
 interface HeaderProps {
@@ -20,9 +16,6 @@ interface HeaderProps {
 
 type HeaderType = HeaderProps & {
   graphs: any
-  date: any
-  selectedElementDate: any
-  selectedElementValue: any
 }
 
 const Header = ({ graphs, translation, index }: HeaderType): JSX.Element => {

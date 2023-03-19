@@ -15,45 +15,23 @@ import Animated, {
 } from "react-native-reanimated"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 import { mixPath, useVector } from "react-native-redash"
+import GradientPath from "react-native-svg-path-gradient"
 
 import { buildGraph, GraphIndex, Prices, SIZE } from "./Model"
 import Header from "./Header"
 import Cursor from "./Cursor"
 import { DataContext } from "../../providers/DataProvider"
-import moment from "moment"
 
 const { width } = Dimensions.get("window")
 const AnimatedPath = Animated.createAnimatedComponent(Path)
 
 const SELECTION_WIDTH = width - 32
 
-const Graph = ({ data }): JSX.Element => {
+const Graph = ({ data, graphs }): JSX.Element => {
   const values = data.data.prices as Prices
   const { pickedColor } = useContext(DataContext)
   const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
 
-  const graphs = [
-    {
-      label: "1D",
-      value: 0,
-      data: buildGraph(values.day, "Today", values.latest),
-    },
-    {
-      label: "1M",
-      value: 1,
-      data: buildGraph(values.month, "Last Month", values.latest),
-    },
-    {
-      label: "1Y",
-      value: 2,
-      data: buildGraph(values.year, "This Year", values.latest),
-    },
-    {
-      label: "All",
-      value: 3,
-      data: buildGraph(values.all, "All time", values.latest),
-    },
-  ] as const
 
   const BUTTON_WIDTH = (width - 32) / graphs.length
   const styles = StyleSheet.create({
@@ -87,11 +65,6 @@ const Graph = ({ data }): JSX.Element => {
   const transition = useSharedValue(0)
   const previous = useSharedValue<GraphIndex>(0)
   const current = useSharedValue<GraphIndex>(0)
-
-  const selectedElementDate = useSharedValue(new Date())
-  const selectedElementValue = useSharedValue(values.latest)
-
-  const [selectedDate, setSelectedDate] = useState(new Date())
 
   const animatedProps = useAnimatedProps(() => {
     const previousPath = graphs[previous.value].data.path
@@ -136,24 +109,10 @@ const Graph = ({ data }): JSX.Element => {
             strokeWidth={3}
           />
         </Svg>
-        <Cursor
-          graphs={graphs}
-          index={current}
-          selectedElementDate={selectedElementDate}
-          selectedElementValue={selectedElementValue}
-          setSelectedDate={setSelectedDate}
-          translation={translation}
-        />
+        <Cursor graphs={graphs} index={current} translation={translation} />
       </View>
       <View>
-        <Header
-          date={selectedDate}
-          graphs={graphs}
-          index={current}
-          selectedElementDate={selectedElementDate}
-          selectedElementValue={selectedElementValue}
-          translation={translation}
-        />
+        <Header graphs={graphs} index={current} translation={translation} />
       </View>
     </View>
   )

@@ -2682,6 +2682,11 @@ mkdirp@~0.5.0:
   dependencies:
     minimist "^1.2.6"
 
+moment-round@^1.0.1:
+  version "1.0.1"
+  resolved "https://gapinc.jfrog.io/gapinc/api/npm/npm-repos/moment-round/-/moment-round-1.0.1.tgz#5baf2b752e85d0f6a227c0a16f6fbe107c2a2d39"
+  integrity sha512-UXGqmPCOM1pCtD3RXTAgQkmTYLELDYw/u/hJerNssB4H2lqJvMT9ov1D//NXzsGkCZcUHnAEMzRCOtb67sU5PA==
+
 moment@^2.29.4:
   version "2.29.4"
   resolved "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"

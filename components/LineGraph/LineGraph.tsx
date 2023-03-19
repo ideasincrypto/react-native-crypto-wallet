@@ -11,10 +11,10 @@ const styles = StyleSheet.create({
   },
 })
 
-const LineGraph = ({ values }): JSX.Element => {
+const LineGraph = ({ values, graphs }): JSX.Element => {
   return (
     <View style={styles.container}>
-      <Graph data={values} />
+      <Graph data={values} graphs={graphs} />
     </View>
   )
 }

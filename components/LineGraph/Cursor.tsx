@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useContext } from "react"
-import { View, StyleSheet } from "react-native"
+import { View, StyleSheet, Dimensions } from "react-native"
 import { PanGestureHandler } from "react-native-gesture-handler"
 import * as Haptics from "expo-haptics"
 import * as Device from "expo-device"
@@ -17,6 +17,7 @@ import { DataContext } from "../../providers/DataProvider"
 import { GraphIndex } from "./Model"
 
 const CURSOR = 50
+const SIZE = Dimensions.get("window").width
 
 interface CursorProps {
   index: Animated.SharedValue<GraphIndex>
@@ -25,20 +26,9 @@ interface CursorProps {
 
 type GraphType = CursorProps & {
   graphs: any
-  selectedElementDate: any
-  selectedElementValue: any
-  setSelectedDate: Dispatch<SetStateAction<Date>>
 }
 
-
-const Cursor = ({
-  selectedElementDate,
-  selectedElementValue,
-  index,
-  translation,
-  graphs,
-  setSelectedDate,
-}: GraphType): JSX.Element => {
+const Cursor = ({ index, translation, graphs }: GraphType): JSX.Element => {
   const { pickedColor } = useContext(DataContext)
 
   const styles = StyleSheet.create({
@@ -58,23 +48,20 @@ const Cursor = ({
     },
   })
 
-  const setDayData = (value, date) => {
-    setSelectedDate(date)
-  }
-
   const isActive = useSharedValue(false)
   const onGestureEvent = useAnimatedGestureHandler({
-    onStart: (event, context) => {
+    onStart: () => {
       isActive.value = true
     },
-    onActive: async (event, context) => {
+    onActive: async (event) => {
       translation.x.value = event.x
       translation.y.value =
         getYForX(graphs[index.value].data.path, translation.x.value) || 0
     },
-    onEnd: (event, context) => {
+    onEnd: () => {
       isActive.value = false
-      runOnJS(setDayData)("", new Date())
+      translation.x.value = SIZE
+      translation.y.value = graphs[index.value].data.currentPrice
     },
   })
 

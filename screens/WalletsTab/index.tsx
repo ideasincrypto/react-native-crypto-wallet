@@ -22,6 +22,7 @@ const WalletsTab = (): JSX.Element => {
     currentUSDValue,
     selectedPoints,
     apiData,
+    graphData,
     points1M,
     points1W,
     points1Y,
@@ -41,7 +42,9 @@ const WalletsTab = (): JSX.Element => {
   })
 
   useEffect(() => {
+    // console.log(graphData)
     const isLoading =
+      graphData &&
       apiData &&
       JSON.stringify(apiData) !== "{}" &&
       apiData.data.prices &&
@@ -51,7 +54,7 @@ const WalletsTab = (): JSX.Element => {
       apiData.data.prices.year.prices !== undefined &&
       apiData.data.prices.all.prices !== undefined
     setLoading(!isLoading)
-  }, [apiData])
+  }, [apiData, graphData])
 
   return (
     <View style={styles.container}>
@@ -67,13 +70,12 @@ const WalletsTab = (): JSX.Element => {
       </View>
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         {loading ? (
-          <View style={[styles.loadingView, { height: 275 }]}>
+          <View style={[styles.loadingView, { height: 375 }]}>
             <Loading />
           </View>
         ) : (
           <>
-            <LineGraph values={apiData} />
-            {/* <BottomData selectedPointValues={selectedPointValues} /> */}
+            <LineGraph graphs={graphData} values={apiData} />
           </>
         )}
       </View>

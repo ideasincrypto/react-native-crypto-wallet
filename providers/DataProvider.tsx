@@ -22,6 +22,9 @@ export const DataContext = createContext({
   apiData: {},
   setApiData: (data) => {},
 
+  graphData: {},
+  setGraphData: (data) => {},
+
   selectedUSDValue: 0,
   setSelectedUSDValue: (value: number) => {},
 
@@ -42,6 +45,8 @@ export const DataProvider = ({ children }): JSX.Element => {
   // const [pointsALL, setPointsALL] = useState<GraphPoint[]>()
 
   const [apiData, setApiData] = useState({})
+
+  const [graphData, setGraphData] = useState({})
 
   const [selectedPoints, setSelectedPoints] = useState([])
 
@@ -74,6 +79,9 @@ export const DataProvider = ({ children }): JSX.Element => {
 
         apiData,
         setApiData,
+
+        graphData,
+        setGraphData,
 
         selectedPoints,
         setSelectedPoints,

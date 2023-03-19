@@ -9,6 +9,7 @@ import fetch from "node-fetch"
 import fs from "fs"
 import JSONdb from "simple-json-db"
 import change from "percent-change"
+require("moment-round")
 
 const env = process.env.NODE_ENV
 import { fileURLToPath } from "url"
@@ -32,6 +33,14 @@ if (!fs.existsSync("./storage.json")) {
 const db = new JSONdb("./storage.json")
 
 app.use(express.static(__dirname + "/public"))
+
+const reduceData = (arr) => {
+  let output = []
+  for (let i = 0; i < arr.length; i += incrementInterval) {
+    output.push(arr[i])
+  }
+  return output
+}
 
 const getGraphData = async (timestamp) => {
   let timeValue = moment()
@@ -101,7 +110,6 @@ const getHighLowData = async (timestamp) => {
     console.log(url)
     const response = await fetch(url)
     const data = await response.json()
-    // const fixedPrices = prices.map((x) => [])
     return data
   } catch (error) {
     console.log(error)
@@ -131,39 +139,39 @@ const sleep = async (seconds) => {
 }
 
 const triggerDataRefresh = async () => {
-  const dataALL = await getGraphData("ALL")
+  const dataALL = reduceData(await getGraphData("ALL"), 4)
   try {
     db.set("dataALL", JSON.stringify(dataALL))
   } catch (err) {
     console.error(err)
     console.log(err)
   }
-  await sleep(50)
-  const data1D = await getGraphData("1D")
+  await sleep(60)
+  const data1D = reduceData(await getGraphData("1D"), 15)
   try {
     db.set("data1D", JSON.stringify(data1D))
   } catch (err) {
     console.error(err)
     console.log(err)
   }
-  await sleep(50)
-  const data1Y = await getGraphData("1Y")
+  await sleep(60)
+  const data1Y = reduceData(await getGraphData("1Y"), 4)
   try {
     db.set("data1Y", JSON.stringify(data1Y))
   } catch (err) {
     console.error(err)
     console.log(err)
   }
-  await sleep(50)
-  const data1M = await getGraphData("1M")
+  await sleep(60)
+  const data1M = reduceData(await getGraphData("1M"), 8)
   try {
     db.set("data1M", JSON.stringify(data1M))
   } catch (err) {
     console.error(err)
     console.log(err)
   }
-  await sleep(50)
-  const data1W = await getGraphData("1W")
+  await sleep(60)
+  const data1W = reduceData(await getGraphData("1W"), 12)
   try {
     db.set("data1W", JSON.stringify(data1W))
   } catch (err) {
@@ -171,15 +179,15 @@ const triggerDataRefresh = async () => {
     console.log(err)
   }
 
-  await sleep(50)
-  const hlDataALL = await getHighLowData("ALL")
+  await sleep(60)
+  const hlDataALL = reduceData(await getHighLowData("ALL"))
   try {
     db.set("dataALL-highlow", JSON.stringify(hlDataALL))
   } catch (err) {
     console.error(err)
     console.log(err)
   }
-  await sleep(50)
+  await sleep(60)
   const hlData1Y = await getHighLowData("1Y")
   try {
     db.set("data1Y-highlow", JSON.stringify(hlData1Y))
@@ -187,7 +195,7 @@ const triggerDataRefresh = async () => {
     console.error(err)
     console.log(err)
   }
-  await sleep(50)
+  await sleep(60)
   const hlData1M = await getHighLowData("1M")
   try {
     db.set("data1M-highlow", JSON.stringify(hlData1M))
@@ -195,7 +203,7 @@ const triggerDataRefresh = async () => {
     console.error(err)
     console.log(err)
   }
-  await sleep(50)
+  await sleep(60)
   const hlData1W = await getHighLowData("1W")
   try {
     db.set("data1W-highlow", JSON.stringify(hlData1W))
@@ -203,7 +211,7 @@ const triggerDataRefresh = async () => {
     console.error(err)
     console.log(err)
   }
-  await sleep(50)
+  await sleep(60)
   const hlData1D = await getHighLowData("1D")
   try {
     db.set("data1D-highlow", JSON.stringify(hlData1D))
@@ -212,7 +220,7 @@ const triggerDataRefresh = async () => {
     console.log(err)
   }
 
-  await sleep(50)
+  await sleep(60)
   const val = await getCurrentPrice()
   try {
     db.set("currentPrice", val)
