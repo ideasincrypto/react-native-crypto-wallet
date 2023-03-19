@@ -1,10 +1,15 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import WalletAmount from "../../components/WalletAmount"
 import WalletTransact from "../../components/WalletTransact"
-import { GraphIntervalType, WalletGraph } from "../../components/WalletGraph"
+import { WalletGraph } from "../../components/WalletGraph"
 import { DataContext } from "../../providers/DataProvider"
 import { ChartSwitcherList } from "../../components/WalletGraph/ChartSwitcher"
+import Loading from "../../screens/Loading"
+import BottomData from "../../components/WalletGraph/BottomData"
+import moment from "moment"
+import LineGraph from "../../components/LineGraph"
+import data from "../../components/LineGraph/data.json"
 
 const GRAPH_INTERVAL_1D_PARAM = "1D"
 
@@ -13,13 +18,40 @@ const WalletsTab = (): JSX.Element => {
     return true
   }
 
-  const { currentUSDValue } = useContext(DataContext)
+  const {
+    currentUSDValue,
+    selectedPoints,
+    apiData,
+    points1M,
+    points1W,
+    points1Y,
+    pointsALL,
+  } = useContext(DataContext)
 
-  const [graphInterval, setGraphInterval] = useState<GraphIntervalType>(
+  const [graphInterval, setGraphInterval] = useState<any>(
     GRAPH_INTERVAL_1D_PARAM
   )
 
-  const [graphLoading, setGraphLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [graphHeight, setGraphHeight] = useState(0)
+
+  const [selectedPointValues, setSelectedPointValues] = useState({
+    value: currentUSDValue,
+    date: moment(new Date()).format("M/D/Y LT"),
+  })
+
+  useEffect(() => {
+    const isLoading =
+      apiData &&
+      JSON.stringify(apiData) !== "{}" &&
+      apiData.data.prices &&
+      apiData.data.prices.day.prices !== undefined &&
+      apiData.data.prices.week.prices !== undefined &&
+      apiData.data.prices.month.prices !== undefined &&
+      apiData.data.prices.year.prices !== undefined &&
+      apiData.data.prices.all.prices !== undefined
+    setLoading(!isLoading)
+  }, [apiData])
 
   return (
     <View style={styles.container}>
@@ -30,19 +62,20 @@ const WalletsTab = (): JSX.Element => {
           walletTotal={"10238948.212312"}
         />
       </View>
-      <View style={{ paddingBottom: 60 }}>
+      <View style={{ paddingBottom: 40 }}>
         <WalletTransact openBottomSheetTransact={openBottomSheetTransact} />
       </View>
       <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <ChartSwitcherList
-          graphInterval={graphInterval}
-          setGraphInterval={setGraphInterval}
-          setGraphLoading={setGraphLoading}
-        />
-        <WalletGraph
-          graphInterval={graphInterval}
-          graphLoading={graphLoading}
-        />
+        {loading ? (
+          <View style={[styles.loadingView, { height: 275 }]}>
+            <Loading />
+          </View>
+        ) : (
+          <>
+            <LineGraph values={apiData} />
+            {/* <BottomData selectedPointValues={selectedPointValues} /> */}
+          </>
+        )}
       </View>
     </View>
   )
@@ -65,5 +98,8 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+  loadingView: {
+    width: "100%",
   },
 })

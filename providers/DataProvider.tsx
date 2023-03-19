@@ -19,16 +19,8 @@ export const DataContext = createContext({
   selectedPoints: [],
   setSelectedPoints: (points: GraphPoint[]) => {},
 
-  points1D: [],
-  setPoints1D: (points: GraphPoint[]) => {},
-  points1W: [],
-  setPoints1W: (points: GraphPoint[]) => {},
-  points1M: [],
-  setPoints1M: (points: GraphPoint[]) => {},
-  points1Y: [],
-  setPoints1Y: (points: GraphPoint[]) => {},
-  pointsALL: [],
-  setPointsALL: (points: GraphPoint[]) => {},
+  apiData: {},
+  setApiData: (data) => {},
 
   selectedUSDValue: 0,
   setSelectedUSDValue: (value: number) => {},
@@ -43,13 +35,15 @@ export const DataProvider = ({ children }): JSX.Element => {
   const [wallets, setWallets] = useState([])
   const [pickedColor, setPickedColor] = useState("#6a7ee7")
 
-  const [points1D, setPoints1D] = useState<GraphPoint[]>()
-  const [points1W, setPoints1W] = useState<GraphPoint[]>()
-  const [points1M, setPoints1M] = useState<GraphPoint[]>()
-  const [points1Y, setPoints1Y] = useState<GraphPoint[]>()
-  const [pointsALL, setPointsALL] = useState<GraphPoint[]>()
+  // const [points1D, setPoints1D] = useState<GraphPoint[]>()
+  // const [points1W, setPoints1W] = useState<GraphPoint[]>()
+  // const [points1M, setPoints1M] = useState<GraphPoint[]>()
+  // const [points1Y, setPoints1Y] = useState<GraphPoint[]>()
+  // const [pointsALL, setPointsALL] = useState<GraphPoint[]>()
 
-  const [selectedPoints, setSelectedPoints] = useState<GraphPoint[]>()
+  const [apiData, setApiData] = useState({})
+
+  const [selectedPoints, setSelectedPoints] = useState([])
 
   const [selectedUSDValue, setSelectedUSDValue] = useState(0)
 
@@ -78,16 +72,8 @@ export const DataProvider = ({ children }): JSX.Element => {
         pickedColor,
         setPickedColor,
 
-        points1D,
-        setPoints1D,
-        points1W,
-        setPoints1W,
-        points1M,
-        setPoints1M,
-        points1Y,
-        setPoints1Y,
-        pointsALL,
-        setPointsALL,
+        apiData,
+        setApiData,
 
         selectedPoints,
         setSelectedPoints,

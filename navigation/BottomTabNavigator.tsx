@@ -15,11 +15,7 @@ const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 const BottomTabNavigator = (): JSX.Element => {
   const {
     pickedColor,
-    setPointsALL,
-    setPoints1Y,
-    setPoints1M,
-    setPoints1W,
-    setPoints1D,
+    setApiData,
     setSelectedPoints,
     setSelectedUSDValue,
     setCurrentUSDValue,
@@ -30,54 +26,62 @@ const BottomTabNavigator = (): JSX.Element => {
     date: Date
   }
 
-  type GetDataType = {
-    currentPrice?: number
-    data1D?: [DataType]
-    data1W?: [DataType]
-    data1M?: [DataType]
-    data1Y?: [DataType]
-    dataALL?: [DataType]
-  }
+  // type GetDataType = {
+  //   data1D?: [DataType]
+  //   data1W?: [DataType]
+  //   data1M?: [DataType]
+  //   data1Y?: [DataType]
+  //   dataALL?: [DataType]
+  // }
 
-  const getApiData = async (): Promise<GetDataType> => {
+  const getApiData = async (): Promise<any> => {
     try {
       // eslint-disable-next-line max-len
       const url = "https://wallet-server-r6l7o.ondigitalocean.app/api/data"
       console.log(url)
       const response = await fetch(url)
       const json = await response.json()
-      return json[0]
+      return json
     } catch (error) {
       console.error(error)
       return {}
     }
   }
 
-  const getData = async (): Promise<void> => {
-    const apiData = await getApiData()
-    if (
-      apiData &&
-      apiData.currentPrice &&
-      apiData.dataALL &&
-      apiData.data1Y &&
-      apiData.data1M &&
-      apiData.data1W &&
-      apiData.data1D
-    ) {
-      setCurrentUSDValue(apiData.currentPrice)
-      setSelectedUSDValue(apiData.currentPrice)
-      const allData = apiData.dataALL
-      const yearData = apiData.data1Y
-      const monthData = apiData.data1M
-      const weekData = apiData.data1W
-      const dayData = apiData.data1D
+  const getCurrentPrice = async (): Promise<number> => {
+    try {
+      const response = await fetch(
+        // eslint-disable-next-line max-len
+        "https://api.coingecko.com/api/v3/simple/price?ids=kaspa&vs_currencies=usd"
+      )
+      const { kaspa } = await response.json()
+      return kaspa.usd
+    } catch (error) {
+      console.error(error)
+      return 0
+    }
+  }
 
-      setPointsALL(allData)
-      setPoints1Y(yearData)
-      setPoints1M(monthData)
-      setPoints1W(weekData)
-      setPoints1D(dayData)
-      setSelectedPoints(dayData)
+  const updateData = (array): any => {
+    // console.log(array)
+    return array.map((object) => ({
+      date: new Date(object.date),
+      value: object.value,
+    }))
+  }
+
+  const getData = async (): Promise<void> => {
+    const currentPrice = await getCurrentPrice()
+    const apiData = await getApiData()
+    // console.log("apiData", apiData)
+
+    const goodToGo = apiData !== undefined && currentPrice !== undefined
+    // console.log("goodToGo", goodToGo)
+    if (apiData) {
+      setCurrentUSDValue(currentPrice)
+      setSelectedUSDValue(currentPrice)
+      apiData.data.prices.latest = currentPrice
+      setApiData(apiData)
     }
   }
 
