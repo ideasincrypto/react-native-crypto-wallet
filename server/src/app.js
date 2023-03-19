@@ -9,7 +9,6 @@ import fetch from "node-fetch"
 import fs from "fs"
 import JSONdb from "simple-json-db"
 import change from "percent-change"
-require("moment-round")
 
 const env = process.env.NODE_ENV
 import { fileURLToPath } from "url"
