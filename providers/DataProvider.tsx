@@ -16,20 +16,8 @@ export const DataContext = createContext({
   setWallets: (newWallet: object) => {},
   setSeed: (seed: string[]) => {},
 
-  selectedPoints: [],
-  setSelectedPoints: (points: GraphPoint[]) => {},
-
   apiData: {},
   setApiData: (data) => {},
-
-  graphData: {},
-  setGraphData: (data) => {},
-
-  selectedUSDValue: 0,
-  setSelectedUSDValue: (value: number) => {},
-
-  currentUSDValue: 0,
-  setCurrentUSDValue: (value: number) => {},
 })
 
 export const DataProvider = ({ children }): JSX.Element => {
@@ -45,14 +33,6 @@ export const DataProvider = ({ children }): JSX.Element => {
   // const [pointsALL, setPointsALL] = useState<GraphPoint[]>()
 
   const [apiData, setApiData] = useState({})
-
-  const [graphData, setGraphData] = useState({})
-
-  const [selectedPoints, setSelectedPoints] = useState([])
-
-  const [selectedUSDValue, setSelectedUSDValue] = useState(0)
-
-  const [currentUSDValue, setCurrentUSDValue] = useState(0)
 
   const getData = async () => {
     const walletData = await AsyncStorage.getItem("wallets")
@@ -79,18 +59,6 @@ export const DataProvider = ({ children }): JSX.Element => {
 
         apiData,
         setApiData,
-
-        graphData,
-        setGraphData,
-
-        selectedPoints,
-        setSelectedPoints,
-
-        selectedUSDValue,
-        setSelectedUSDValue,
-
-        currentUSDValue,
-        setCurrentUSDValue,
       }}
     >
       {children}
