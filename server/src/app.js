@@ -34,11 +34,12 @@ const db = new JSONdb("./storage.json")
 app.use(express.static(__dirname + "/public"))
 
 const reduceData = (arr, incrementInterval) => {
-  let output = []
-  for (let i = 0; i < arr.length; i += incrementInterval) {
-    output.push(arr[i])
-  }
-  return output
+  // let output = []
+  // for (let i = 0; i < arr.length; i += incrementInterval) {
+  //   output.push(arr[i])
+  // }
+  // return output
+  return arr
 }
 
 const getGraphData = async (timestamp) => {
