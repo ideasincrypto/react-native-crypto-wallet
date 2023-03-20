@@ -23,6 +23,9 @@
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
+    "@shopify/react-native-skia": "0.1.172",
+    "bumbag": "^2.7.21",
+    "bumbag-native": "^2.7.21",
     "d3-scale": "^4.0.2",
     "d3-shape": "^3.2.0",
     "dayjs": "^1.11.7",
@@ -53,6 +56,7 @@
     "react-native-screens": "~3.20.0",
     "react-native-static-safe-area-insets": "^2.2.0",
     "react-native-svg-path-gradient": "^0.4.0",
+    "react-native-wagmi-charts": "^2.3.0",
     "react-native-web": "~0.18.12"
   },
   "devDependencies": {

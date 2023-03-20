@@ -72,7 +72,7 @@ const getGraphData = async (timestamp) => {
     let fixedPrices = []
     for (var i = 0; i < prices.length; i++) {
       const item = prices[i]
-      fixedPrices.push([`${item[1]}`, item[0]])
+      fixedPrices.push({ timestamp: item[0], value: item[1] })
     }
     return fixedPrices
   } catch (error) {
@@ -260,45 +260,26 @@ app.get("/api/data", async (req, res, next) => {
   const yearChange = change(data1YPercent[0][1], currentPrice, false)
   const allChange = change(dataALLPercent[0][1], currentPrice, false)
   res.json({
-    data: {
-      prices: {
-        latest: `${currentPrice}`,
-        latest_price: {
-          amount: {
-            amount: `${currentPrice}`,
-            currency: "KASPA",
-            scale: "2",
-          },
-          timestamp: new Date().toISOString(),
-          percent_change: {
-            day: dayChange,
-            week: weekChange,
-            month: monthChange,
-            year: yearChange,
-            all: allChange,
-          },
-        },
-        day: {
-          percent_change: dayChange,
-          prices: data1D,
-        },
-        week: {
-          percent_change: weekChange,
-          prices: data1W,
-        },
-        month: {
-          percent_change: monthChange,
-          prices: data1M,
-        },
-        year: {
-          percent_change: yearChange,
-          prices: data1Y,
-        },
-        all: {
-          percent_change: allChange,
-          prices: dataALL,
-        },
-      },
+    currentPrice: `${currentPrice}`,
+    day: {
+      percent_change: dayChange,
+      prices: data1D,
+    },
+    week: {
+      percent_change: weekChange,
+      prices: data1W,
+    },
+    month: {
+      percent_change: monthChange,
+      prices: data1M,
+    },
+    year: {
+      percent_change: yearChange,
+      prices: data1Y,
+    },
+    all: {
+      percent_change: allChange,
+      prices: dataALL,
     },
   })
 })

@@ -52,8 +52,7 @@ export const buildGraph = async (
   label: string,
   currentPrice: string
 ): any => {
-  const priceList = datapoints.prices.slice(0, POINTS)
-  const formattedValues = priceList.map(
+  const formattedValues = datapoints.prices.map(
     (price) => [parseFloat(price[0]), price[1]] as [number, number]
   )
   const prices = formattedValues.map((value) => value[0])

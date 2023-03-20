@@ -71,6 +71,7 @@ const BottomTabNavigator = (): JSX.Element => {
     // console.log("goodToGo", goodToGo)
     if (apiData) {
       const graphs = async () => {
+        // "worklet"
         return [
           {
             label: "1D",
@@ -117,7 +118,7 @@ const BottomTabNavigator = (): JSX.Element => {
               apiData.data.prices.latest
             ),
           },
-        ] as const 
+        ] as const
       }
       setGraphData(await graphs())
       setApiData(apiData)

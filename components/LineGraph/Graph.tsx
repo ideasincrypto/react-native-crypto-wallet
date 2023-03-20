@@ -28,9 +28,11 @@ const AnimatedPath = Animated.createAnimatedComponent(Path)
 const SELECTION_WIDTH = width - 32
 
 const Graph = ({ data, graphs }): JSX.Element => {
-  const values = data.data.prices as Prices
+  // const values = data.data.prices as Prices
   const { pickedColor } = useContext(DataContext)
   const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
+
+  // const graphsData = useDerivedValue(() => graphs)
 
 
   const BUTTON_WIDTH = (width - 32) / graphs.length
