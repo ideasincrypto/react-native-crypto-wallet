@@ -1,18 +1,18 @@
-import * as React from 'react';
-import Animated from 'react-native-reanimated';
-import { Path, PathProps } from 'react-native-svg';
+import * as React from "react"
+import Animated from "react-native-reanimated"
+import { Path, PathProps } from "react-native-svg"
 
-import { LineChartDimensionsContext } from './Chart';
-import { LineChartPathContext } from './LineChartPathContext';
-import useAnimatedPath from './useAnimatedPath';
+import { LineChartDimensionsContext } from "./Chart"
+import { LineChartPathContext } from "./LineChartPathContext"
+import useAnimatedPath from "./useAnimatedPath"
 
-const AnimatedPath = Animated.createAnimatedComponent(Path);
+const AnimatedPath = Animated.createAnimatedComponent(Path)
 
 export type LineChartPathProps = Animated.AnimateProps<PathProps> & {
-  color?: string;
-  inactiveColor?: string;
-  width?: number;
-  isInactive?: boolean;
+  color?: string
+  inactiveColor?: string
+  width?: number
+  isInactive?: boolean
   /**
    * Default: `true`.
    *
@@ -28,27 +28,25 @@ export type LineChartPathProps = Animated.AnimateProps<PathProps> & {
    * />
    * ```
    */
-  isTransitionEnabled?: boolean;
-};
+  isTransitionEnabled?: boolean
+}
 
-LineChartPath.displayName = 'LineChartPath';
-
-export function LineChartPath({
-  color = 'black',
+export const LineChartPath = ({
+  color = "black",
   inactiveColor,
   width: strokeWidth = 3,
   ...props
-}: LineChartPathProps) {
-  const { path } = React.useContext(LineChartDimensionsContext);
+}: LineChartPathProps): JSX.Element => {
+  const { path } = React.useContext(LineChartDimensionsContext)
   const { isTransitionEnabled, isInactive } =
-    React.useContext(LineChartPathContext);
+    React.useContext(LineChartPathContext)
 
   ////////////////////////////////////////////////
 
   const { animatedProps } = useAnimatedPath({
     enabled: isTransitionEnabled,
     path,
-  });
+  })
 
   ////////////////////////////////////////////////
 
@@ -63,5 +61,7 @@ export function LineChartPath({
         {...props}
       />
     </>
-  );
+  )
 }
+
+LineChartPath.displayName = "LineChartPath"

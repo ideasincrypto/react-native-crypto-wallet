@@ -1,42 +1,40 @@
-import * as React from 'react';
-import Animated from 'react-native-reanimated';
-import { Path, PathProps } from 'react-native-svg';
+import * as React from "react"
+import Animated from "react-native-reanimated"
+import { Path, PathProps } from "react-native-svg"
 
-import { LineChartDimensionsContext } from './Chart';
-import { LineChartPathContext } from './LineChartPathContext';
-import useAnimatedPath from './useAnimatedPath';
-import { useLineChart } from './useLineChart';
-import { getPath } from './utils';
+import { LineChartDimensionsContext } from "./Chart"
+import { LineChartPathContext } from "./LineChartPathContext"
+import useAnimatedPath from "./useAnimatedPath"
+import { useLineChart } from "./useLineChart"
+import { getPath } from "./utils"
 
-const AnimatedPath = Animated.createAnimatedComponent(Path);
+const AnimatedPath = Animated.createAnimatedComponent(Path)
 
 export type LineChartColorProps = Animated.AnimateProps<PathProps> & {
-  color?: string;
-  from: number;
-  to: number;
-  showInactiveColor?: boolean;
-  inactiveColor?: string;
-  width?: number;
-};
+  color?: string
+  from: number
+  to: number
+  showInactiveColor?: boolean
+  inactiveColor?: string
+  width?: number
+}
 
-LineChartHighlight.displayName = 'LineChartHighlight';
-
-export function LineChartHighlight({
-  color = 'black',
+export const LineChartHighlight = ({
+  color = "black",
   inactiveColor,
   showInactiveColor = true,
   from,
   to,
   width: strokeWidth = 3,
   ...props
-}: LineChartColorProps) {
-  const { data, yDomain } = useLineChart();
+}: LineChartColorProps): JSX.Element => {
+  const { data, yDomain } = useLineChart()
   const { pathWidth, height, gutter, shape } = React.useContext(
     LineChartDimensionsContext
-  );
+  )
   const { isTransitionEnabled, isInactive: _isInactive } =
-    React.useContext(LineChartPathContext);
-  const isInactive = showInactiveColor && _isInactive;
+    React.useContext(LineChartPathContext)
+  const isInactive = showInactiveColor && _isInactive
 
   ////////////////////////////////////////////////
 
@@ -51,15 +49,15 @@ export function LineChartHighlight({
         gutter,
         shape,
         yDomain,
-      });
+      })
     }
-    return '';
-  }, [data, from, to, pathWidth, height, gutter, shape, yDomain]);
+    return ""
+  }, [data, from, to, pathWidth, height, gutter, shape, yDomain])
 
   const { animatedProps } = useAnimatedPath({
     enabled: isTransitionEnabled,
     path,
-  });
+  })
 
   ////////////////////////////////////////////////
 
@@ -69,10 +67,12 @@ export function LineChartHighlight({
         animatedProps={animatedProps}
         fill="transparent"
         stroke={isInactive ? inactiveColor || color : color}
-        strokeWidth={strokeWidth}
         strokeOpacity={isInactive && !inactiveColor ? 0.5 : 1}
+        strokeWidth={strokeWidth}
         {...props}
       />
     </>
-  );
+  )
 }
+
+LineChartHighlight.displayName = "LineChartHighlight"

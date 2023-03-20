@@ -3,45 +3,47 @@ import {
   useAnimatedReaction,
   useSharedValue,
   withTiming,
-} from 'react-native-reanimated';
+} from "react-native-reanimated"
 
-import { usePrevious } from '../../utils';
-import { interpolatePath } from './utils';
+import { usePrevious } from "../../utils"
+import { interpolatePath } from "./utils"
 
-export default function useAnimatedPath({
+const useAnimatedPath = ({
   enabled = true,
   path,
 }: {
-  enabled?: boolean;
-  path: string;
-}) {
-  const transition = useSharedValue(0);
+  enabled?: boolean
+  path: string
+}): any => {
+  const transition = useSharedValue(0)
 
-  const previousPath = usePrevious(path);
+  const previousPath = usePrevious(path)
 
   useAnimatedReaction(
     () => {
-      return path;
+      return path
     },
     (_, previous) => {
       if (previous) {
-        transition.value = 0;
-        transition.value = withTiming(1);
+        transition.value = 0
+        transition.value = withTiming(1)
       }
     },
     [path]
-  );
+  )
 
   const animatedProps = useAnimatedProps(() => {
-    let d = path || '';
+    let d = path || ""
     if (previousPath && enabled) {
-      const pathInterpolator = interpolatePath(previousPath, path, null);
-      d = pathInterpolator(transition.value);
+      const pathInterpolator = interpolatePath(previousPath, path, null)
+      d = pathInterpolator(transition.value)
     }
     return {
       d,
-    };
-  });
+    }
+  })
 
-  return { animatedProps };
+  return { animatedProps }
 }
+
+export default useAnimatedPath

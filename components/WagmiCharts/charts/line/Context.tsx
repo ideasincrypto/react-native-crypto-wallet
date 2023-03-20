@@ -1,61 +1,56 @@
-import * as React from 'react';
+import * as React from "react"
 import {
   runOnJS,
   useAnimatedReaction,
   useSharedValue,
-} from 'react-native-reanimated';
-import type { TLineChartDataProp } from './types';
-import { LineChartDataProvider } from './Data';
+} from "react-native-reanimated"
+import type { TLineChartDataProp } from "./types"
+import { LineChartDataProvider } from "./Data"
 
-import type { TLineChartContext, YRangeProp } from './types';
-import { getDomain, lineChartDataPropToArray } from './utils';
+import type { TLineChartContext, YRangeProp } from "./types"
+import { getDomain, lineChartDataPropToArray } from "./utils"
 
 export const LineChartContext = React.createContext<TLineChartContext>({
   currentX: { value: -1 },
   currentIndex: { value: -1 },
   domain: [0, 0],
-  isActive: { value: true },
+  isActive: { value: false },
   yDomain: {
     min: 0,
     max: 0,
   },
   xDomain: undefined,
   xLength: 0,
-});
+})
 
 type LineChartProviderProps = {
-  children: React.ReactNode;
-  data: TLineChartDataProp;
-  yRange?: YRangeProp;
-  onCurrentIndexChange?: (x: number) => void;
-  xLength?: number;
-  xDomain?: [number, number];
-};
+  children: React.ReactNode
+  data: TLineChartDataProp
+  yRange?: YRangeProp
+  onCurrentIndexChange?: (x: number) => void
+  xLength?: number
+  xDomain?: [number, number]
+}
 
-LineChartProvider.displayName = 'LineChartProvider';
-
-export function LineChartProvider({
+export const LineChartProvider = ({
   children,
   data = [],
   yRange,
   onCurrentIndexChange,
   xLength,
   xDomain,
-}: LineChartProviderProps) {
-  const currentX = useSharedValue(-1);
-  const currentIndex = useSharedValue(data.length-1);
-  const isActive = useSharedValue(true);
-  // console.log(currentX)
-  // console.log(currentIndex)
-  // console.log(isActive)
+}: LineChartProviderProps): JSX.Element => {
+  const currentX = useSharedValue(-1)
+  const currentIndex = useSharedValue(-1)
+  const isActive = useSharedValue(false)
 
   const domain = React.useMemo(
     () => getDomain(Array.isArray(data) ? data : Object.values(data)[0]),
     [data]
-  );
+  )
 
   const contextValue = React.useMemo<TLineChartContext>(() => {
-    const values = lineChartDataPropToArray(data).map(({ value }) => value);
+    const values = lineChartDataPropToArray(data).map(({ value }) => value)
 
     return {
       currentX,
@@ -69,7 +64,7 @@ export function LineChartProvider({
       xDomain,
       xLength:
         xLength ?? (Array.isArray(data) ? data : Object.values(data)[0]).length,
-    };
+    }
   }, [
     currentIndex,
     currentX,
@@ -80,17 +75,17 @@ export function LineChartProvider({
     yRange?.min,
     xLength,
     xDomain,
-  ]);
+  ])
 
   useAnimatedReaction(
     () => currentIndex.value,
     (x, prevX) => {
       if (x !== -1 && x !== prevX && onCurrentIndexChange) {
-        runOnJS(onCurrentIndexChange)(x);
+        runOnJS(onCurrentIndexChange)(x)
       }
     },
     [currentIndex]
-  );
+  )
 
   return (
     <LineChartDataProvider data={data}>
@@ -98,5 +93,7 @@ export function LineChartProvider({
         {children}
       </LineChartContext.Provider>
     </LineChartDataProvider>
-  );
+  )
 }
+
+LineChartProvider.displayName = "LineChartProvider"

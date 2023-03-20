@@ -1,31 +1,29 @@
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import * as React from "react"
+import { StyleSheet } from "react-native"
 import {
   GestureEvent,
   LongPressGestureHandler,
   LongPressGestureHandlerEventPayload,
   LongPressGestureHandlerProps,
-} from 'react-native-gesture-handler';
+} from "react-native-gesture-handler"
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
-} from 'react-native-reanimated';
+} from "react-native-reanimated"
 
-import { LineChartDimensionsContext } from './Chart';
-import { useLineChart } from './useLineChart';
-import { scaleLinear } from 'd3-scale';
-import { bisectCenter } from 'd3-array';
-import type { Path } from 'react-native-redash';
+import { LineChartDimensionsContext } from "./Chart"
+import { useLineChart } from "./useLineChart"
+import { scaleLinear } from "d3-scale"
+import { bisectCenter } from "d3-array"
+import type { Path } from "react-native-redash"
 
 export type LineChartCursorProps = LongPressGestureHandlerProps & {
-  children: React.ReactNode;
-  type: 'line' | 'crosshair';
-  snapToPoint?: boolean;
-};
+  children: React.ReactNode
+  type: "line" | "crosshair"
+  snapToPoint?: boolean
+}
 
-export const CursorContext = React.createContext({ type: '' });
-
-LineChartCursor.displayName = 'LineChartCursor';
+export const CursorContext = React.createContext({ type: "" })
 
 const linearScalePositionAndIndex = ({
   timestamps,
@@ -36,74 +34,75 @@ const linearScalePositionAndIndex = ({
   path,
   xDomain,
 }: {
-  timestamps: number[];
-  width: number;
-  xToUpdate: Animated.SharedValue<number>;
-  currentIndex: Animated.SharedValue<number>;
-  xPosition: number;
-  path: Path | undefined;
-  xDomain: [number, number] | undefined;
-}) => {
+  timestamps: number[]
+  width: number
+  xToUpdate: Animated.SharedValue<number>
+  currentIndex: Animated.SharedValue<number>
+  xPosition: number
+  path: Path | undefined
+  xDomain: [number, number] | undefined
+}): void => {
   if (!path) {
-    return;
+    return
   }
 
-  const domainArray = xDomain ?? [0, timestamps.length];
+  const domainArray = xDomain ?? [0, timestamps.length]
 
   // Same scale as in /src/charts/line/utils/getPath.ts
-  const scaleX = scaleLinear().domain(domainArray).range([0, width]);
+  const scaleX = scaleLinear().domain(domainArray).range([0, width])
 
   // Calculate a scaled timestamp for the current touch position
-  const xRelative = scaleX.invert(xPosition);
+  const xRelative = scaleX.invert(xPosition)
 
-  const closestIndex = bisectCenter(timestamps, xRelative);
-  const pathDataDelta = Math.abs(path.curves.length - timestamps.length); // sometimes there is a difference between data length and number of path curves.
+  const closestIndex = bisectCenter(timestamps, xRelative)
+  // sometimes theres a difference b/w data length and number of path curves.
+  const pathDataDelta = Math.abs(path.curves.length - timestamps.length)
   const closestPathCurve = Math.max(
     Math.min(bisectCenter(timestamps, xRelative), path.curves.length + 1) -
       pathDataDelta,
     0
-  );
+  )
 
-  const p0 = (closestIndex > 0 ? path.curves[closestPathCurve].to : path.move)
-    .x;
+  const p0 = (closestIndex > 0 ? path.curves[closestPathCurve].to : path.move).x
   // Update values
-  currentIndex.value = closestIndex;
-  xToUpdate.value = p0;
-};
+  currentIndex.value = closestIndex
+  xToUpdate.value = p0
+}
 
-export function LineChartCursor({
+export const LineChartCursor = ({
   children,
   snapToPoint,
   type,
   ...props
-}: LineChartCursorProps) {
+}: LineChartCursorProps): JSX.Element => {
   const { pathWidth: width, parsedPath } = React.useContext(
     LineChartDimensionsContext
-  );
-  const { currentX, currentIndex, isActive, data, xDomain } = useLineChart();
+  )
+  const { currentX, currentIndex, isActive, data, xDomain } = useLineChart()
 
   const onGestureEvent = useAnimatedGestureHandler<
     GestureEvent<LongPressGestureHandlerEventPayload>
   >({
     onActive: ({ x }) => {
       if (parsedPath) {
-        const boundedX = Math.max(0, x <= width ? x : width);
-        isActive.value = true;
+        const boundedX = Math.max(0, x <= width ? x : width)
+        isActive.value = true
         const xValues = data.map(({ timestamp }, i) =>
           xDomain ? timestamp : i
-        );
+        )
 
         // on Web, we could drag the cursor to be negative, breaking it
         // so we clamp the index at 0 to fix it
         // https://github.com/coinjar/react-native-wagmi-charts/issues/24
-        const minIndex = 0;
+        const minIndex = 0
         const boundedIndex = Math.max(
           minIndex,
           Math.round(boundedX / width / (1 / (data.length - 1)))
-        );
+        )
 
         if (snapToPoint) {
-          // We have to run this on the JS thread unfortunately as the scaleLinear functions won't work on UI thread
+          // We have to run this on the JS thread unfortunately as
+          // the scaleLinear functions won't work on UI thread
           runOnJS(linearScalePositionAndIndex)({
             timestamps: xValues,
             width,
@@ -112,26 +111,26 @@ export function LineChartCursor({
             xPosition: boundedX,
             path: parsedPath,
             xDomain,
-          });
+          })
         } else if (!snapToPoint) {
-          currentX.value = boundedX;
-          currentIndex.value = boundedIndex;
+          currentX.value = boundedX
+          currentIndex.value = boundedIndex
         }
       }
     },
     onEnd: () => {
-      isActive.value = false;
-      currentIndex.value = data.length - 1
+      isActive.value = false
+      currentIndex.value = -1
     },
-  });
+  })
 
   return (
     <CursorContext.Provider value={{ type }}>
       <LongPressGestureHandler
-        minDurationMs={0}
         maxDist={999999}
-        onGestureEvent={onGestureEvent}
+        minDurationMs={0}
         shouldCancelWhenOutside={false}
+        onGestureEvent={onGestureEvent}
         {...props}
       >
         <Animated.View style={StyleSheet.absoluteFill}>
@@ -139,5 +138,7 @@ export function LineChartCursor({
         </Animated.View>
       </LongPressGestureHandler>
     </CursorContext.Provider>
-  );
+  )
 }
+
+LineChartCursor.displayName = "LineChartCursor"

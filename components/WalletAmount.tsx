@@ -1,6 +1,7 @@
-import React from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { StyleSheet, View, useColorScheme } from "react-native"
 import { Skeleton, Text, Heading } from "native-base"
+import { DataContext } from "../providers/DataProvider"
 
 type WalletAmountType = {
   walletTotal: string | undefined
@@ -16,35 +17,43 @@ const currencyFormatter = (val: number): string => {
 }
 
 const WalletAmount = ({
-  walletTotal,
-  currentPrice,
-}: WalletAmountType): JSX.Element => {
+  walletTotal = "10238948.212312",
+  isLoaded,
+}): JSX.Element => {
   const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
+  const { apiData } = useContext(DataContext)
+  const [skeleton1, setSkeleton1] = useState([0, 0])
+  const [skeleton2, setSkeleton2] = useState([0, 0])
 
-  if (walletTotal === undefined || currentPrice === undefined) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.skeletonContainer}>
-          <Skeleton h="75" />
-        </View>
-        <View style={styles.skeletonContainer}>
-          <Skeleton h="10" />
-        </View>
-      </View>
-    )
+  const apiVal = apiData ? apiData : { currentPrice: "0" }
+
+  const setWidthHeight = (event, val): void => {
+    const { width, height } = event.nativeEvent.layout
+    if (val === 1) {
+      setSkeleton1([width, height])
+    }
+    if (val === 2) {
+      setSkeleton2([width, height])
+    }
   }
 
+  const { currentPrice } = apiVal
   const value = parseFloat(walletTotal) * parseFloat(currentPrice)
   const walletTotalMonetaryValue = currencyFormatter(value)
+
   return (
     <View style={styles.container}>
       <View>
-        <Heading color={textColor} size="3xl">
-          {walletTotalMonetaryValue}
-        </Heading>
+        <Skeleton h={58} isLoaded={isLoaded} marginBottom={1} w={310}>
+          <Heading color={textColor} size="3xl">
+            {walletTotalMonetaryValue}
+          </Heading>
+        </Skeleton>
       </View>
       <View>
-        <Text color={textColor} fontSize="xl">{`${walletTotal} KASPA`}</Text>
+        <Skeleton h={26} isLoaded={isLoaded} w={230}>
+          <Text color={textColor} fontSize="xl">{`${walletTotal} KASPA`}</Text>
+        </Skeleton>
       </View>
     </View>
   )

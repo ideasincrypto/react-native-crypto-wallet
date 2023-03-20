@@ -1,43 +1,41 @@
-import * as React from 'react';
-import Animated from 'react-native-reanimated';
-import { Defs, LinearGradient, Stop, Path, PathProps } from 'react-native-svg';
+import * as React from "react"
+import Animated from "react-native-reanimated"
+import { Defs, LinearGradient, Stop, Path, PathProps } from "react-native-svg"
 
-import { LineChartDimensionsContext } from './Chart';
-import { LineChartPathContext } from './LineChartPathContext';
-import useAnimatedPath from './useAnimatedPath';
+import { LineChartDimensionsContext } from "./Chart"
+import { LineChartPathContext } from "./LineChartPathContext"
+import useAnimatedPath from "./useAnimatedPath"
 
-const AnimatedPath = Animated.createAnimatedComponent(Path);
+const AnimatedPath = Animated.createAnimatedComponent(Path)
 
 export type LineChartGradientProps = Animated.AnimateProps<PathProps> & {
-  color?: string;
-  children?: React.ReactNode;
-};
+  color?: string
+  children?: React.ReactNode
+}
 
-let id = 0;
+let id = 0
 
-LineChartGradient.displayName = 'LineChartGradient';
-
-export function LineChartGradient({
+export const LineChartGradient = ({
   color: overrideColor = undefined,
   children,
   ...props
-}: LineChartGradientProps) {
-  const { area } = React.useContext(LineChartDimensionsContext);
+}: LineChartGradientProps): JSX.Element => {
+  const { area } = React.useContext(LineChartDimensionsContext)
   const { color: contextColor, isTransitionEnabled } =
-    React.useContext(LineChartPathContext);
+    React.useContext(LineChartPathContext)
 
-  const color = overrideColor || contextColor;
+  const color = overrideColor || contextColor
 
   ////////////////////////////////////////////////
 
   const { animatedProps } = useAnimatedPath({
     enabled: isTransitionEnabled,
     path: area,
-  });
+  })
 
   ////////////////////////////////////////////////
 
-  const localId = React.useRef(++id);
+  const localId = React.useRef(++id)
 
   ////////////////////////////////////////////////
 
@@ -76,5 +74,7 @@ export function LineChartGradient({
         {...props}
       />
     </>
-  );
+  )
 }
+
+LineChartGradient.displayName = "LineChartGradient"

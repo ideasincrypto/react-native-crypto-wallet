@@ -1,43 +1,41 @@
-import * as React from 'react';
-// @ts-ignore
-import * as d3Shape from 'd3-shape';
-import { Dimensions, StyleSheet, View, ViewProps } from 'react-native';
-import { LineChartContext } from './Context';
-import { LineChartIdProvider, useLineChartData } from './Data';
+import * as React from "react"
+import * as d3Shape from "d3-shape"
+import { Dimensions, StyleSheet, View, ViewProps } from "react-native"
+import { LineChartContext } from "./Context"
+import { LineChartIdProvider, useLineChartData } from "./Data"
 
-import { getArea, getPath } from './utils';
-import { parse, Path } from 'react-native-redash';
+import { getArea, getPath } from "./utils"
+import { parse, Path } from "react-native-redash"
 
 export const LineChartDimensionsContext = React.createContext({
   width: 0,
   height: 0,
   pointWidth: 0,
   parsedPath: {} as Path,
-  path: '',
-  area: '',
+  path: "",
+  area: "",
   shape: d3Shape.curveBumpX,
   gutter: 0,
   pathWidth: 0,
-});
+})
 
 type LineChartProps = ViewProps & {
-  children: React.ReactNode;
-  yGutter?: number;
-  width?: number;
-  height?: number;
-  shape?: unknown;
+  children: React.ReactNode
+  yGutter?: number
+  width?: number
+  height?: number
+  shape?: unknown
   /**
-   * If your `LineChart.Provider` uses a dictionary with multiple IDs for multiple paths, then this field is required.
+   * If your `LineChart.Provider` uses a dictionary with multiple
+   * IDs for multiple paths, then this field is required.
    */
-  id?: string;
-  absolute?: boolean;
-};
+  id?: string
+  absolute?: boolean
+}
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get("window")
 
-LineChart.displayName = 'LineChart';
-
-export function LineChart({
+export const LineChart = ({
   children,
   yGutter = 16,
   width = screenWidth,
@@ -46,19 +44,19 @@ export function LineChart({
   id,
   absolute,
   ...props
-}: LineChartProps) {
-  const { yDomain, xLength, xDomain } = React.useContext(LineChartContext);
+}: LineChartProps): JSX.Element => {
+  const { yDomain, xLength, xDomain } = React.useContext(LineChartContext)
   const { data } = useLineChartData({
     id,
-  });
+  })
 
   const pathWidth = React.useMemo(() => {
-    let allowedWidth = width;
+    let allowedWidth = width
     if (xLength > data.length) {
-      allowedWidth = (width * data.length) / xLength;
+      allowedWidth = (width * data.length) / xLength
     }
-    return allowedWidth;
-  }, [data.length, width, xLength]);
+    return allowedWidth
+  }, [data.length, width, xLength])
 
   const path = React.useMemo(() => {
     if (data && data.length > 0) {
@@ -70,10 +68,10 @@ export function LineChart({
         shape,
         yDomain,
         xDomain,
-      });
+      })
     }
-    return '';
-  }, [data, pathWidth, height, yGutter, shape, yDomain, xDomain]);
+    return ""
+  }, [data, pathWidth, height, yGutter, shape, yDomain, xDomain])
 
   const area = React.useMemo(() => {
     if (data && data.length > 0) {
@@ -84,17 +82,17 @@ export function LineChart({
         gutter: yGutter,
         shape,
         yDomain,
-      });
+      })
     }
-    return '';
-  }, [data, pathWidth, height, yGutter, shape, yDomain]);
+    return ""
+  }, [data, pathWidth, height, yGutter, shape, yDomain])
 
-  const dataLength = data.length;
-  const parsedPath = React.useMemo(() => parse(path), [path]);
+  const dataLength = data.length
+  const parsedPath = React.useMemo(() => parse(path), [path])
   const pointWidth = React.useMemo(
     () => width / (dataLength - 1),
     [dataLength, width]
-  );
+  )
 
   const contextValue = React.useMemo(
     () => ({
@@ -119,7 +117,7 @@ export function LineChart({
       pathWidth,
       shape,
     ]
-  );
+  )
 
   return (
     <LineChartIdProvider id={id}>
@@ -129,11 +127,13 @@ export function LineChart({
         </View>
       </LineChartDimensionsContext.Provider>
     </LineChartIdProvider>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   absolute: {
-    position: 'absolute',
+    position: "absolute",
   },
-});
+})
+
+LineChart.displayName = "LineChart"

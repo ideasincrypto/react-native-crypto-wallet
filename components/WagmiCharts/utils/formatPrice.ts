@@ -5,23 +5,23 @@
  */
 export function formatPrice({
   value: _value,
-  defaultPrice: _defaultPrice = '',
+  defaultPrice: _defaultPrice = "",
   precision,
 }: {
-  value: string;
-  defaultPrice?: string;
-  precision?: number;
+  value: string
+  defaultPrice?: string
+  precision?: number
 }) {
-  'worklet';
+  "worklet"
 
-  let defaultPrice = _defaultPrice;
-  if (typeof defaultPrice === 'number') {
-    defaultPrice = (defaultPrice as number).toString();
+  let defaultPrice = _defaultPrice
+  if (typeof defaultPrice === "number") {
+    defaultPrice = (defaultPrice as number).toString()
   }
 
-  let value = _value || defaultPrice?.replace?.(',', '');
+  const value = _value || defaultPrice?.replace?.(",", "")
   if (!value) {
-    return `0.00`;
+    return `0.00`
   }
 
   // let decimals =
@@ -30,7 +30,7 @@ export function formatPrice({
   //     ? Math.min(8, value.toString().slice(2).search(/[^0]/g) + 3)
   //     : 2);
 
-  const res = `${Number(value).toFixed(6)}`;
+  const res = `${Number(value).toFixed(6)}`
   // const vals = res.split('.');
   // if (vals.length > 0) {
   //   res = vals[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -38,5 +38,5 @@ export function formatPrice({
   //     return res + '.' + vals[1];
   //   }
   // }
-  return res;
+  return res
 }

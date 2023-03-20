@@ -1,25 +1,25 @@
-import type { TLineChartData, TLineChartDataProp } from '../types';
+import type { TLineChartData, TLineChartDataProp } from "../types"
 
-export function lineChartDataPropToArray(
+export const lineChartDataPropToArray = (
   dataProp: TLineChartDataProp
-): TLineChartData {
-  'worklet';
+): TLineChartData => {
+  "worklet"
 
   if (!dataProp) {
-    return [];
+    return []
   }
 
   if (Array.isArray(dataProp)) {
-    return dataProp;
+    return dataProp
   }
 
-  const data: TLineChartData = [];
+  const data: TLineChartData = []
 
   Object.values(dataProp).forEach((dataSet) => {
     if (dataSet) {
-      data.push(...dataSet);
+      data.push(...dataSet)
     }
-  });
+  })
 
-  return data;
+  return data
 }

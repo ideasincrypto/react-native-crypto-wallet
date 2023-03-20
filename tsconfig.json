@@ -11,6 +11,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "ban-ts-comment": false,
     "allowJs": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

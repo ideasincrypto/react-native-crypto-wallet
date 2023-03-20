@@ -6,17 +6,14 @@ import React, { useContext, useEffect } from "react"
 import WalletsTab from "../screens/WalletsTab"
 import TransactionsTab from "../screens/TransactionsTab"
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from "../types"
-import { DataContext } from "../providers/DataProvider"
-import moment from "moment"
-import { GraphPoint } from "react-native-graph"
-import { buildGraph } from "../components/LineGraph/Model"
+import { ApiType, DataContext } from "../providers/DataProvider"
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
 const BottomTabNavigator = (): JSX.Element => {
   const { pickedColor, setApiData } = useContext(DataContext)
 
-  const getApiData = async (): Promise<any> => {
+  const getApiData = async (): Promise<ApiType> => {
     try {
       // eslint-disable-next-line max-len
       const url = "https://wallet-server-r6l7o.ondigitalocean.app/api/data"

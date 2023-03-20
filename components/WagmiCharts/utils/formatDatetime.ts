@@ -3,14 +3,14 @@
  */
 export function formatDatetime({
   value,
-  locale = 'en-US',
+  locale = "en-US",
   options = {},
 }: {
-  value: number;
-  locale?: string;
-  options?: Intl.DateTimeFormatOptions;
+  value: number
+  locale?: string
+  options?: Intl.DateTimeFormatOptions
 }) {
-  'worklet';
-  const d = new Date(value);
-  return d.toLocaleString(locale, options);
+  "worklet"
+  const d = new Date(value)
+  return d.toLocaleString(locale, options)
 }

@@ -6,6 +6,27 @@ import React, { useState, createContext, useEffect } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { GraphPoint } from "react-native-graph"
 
+type DataPoint = {
+  timestamp: number
+  value: number
+}
+
+type Prices = DataPoint[]
+
+type Interval = {
+  percent_change: number
+  prices: Prices
+}
+
+export type ApiType = {
+  currentPrice: string
+  day: Interval
+  week: Interval
+  month: Interval
+  year: Interval
+  all: Interval
+}
+
 // exposed context for doing awesome things directly in React
 export const DataContext = createContext({
   loading: true,
@@ -16,7 +37,7 @@ export const DataContext = createContext({
   setWallets: (newWallet: object) => {},
   setSeed: (seed: string[]) => {},
 
-  apiData: {},
+  apiData: undefined,
   setApiData: (data) => {},
 })
 
@@ -26,13 +47,7 @@ export const DataProvider = ({ children }): JSX.Element => {
   const [wallets, setWallets] = useState([])
   const [pickedColor, setPickedColor] = useState("#6a7ee7")
 
-  // const [points1D, setPoints1D] = useState<GraphPoint[]>()
-  // const [points1W, setPoints1W] = useState<GraphPoint[]>()
-  // const [points1M, setPoints1M] = useState<GraphPoint[]>()
-  // const [points1Y, setPoints1Y] = useState<GraphPoint[]>()
-  // const [pointsALL, setPointsALL] = useState<GraphPoint[]>()
-
-  const [apiData, setApiData] = useState({})
+  const [apiData, setApiData] = useState<ApiType>()
 
   const getData = async () => {
     const walletData = await AsyncStorage.getItem("wallets")

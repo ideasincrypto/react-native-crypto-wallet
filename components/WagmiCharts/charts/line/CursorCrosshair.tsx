@@ -1,49 +1,45 @@
-import * as React from 'react';
-import { Platform, View, ViewProps } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  withSpring,
-} from 'react-native-reanimated';
+import * as React from "react"
+import { Platform, View, ViewProps } from "react-native"
+import Animated, { useAnimatedStyle, withSpring } from "react-native-reanimated"
 
-import { LineChartCursor, LineChartCursorProps } from './Cursor';
-import { useLineChart } from './useLineChart';
+import { LineChartCursor, LineChartCursorProps } from "./Cursor"
+import { useLineChart } from "./useLineChart"
 
 type LineChartCursorCrosshairProps = Omit<
   LineChartCursorProps,
-  'children' | 'type'
+  "children" | "type"
 > & {
-  children?: React.ReactNode;
-  color?: string;
-  size?: number;
-  outerSize?: number;
-  crosshairWrapperProps?: Animated.AnimateProps<ViewProps>;
-  crosshairProps?: ViewProps;
-  crosshairOuterProps?: ViewProps;
-};
+  children?: React.ReactNode
+  color?: string
+  size?: number
+  outerSize?: number
+  crosshairWrapperProps?: Animated.AnimateProps<ViewProps>
+  crosshairProps?: ViewProps
+  crosshairOuterProps?: ViewProps
+}
 
-LineChartCursorCrosshair.displayName = 'LineChartCursorCrosshair';
-
-export function LineChartCursorCrosshair({
+export const LineChartCursorCrosshair = ({
   children,
-  color = 'black',
+  color = "black",
   size = 8,
   outerSize = 32,
   crosshairWrapperProps = {},
   crosshairProps = {},
   crosshairOuterProps = {},
   ...props
-}: LineChartCursorCrosshairProps) {
-  const { currentX, currentY, isActive } = useLineChart();
+}: LineChartCursorCrosshairProps): JSX.Element => {
+  const { currentX, currentY, isActive } = useLineChart()
 
-  // It seems that enabling spring animation on initial render on Android causes a crash.
+  // It seems that enabling spring animation
+  // on initial render on Android causes a crash.
   const [enableSpringAnimation, setEnableSpringAnimation] = React.useState(
-    Platform.OS === 'ios'
-  );
+    Platform.OS === "ios"
+  )
   React.useEffect(() => {
     setTimeout(() => {
-      setEnableSpringAnimation(true);
-    }, 100);
-  }, []);
+      setEnableSpringAnimation(true)
+    }, 100)
+  }, [])
 
   const animatedCursorStyle = useAnimatedStyle(
     () => ({
@@ -60,7 +56,7 @@ export function LineChartCursorCrosshair({
       ],
     }),
     [currentX, currentY, enableSpringAnimation, isActive, outerSize]
-  );
+  )
 
   return (
     <LineChartCursor type="crosshair" {...props}>
@@ -70,8 +66,8 @@ export function LineChartCursorCrosshair({
           {
             width: outerSize,
             height: outerSize,
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: "center",
+            justifyContent: "center",
           },
           animatedCursorStyle,
           crosshairWrapperProps.style,
@@ -86,7 +82,7 @@ export function LineChartCursorCrosshair({
               height: outerSize,
               borderRadius: outerSize,
               opacity: 0.1,
-              position: 'absolute',
+              position: "absolute",
             },
             crosshairOuterProps.style,
           ]}
@@ -106,5 +102,7 @@ export function LineChartCursorCrosshair({
       </Animated.View>
       {children}
     </LineChartCursor>
-  );
+  )
 }
+
+LineChartCursorCrosshair.displayName = "LineChartCursorCrosshair"

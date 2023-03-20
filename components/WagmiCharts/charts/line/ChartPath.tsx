@@ -1,52 +1,50 @@
-import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Svg } from 'react-native-svg';
+import * as React from "react"
+import { StyleSheet, View } from "react-native"
+import { Svg } from "react-native-svg"
 import Animated, {
   useAnimatedProps,
   useSharedValue,
   withTiming,
   WithTimingConfig,
-} from 'react-native-reanimated';
-import flattenChildren from 'react-keyed-flatten-children';
+} from "react-native-reanimated"
+import flattenChildren from "react-keyed-flatten-children"
 
-import { LineChartDimensionsContext } from './Chart';
-import { LineChartPathContext } from './LineChartPathContext';
-import { LineChartPath, LineChartPathProps } from './Path';
-import { useLineChart } from './useLineChart';
+import { LineChartDimensionsContext } from "./Chart"
+import { LineChartPathContext } from "./LineChartPathContext"
+import { LineChartPath, LineChartPathProps } from "./Path"
+import { useLineChart } from "./useLineChart"
 
 const BACKGROUND_COMPONENTS = [
-  'LineChartHighlight',
-  'LineChartHorizontalLine',
-  'LineChartGradient',
-  'LineChartDot',
-  'LineChartTooltip',
-];
-const FOREGROUND_COMPONENTS = ['LineChartHighlight', 'LineChartDot'];
+  "LineChartHighlight",
+  "LineChartHorizontalLine",
+  "LineChartGradient",
+  "LineChartDot",
+  "LineChartTooltip",
+]
+const FOREGROUND_COMPONENTS = ["LineChartHighlight", "LineChartDot"]
 
-const AnimatedSVG = Animated.createAnimatedComponent(Svg);
+const AnimatedSVG = Animated.createAnimatedComponent(Svg)
 
 type LineChartPathWrapperProps = {
-  animationDuration?: number;
-  animationProps?: Omit<Partial<WithTimingConfig>, 'duration'>;
-  children?: React.ReactNode;
-  color?: string;
-  inactiveColor?: string;
-  width?: number;
-  widthOffset?: number;
-  pathProps?: Partial<LineChartPathProps>;
-  showInactivePath?: boolean;
-  animateOnMount?: 'foreground';
-  mountAnimationDuration?: number;
-  mountAnimationProps?: Partial<WithTimingConfig>;
-};
+  animationDuration?: number
+  animationProps?: Omit<Partial<WithTimingConfig>, "duration">
+  children?: React.ReactNode
+  color?: string
+  inactiveColor?: string
+  width?: number
+  widthOffset?: number
+  pathProps?: Partial<LineChartPathProps>
+  showInactivePath?: boolean
+  animateOnMount?: "foreground"
+  mountAnimationDuration?: number
+  mountAnimationProps?: Partial<WithTimingConfig>
+}
 
-LineChartPathWrapper.displayName = 'LineChartPathWrapper';
-
-export function LineChartPathWrapper({
+export const LineChartPathWrapper = ({
   animationDuration = 300,
   animationProps = {},
   children,
-  color = 'black',
+  color = "black",
   inactiveColor,
   width: strokeWidth = 3,
   widthOffset = 20,
@@ -55,52 +53,52 @@ export function LineChartPathWrapper({
   animateOnMount,
   mountAnimationDuration = animationDuration,
   mountAnimationProps = animationProps,
-}: LineChartPathWrapperProps) {
+}: LineChartPathWrapperProps): JSX.Element => {
   const { height, pathWidth, width } = React.useContext(
     LineChartDimensionsContext
-  );
-  const { currentX, isActive } = useLineChart();
-  const isMounted = useSharedValue(false);
-  const hasMountedAnimation = useSharedValue(false);
+  )
+  const { currentX, isActive } = useLineChart()
+  const isMounted = useSharedValue(false)
+  const hasMountedAnimation = useSharedValue(false)
 
   React.useEffect(() => {
-    isMounted.value = true;
+    isMounted.value = true
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   ////////////////////////////////////////////////
 
   const svgProps = useAnimatedProps(() => {
-    const shouldAnimateOnMount = animateOnMount === 'foreground';
+    const shouldAnimateOnMount = animateOnMount === "foreground"
     const inactiveWidth =
-      !isMounted.value && shouldAnimateOnMount ? 0 : pathWidth;
+      !isMounted.value && shouldAnimateOnMount ? 0 : pathWidth
 
     let duration =
       shouldAnimateOnMount && !hasMountedAnimation.value
         ? mountAnimationDuration
-        : animationDuration;
+        : animationDuration
     const props =
       shouldAnimateOnMount && !hasMountedAnimation.value
         ? mountAnimationProps
-        : animationProps;
+        : animationProps
 
     if (isActive.value) {
-      duration = 0;
+      duration = 0
     }
 
     return {
       width: withTiming(
         isActive.value
           ? // on Web, <svg /> elements don't support negative widths
-            // https://github.com/coinjar/react-native-wagmi-charts/issues/24#issuecomment-955789904
+            // https://github.com/coinjar/react-native-wagmi-charts/issues/24
             Math.max(currentX.value, 0)
           : inactiveWidth + widthOffset,
         Object.assign({ duration }, props),
         () => {
-          hasMountedAnimation.value = true;
+          hasMountedAnimation.value = true
         }
       ),
-    };
+    }
   }, [
     animateOnMount,
     animationDuration,
@@ -113,24 +111,24 @@ export function LineChartPathWrapper({
     mountAnimationProps,
     pathWidth,
     widthOffset,
-  ]);
+  ])
 
-  const viewSize = React.useMemo(() => ({ width, height }), [width, height]);
+  const viewSize = React.useMemo(() => ({ width, height }), [width, height])
 
   ////////////////////////////////////////////////
 
-  let backgroundChildren;
-  let foregroundChildren;
+  let backgroundChildren
+  let foregroundChildren
   if (children) {
-    const iterableChildren = flattenChildren(children);
+    const iterableChildren = flattenChildren(children)
     backgroundChildren = iterableChildren.filter((child) =>
-      // @ts-ignore
+      // @ts-ignore: idk why this is here
       BACKGROUND_COMPONENTS.includes(child?.type?.displayName)
-    );
+    )
     foregroundChildren = iterableChildren.filter((child) =>
-      // @ts-ignore
+      // @ts-ignore: idk why this is here
       FOREGROUND_COMPONENTS.includes(child?.type?.displayName)
-    );
+    )
   }
 
   ////////////////////////////////////////////////
@@ -145,7 +143,7 @@ export function LineChartPathWrapper({
         }}
       >
         <View style={viewSize}>
-          <Svg width={width} height={height}>
+          <Svg height={height} width={width}>
             <LineChartPath
               color={color}
               inactiveColor={inactiveColor}
@@ -171,5 +169,7 @@ export function LineChartPathWrapper({
         </View>
       </LineChartPathContext.Provider>
     </>
-  );
+  )
 }
+
+LineChartPathWrapper.displayName = "LineChartPathWrapper"

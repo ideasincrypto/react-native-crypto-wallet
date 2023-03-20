@@ -1,21 +1,21 @@
-import React from 'react';
+import React from "react"
 import Animated, {
   useAnimatedProps,
   useDerivedValue,
   withTiming,
-} from 'react-native-reanimated';
-import { Line as SVGLine, LineProps } from 'react-native-svg';
-import { getYForX } from 'react-native-redash';
+} from "react-native-reanimated"
+import { Line as SVGLine, LineProps } from "react-native-svg"
+import { getYForX } from "react-native-redash"
 
-import { LineChartDimensionsContext } from './Chart';
-import { useLineChart } from './useLineChart';
+import { LineChartDimensionsContext } from "./Chart"
+import { useLineChart } from "./useLineChart"
 
-const AnimatedLine = Animated.createAnimatedComponent(SVGLine);
+const AnimatedLine = Animated.createAnimatedComponent(SVGLine)
 
 type HorizontalLineProps = {
-  color?: string;
-  lineProps?: Partial<LineProps>;
-  offsetY?: number;
+  color?: string
+  lineProps?: Partial<LineProps>
+  offsetY?: number
   /**
    * (Optional) A pixel value to nudge the line up or down.
    *
@@ -35,34 +35,32 @@ type HorizontalLineProps = {
    */
   at?:
     | {
-        index: number;
-        value?: never;
+        index: number
+        value?: never
       }
     | {
-        index?: never;
-        value: number;
+        index?: never
+        value: number
       }
-    | number;
-};
+    | number
+}
 
-LineChartHorizontalLine.displayName = 'LineChartHorizontalLine';
-
-export function LineChartHorizontalLine({
-  color = 'gray',
+export const LineChartHorizontalLine = ({
+  color = "gray",
   lineProps = {},
   at = { index: 0 },
   offsetY = 0,
-}: HorizontalLineProps) {
+}: HorizontalLineProps): JSX.Element => {
   const { width, parsedPath, pointWidth, height, gutter } = React.useContext(
     LineChartDimensionsContext
-  );
-  const { yDomain } = useLineChart();
+  )
+  const { yDomain } = useLineChart()
 
   const y = useDerivedValue(() => {
-    if (typeof at === 'number' || at.index != null) {
-      const index = typeof at === 'number' ? at : at.index;
-      const yForX = getYForX(parsedPath!, pointWidth * index) || 0;
-      return withTiming(yForX + offsetY);
+    if (typeof at === "number" || at.index != null) {
+      const index = typeof at === "number" ? at : at.index
+      const yForX = getYForX(parsedPath!, pointWidth * index) || 0
+      return withTiming(yForX + offsetY)
     }
     /**
      * <gutter>
@@ -74,14 +72,14 @@ export function LineChartHorizontalLine({
      * <gutter>
      */
 
-    const offsetTop = yDomain.max - at.value;
-    const percentageOffsetTop = offsetTop / (yDomain.max - yDomain.min);
+    const offsetTop = yDomain.max - at.value
+    const percentageOffsetTop = offsetTop / (yDomain.max - yDomain.min)
 
-    const heightBetweenGutters = height - gutter * 2;
+    const heightBetweenGutters = height - gutter * 2
 
-    const offsetTopPixels = gutter + percentageOffsetTop * heightBetweenGutters;
+    const offsetTopPixels = gutter + percentageOffsetTop * heightBetweenGutters
 
-    return withTiming(offsetTopPixels + offsetY);
+    return withTiming(offsetTopPixels + offsetY)
   }, [
     at,
     gutter,
@@ -91,7 +89,7 @@ export function LineChartHorizontalLine({
     pointWidth,
     yDomain.max,
     yDomain.min,
-  ]);
+  ])
 
   const lineAnimatedProps = useAnimatedProps(
     () => ({
@@ -101,15 +99,17 @@ export function LineChartHorizontalLine({
       y2: y.value,
     }),
     [width, y]
-  );
+  )
 
   return (
     <AnimatedLine
       animatedProps={lineAnimatedProps}
-      strokeWidth={2}
       stroke={color}
       strokeDasharray="3 3"
+      strokeWidth={2}
       {...lineProps}
     />
-  );
+  )
 }
+
+LineChartHorizontalLine.displayName = "LineChartHorizontalLine"

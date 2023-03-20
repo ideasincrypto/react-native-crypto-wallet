@@ -10,41 +10,29 @@ import LineGraph from "../../components/LineGraph"
 
 const GRAPH_INTERVAL_1D_PARAM = "1D"
 
-const WalletsTab = (): JSX.Element => {
+const WalletsTab = ({ data, setData }): JSX.Element => {
   const openBottomSheetTransact = (): boolean => {
     return true
   }
 
   const { apiData } = useContext(DataContext)
 
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    // console.log(graphData)
-    const isLoading = apiData && JSON.stringify(apiData) !== "{}"
-    setLoading(!isLoading)
-  }, [apiData])
-
   return (
     <View style={styles.container}>
       {/* Wallet Picker */}
       <View style={{ paddingBottom: 30, paddingTop: 30 }}>
-        <WalletAmount
-          currentPrice={`${apiData.currentPrice}`}
-          walletTotal={"10238948.212312"}
-        />
+        <WalletAmount isLoaded={apiData} />
       </View>
       <View style={{ paddingBottom: 40 }}>
         <WalletTransact openBottomSheetTransact={openBottomSheetTransact} />
       </View>
       <View style={{ justifyContent: "center", alignItems: "center" }}>
-        {loading ? (
-          <View style={[styles.loadingView, { height: 375 }]}>
-            <Loading />
-          </View>
-        ) : (
-          <LineGraph apiData={apiData} />
-        )}
+        <LineGraph
+          apiData={apiData}
+          data={data}
+          isLoaded={apiData}
+          setData={setData}
+        />
       </View>
     </View>
   )
