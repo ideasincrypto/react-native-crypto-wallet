@@ -5,15 +5,19 @@ import React, {
   useMemo,
   useState,
 } from "react"
-import { Dimensions, StyleSheet, useColorScheme, View } from "react-native"
-// import { LineChart } from "react-native-wagmi-charts"
-import { DataContext } from "../providers/DataProvider"
-import { LineChart } from "./WagmiCharts"
-// import { LineChart } from "react-native-wagmi-charts"
-// import { LineChart } from "@colinfran/react-native-wagmi-charts"
+import {
+  Dimensions,
+  StyleSheet,
+  useColorScheme,
+  View,
+  Text,
+} from "react-native"
+import { DataContext } from "../../providers/DataProvider"
+import { LineChart } from "./charts/line"
 import * as Haptics from "expo-haptics"
-import { ChartSwitcher } from "./WagmiCharts/components/ChartSwitcher"
+import { ChartSwitcher } from "../LineGraph/components/ChartSwitcher"
 import { Skeleton } from "native-base"
+import { DefaultValues } from "./components/DefaultValues"
 
 const LineGraph = ({ apiData, isLoaded }): JSX.Element => {
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0)
@@ -91,22 +95,16 @@ const LineGraph = ({ apiData, isLoaded }): JSX.Element => {
   const [min, max] = useMemo(() => {
     if (Array.isArray(data)) {
       const values = data.map((d) => d.value)
-      // console.log(values)
-
       const _min = Math.min(...values)
-      // console.log(_min)
-
       const _max = Math.max(...values)
       return [
         values.findLastIndex((v) => v === _min),
         values.findLastIndex((v) => v === _max),
       ]
     }
-    console.log("not an array")
     return [0, 0]
   }, [data])
 
-  // console.log(min, max)
   const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
 
   const invokeHaptic = (): void => {
@@ -114,7 +112,6 @@ const LineGraph = ({ apiData, isLoaded }): JSX.Element => {
   }
 
   const onCurrentIndexChange = useCallback((index: number) => {
-    console.log(index)
     invokeHaptic()
   }, [])
 
@@ -127,6 +124,11 @@ const LineGraph = ({ apiData, isLoaded }): JSX.Element => {
   const screenWidth = Dimensions.get("window").width
 
   // const { min, max } = minMax
+  const [showCurrentPrice, setShowCurrentPrice] = useState(true)
+
+  const showHideCurrentPriceFunc = (): void => {
+    setShowCurrentPrice(!showCurrentPrice)
+  }
 
   return (
     <View style={styles.container}>
@@ -171,19 +173,35 @@ const LineGraph = ({ apiData, isLoaded }): JSX.Element => {
                   // xGutter={0}
                   yGutter={-5}
                 />
-                <LineChart.Gradient />
+                <LineChart.Gradient color={textColor} />
               </LineChart.Path>
               <LineChart.CursorCrosshair
                 color={pickedColor}
                 snapToPoint={true}
+                onActivated={showHideCurrentPriceFunc}
+                onEnded={showHideCurrentPriceFunc}
               />
             </LineChart>
           </Skeleton>
           <Skeleton h={5} isLoaded={isLoaded} marginTop={1} w={60}>
-            <LineChart.PriceText style={{ color: textColor }} />
+            {showCurrentPrice ? (
+              <DefaultValues
+                style={{ color: textColor }}
+                text={apiData?.currentPrice}
+              />
+            ) : (
+              <LineChart.PriceText style={{ color: textColor }} />
+            )}
           </Skeleton>
           <Skeleton h={5} isLoaded={isLoaded} marginTop={1} w={156}>
-            <LineChart.DatetimeText style={{ color: textColor }} />
+            {showCurrentPrice ? (
+              <DefaultValues
+                style={{ color: textColor }}
+                text={new Date().toLocaleString() as any}
+              />
+            ) : (
+              <LineChart.DatetimeText style={{ color: textColor }} />
+            )}
           </Skeleton>
         </LineChart.Provider>
       </View>

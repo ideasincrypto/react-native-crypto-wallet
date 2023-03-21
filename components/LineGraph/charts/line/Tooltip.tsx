@@ -151,11 +151,11 @@ export const LineChartTooltip = ({
       onLayout={handleLayout}
       {...props}
       style={[
-        // {
-        //   position: "absolute",
-        //   padding: 4,
-        //   alignSelf: "flex-start",
-        // },
+        {
+          position: "absolute",
+          padding: 4,
+          alignSelf: "flex-start",
+        },
         animatedCursorStyle,
         props.style,
       ]}

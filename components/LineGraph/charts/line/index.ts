@@ -15,7 +15,7 @@ import { LineChartDatetimeText } from "./DatetimeText"
 import { useLineChartDatetime } from "./useDatetime"
 import { useLineChartPrice } from "./usePrice"
 import { useLineChart } from "./useLineChart"
-import { LineChartHoverTrap } from "../line/HoverTrap"
+import { LineChartHoverTrap } from "./HoverTrap"
 
 export * from "./Chart"
 export * from "./ChartPath"
