@@ -27,15 +27,15 @@ const BottomTabNavigator = (): JSX.Element => {
     }
   }
 
-  const getData = async (): Promise<void> => {
-    const apiData = await getApiData()
-    if (apiData) {
-      setApiData(apiData)
-    }
-  }
-
   useEffect(() => {
+    const getData = async (): Promise<void> => {
+      const apiData = await getApiData()
+      if (apiData) {
+        setApiData(apiData)
+      }
+    }
     getData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

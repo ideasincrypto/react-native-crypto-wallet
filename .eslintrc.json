@@ -4,7 +4,8 @@
      "es2021":true
   },
   "extends":[
-   "plugin:import/react",
+     "eslint:recommended",
+     "plugin:import/react",
      "plugin:react/recommended",
      "plugin:@typescript-eslint/recommended",
      "plugin:prettier/recommended"
@@ -21,9 +22,14 @@
    "import",
      "react",
      "@typescript-eslint",
-     "react-hooks"
+     "react-hooks",
+     "unused-imports"
   ],
   "rules":{ 
+   "@typescript-eslint/no-explicit-any": ["off"],
+
+    "unused-imports/no-unused-imports-ts": "error",
+
    "@typescript-eslint/ban-ts-comment": [
       "error",
       {"ts-ignore": "allow-with-description"}

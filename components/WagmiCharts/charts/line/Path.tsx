@@ -18,7 +18,8 @@ export type LineChartPathProps = Animated.AnimateProps<PathProps> & {
    *
    * If `false`, changes in the chart's path will not animate.
    *
-   * While this use case is rare, it may be useful on web, where animations might not work as well.
+   * While this use case is rare, it may be useful on web,
+   * where animations might not work as well.
    *
    * **Example**
    *

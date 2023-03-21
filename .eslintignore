@@ -5,3 +5,5 @@
 /.expo/
 /.expo-shared/
 /server/
+./babel.config.js
+babel.config.js

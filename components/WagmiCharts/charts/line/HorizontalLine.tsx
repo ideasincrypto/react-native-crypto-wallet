@@ -19,7 +19,8 @@ type HorizontalLineProps = {
   /**
    * (Optional) A pixel value to nudge the line up or down.
    *
-   * This may be useful to customize the line's position based on the thickness of your cursor or chart path.
+   * This may be useful to customize the line's position based
+   * on the thickness of your cursor or chart path.
    *
    * ```tsx
    * <LineChart.HorizontalLine
@@ -59,6 +60,7 @@ export const LineChartHorizontalLine = ({
   const y = useDerivedValue(() => {
     if (typeof at === "number" || at.index != null) {
       const index = typeof at === "number" ? at : at.index
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const yForX = getYForX(parsedPath!, pointWidth * index) || 0
       return withTiming(yForX + offsetY)
     }

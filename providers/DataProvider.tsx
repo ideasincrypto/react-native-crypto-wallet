@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React, { useState, createContext, useEffect } from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { GraphPoint } from "react-native-graph"
 
 type DataPoint = {
   timestamp: number

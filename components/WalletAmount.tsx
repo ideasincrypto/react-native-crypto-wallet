@@ -1,12 +1,7 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext } from "react"
 import { StyleSheet, View, useColorScheme } from "react-native"
 import { Skeleton, Text, Heading } from "native-base"
 import { DataContext } from "../providers/DataProvider"
-
-type WalletAmountType = {
-  walletTotal: string | undefined
-  currentPrice: string | undefined
-}
 
 const currencyFormatter = (val: number): string => {
   const formatter = new Intl.NumberFormat("en-US", {
@@ -22,20 +17,8 @@ const WalletAmount = ({
 }): JSX.Element => {
   const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
   const { apiData } = useContext(DataContext)
-  const [skeleton1, setSkeleton1] = useState([0, 0])
-  const [skeleton2, setSkeleton2] = useState([0, 0])
 
   const apiVal = apiData ? apiData : { currentPrice: "0" }
-
-  const setWidthHeight = (event, val): void => {
-    const { width, height } = event.nativeEvent.layout
-    if (val === 1) {
-      setSkeleton1([width, height])
-    }
-    if (val === 2) {
-      setSkeleton2([width, height])
-    }
-  }
 
   const { currentPrice } = apiVal
   const value = parseFloat(walletTotal) * parseFloat(currentPrice)

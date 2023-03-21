@@ -29,7 +29,8 @@ export type LineChartDotProps = {
   /**
    * If `always`, the outer dot will still animate when interaction is active.
    *
-   * If `while-inactive`, the outer dot will animate only when the interaction is inactive.
+   * If `while-inactive`, the outer dot will animate
+   * only when the interaction is inactive.
    *
    * Default: `while-inactive`
    */
@@ -72,6 +73,7 @@ export const LineChartDot = ({
 
   const x = useDerivedValue(() => withTiming(pointWidth * at), [at, pointWidth])
   const y = useDerivedValue(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     () => withTiming(getYForX(parsedPath!, x.value) || 0),
     [parsedPath, x]
   )

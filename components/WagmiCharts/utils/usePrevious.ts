@@ -1,6 +1,6 @@
 import * as React from "react"
-
-export function usePrevious<T>(value: T) {
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
+export const usePrevious = <T>(value: T): any => {
   // The ref object is a generic container whose current property is mutable ...
   // ... and can hold any value, similar to an instance property on a class
   const ref = React.useRef<T>()

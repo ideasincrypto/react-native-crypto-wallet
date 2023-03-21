@@ -9,7 +9,7 @@ type Props = {
   children: ReactNode
 } & ViewProps
 
-export const LineChartGroup = ({ children, ...props }: Props) => {
+export const LineChartGroup = ({ children, ...props }: Props): JSX.Element => {
   const flatChildren = flattenChildren(children)
   const flatChildrenCount = Children.count(flatChildren)
   return (

@@ -12,7 +12,6 @@ let isEnabled = false
 // the following logic comes from the creator of react-native-web
 // https://gist.github.com/necolas/1c494e44e23eb7f8c5864a2fac66299a
 // it's also used by MotiPressable's hover interactions
-// https://github.com/nandorojo/moti/blob/master/packages/interactions/src/pressable/hoverable.tsx
 if (canUseDOM) {
   /**
    * Web browsers emulate mouse events (and hover states) after touch events.
@@ -86,14 +85,15 @@ export const LineChartHoverTrap = (): JSX.Element => {
 
   return (
     <View
+      // eslint-disable-next-line react/jsx-sort-props
       onMouseLeave={onMouseLeave}
       style={StyleSheet.absoluteFill}
       // @ts-expect-error mouse move event
       onMouseMove={React.useCallback(
         // eslint-disable-next-line no-undef
         (e: React.MouseEvent<HTMLElement>) => {
-          let rect = e.currentTarget.getBoundingClientRect()
-          let x = e.clientX - rect.left // x position within the element.
+          const rect = e.currentTarget.getBoundingClientRect()
+          const x = e.clientX - rect.left // x position within the element.
           onMouseMove({ x })
         },
         [onMouseMove]

@@ -1,14 +1,9 @@
-import React, { useContext, useEffect, useState } from "react"
-import { Button, StyleSheet, View } from "react-native"
+import React, { useContext } from "react"
+import { StyleSheet, View } from "react-native"
 import WalletAmount from "../../components/WalletAmount"
 import WalletTransact from "../../components/WalletTransact"
-import { WalletGraph } from "../../components/WalletGraph"
 import { DataContext } from "../../providers/DataProvider"
-import { ChartSwitcherList } from "../../components/WalletGraph/ChartSwitcher"
-import Loading from "../../screens/Loading"
 import LineGraph from "../../components/LineGraph"
-
-const GRAPH_INTERVAL_1D_PARAM = "1D"
 
 const WalletsTab = ({ data, setData }): JSX.Element => {
   const openBottomSheetTransact = (): boolean => {

@@ -1,7 +1,7 @@
 /**
  * @worklet
  */
-export function formatDatetime({
+export const formatDatetime = ({
   value,
   locale = "en-US",
   options = {},
@@ -9,7 +9,7 @@ export function formatDatetime({
   value: number
   locale?: string
   options?: Intl.DateTimeFormatOptions
-}) {
+}): string => {
   "worklet"
   const d = new Date(value)
   return d.toLocaleString(locale, options)

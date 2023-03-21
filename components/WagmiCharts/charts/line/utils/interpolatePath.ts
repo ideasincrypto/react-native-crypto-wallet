@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * Reanimated compatible fork of https://github.com/pbeshai/d3-interpolate-path
  */
@@ -226,7 +228,7 @@ const commandToString = (command): any => {
  * @param {Object} bCommand Command object from path `d` attribute to match against
  * @return {Object} aCommand converted to type of bCommand
  */
-function convertToSameType(aCommand, bCommand) {
+const convertToSameType = (aCommand, bCommand) => {
   "worklet"
 
   const conversionMap = {
