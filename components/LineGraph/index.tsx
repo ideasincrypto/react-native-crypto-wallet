@@ -65,32 +65,20 @@ const LineGraph = ({ apiData, isLoaded }): JSX.Element => {
   ]
 
   const dayData = apiData?.day?.prices || defaultData
-  const weekData = apiData?.week?.prices || defaultData
-  const monthData = apiData?.month?.prices || defaultData
-  const yearData = apiData?.year?.prices || defaultData
-  const allData = apiData?.all?.prices || defaultData
+  const weekData = apiData?.week?.prices
+  const monthData = apiData?.month?.prices
+  const yearData = apiData?.year?.prices
+  const allData = apiData?.all?.prices
 
-  const arrayButtons = [
-    { prices: dayData, buttonTitle: "Day" },
-    { prices: weekData, buttonTitle: "Week" },
-    { prices: monthData, buttonTitle: "Month" },
-    { prices: yearData, buttonTitle: "Year" },
-    { prices: allData, buttonTitle: "All" },
-  ]
-
-  // const [minMax, setMinMax] = useState({ min: 0, max: 0 })
-
-  // useEffect(() => {
-  //   let obj = { min: 0, max: 0 }
-  //   if (Array.isArray(data)) {
-  //     const values = data.map((d) => d.value)
-  //     const _min = Math.min(...values)
-  //     const _max = Math.max(...values)
-  //     obj.min = values.findIndex((v) => v === _min)
-  //     obj.max = values.findIndex((v) => v === _max)
-  //   }
-  //   setMinMax(obj)
-  // }, [data])
+  const arrayButtons = [{ prices: dayData, buttonTitle: "Day" }]
+  if (apiData?.week?.prices.length > 0)
+    arrayButtons.push({ prices: weekData, buttonTitle: "Week" })
+  if (apiData?.month?.prices.length > 0)
+    arrayButtons.push({ prices: monthData, buttonTitle: "Month" })
+  if (apiData?.year?.prices.length > 0)
+    arrayButtons.push({ prices: yearData, buttonTitle: "Year" })
+  if (apiData?.all?.prices.length > 0)
+    arrayButtons.push({ prices: allData, buttonTitle: "All" })
 
   const [min, max] = useMemo(() => {
     if (Array.isArray(data)) {
