@@ -19,25 +19,28 @@ import { ChartSwitcher } from "../LineGraph/components/ChartSwitcher"
 import { Skeleton } from "native-base"
 import { DefaultValues } from "./components/DefaultValues"
 
+const defaultData = [
+  {
+    timestamp: 1679246714543,
+    value: 0.014540020460445197,
+  },
+  {
+    timestamp: 1679247047789,
+    value: 0.014571506674731024,
+  },
+  {
+    timestamp: 1679247288167,
+    value: 0.014452072671740143,
+  },
+]
+
 const LineGraph = ({ apiData, isLoaded }): JSX.Element => {
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0)
+  const [arrayButtonsData, setArrayButtonsData] = useState([
+    { prices: apiData?.day?.prices || defaultData, buttonTitle: "Day" },
+  ])
 
-  const [data, setData] = useState(
-    apiData?.week?.prices || [
-      {
-        timestamp: 1679246714543,
-        value: 0.014540020460445197,
-      },
-      {
-        timestamp: 1679247047789,
-        value: 0.014571506674731024,
-      },
-      {
-        timestamp: 1679247288167,
-        value: 0.014452072671740143,
-      },
-    ]
-  )
+  const [data, setData] = useState(apiData?.week?.prices || defaultData)
 
   useEffect(() => {
     if (apiData) {
@@ -49,36 +52,23 @@ const LineGraph = ({ apiData, isLoaded }): JSX.Element => {
 
   const { pickedColor } = useContext(DataContext)
 
-  const defaultData = [
-    {
-      timestamp: 1679246714543,
-      value: 0.014540020460445197,
-    },
-    {
-      timestamp: 1679247047789,
-      value: 0.014571506674731024,
-    },
-    {
-      timestamp: 1679247288167,
-      value: 0.014452072671740143,
-    },
-  ]
-
-  const dayData = apiData?.day?.prices || defaultData
-  const weekData = apiData?.week?.prices
-  const monthData = apiData?.month?.prices
-  const yearData = apiData?.year?.prices
-  const allData = apiData?.all?.prices
-
-  const arrayButtons = [{ prices: dayData, buttonTitle: "Day" }]
-  if (apiData?.week?.prices.length > 0)
-    arrayButtons.push({ prices: weekData, buttonTitle: "Week" })
-  if (apiData?.month?.prices.length > 0)
-    arrayButtons.push({ prices: monthData, buttonTitle: "Month" })
-  if (apiData?.year?.prices.length > 0)
-    arrayButtons.push({ prices: yearData, buttonTitle: "Year" })
-  if (apiData?.all?.prices.length > 0)
-    arrayButtons.push({ prices: allData, buttonTitle: "All" })
+  useEffect(() => {
+    const dayData = apiData?.day?.prices || defaultData
+    const weekData = apiData?.week?.prices
+    const monthData = apiData?.month?.prices
+    const yearData = apiData?.year?.prices
+    const allData = apiData?.all?.prices
+    const arrayButtons = [{ prices: dayData, buttonTitle: "Day" }]
+    if (apiData?.week?.prices.length > 0)
+      arrayButtons.push({ prices: weekData, buttonTitle: "Week" })
+    if (apiData?.month?.prices.length > 0)
+      arrayButtons.push({ prices: monthData, buttonTitle: "Month" })
+    if (apiData?.year?.prices.length > 0)
+      arrayButtons.push({ prices: yearData, buttonTitle: "Year" })
+    if (apiData?.all?.prices.length > 0)
+      arrayButtons.push({ prices: allData, buttonTitle: "All" })
+    setArrayButtonsData(arrayButtons)
+  }, [apiData])
 
   const [min, max] = useMemo(() => {
     if (Array.isArray(data)) {
@@ -122,7 +112,7 @@ const LineGraph = ({ apiData, isLoaded }): JSX.Element => {
     <View style={styles.container}>
       <Skeleton isLoaded={isLoaded} marginBottom={1} w={screenWidth}>
         <View style={styles.buttonContainer}>
-          {arrayButtons.map(
+          {arrayButtonsData.map(
             (element, i) =>
               element.prices.lenth !== 0 && (
                 <ChartSwitcher

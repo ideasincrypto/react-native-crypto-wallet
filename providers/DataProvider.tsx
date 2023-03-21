@@ -30,6 +30,8 @@ export type ApiType = {
 export const DataContext = createContext({
   loading: true,
   pickedColor: "#6a7ee7",
+  setPickedColor: (hex: string) => {},
+
   wallets: [],
   seed: [],
   setLoading: (loading: boolean) => {},
