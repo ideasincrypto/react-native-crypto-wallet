@@ -8,10 +8,12 @@ import {
   SafeAreaView,
   FlatList,
   Linking,
+  useColorScheme,
 } from "react-native"
 import data from "./frameworks.json"
 
 const FrameworksScreen = (): JSX.Element => {
+  const color = useColorScheme() === "dark" ? "#fff" : "#000"
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ height: "100%" }}>
@@ -19,8 +21,10 @@ const FrameworksScreen = (): JSX.Element => {
           data={data}
           ListHeaderComponent={
             <View style={{ paddingTop: 20 }}>
-              <Text style={{ fontSize: 30 }}>Frameworks</Text>
-              <Text style={{ fontSize: 16, marginBottom: 20 }}>
+              <Text style={{ fontSize: 30, color: color }}>Frameworks</Text>
+              <Text
+                style={{ fontSize: 16, marginBottom: 20, color: color }}
+              >
                 Listed below are the open-sourced frameworks that were used to
                 build this application. Their efforts are much appreciated.
               </Text>
@@ -33,7 +37,7 @@ const FrameworksScreen = (): JSX.Element => {
                   marginBottom: 10,
                   flexDirection: "column",
                   alignItems: "center",
-                  borderColor: "#000",
+                  borderColor: color,
                   borderWidth: 2,
                   padding: 10,
                   borderRadius: 10,
@@ -41,10 +45,10 @@ const FrameworksScreen = (): JSX.Element => {
                 }}
               >
                 <View>
-                  <Text style={{ fontSize: 20 }}>{item.key}</Text>
+                  <Text style={{ fontSize: 20, color: color }}>{item.key}</Text>
                 </View>
                 <View>
-                  <Text style={{ fontSize: 14 }}>{item.description}</Text>
+                  <Text style={{ fontSize: 14, color: color }}>{item.description}</Text>
                 </View>
                 <Button
                   marginTop={4}
@@ -60,7 +64,7 @@ const FrameworksScreen = (): JSX.Element => {
                     }}
                   >
                     <Ionicons color={"lightblue"} name="link" size={24} />
-                    <Text>Link to source code</Text>
+                    <Text style={{ color: color }}>Link to source code</Text>
                   </View>
                 </Button>
               </View>

@@ -19,6 +19,8 @@ export type BottomTabParamList = {
 export type TabOneParamList = {
   TabOneScreen: undefined
   WalletsTab: undefined
+  Send: undefined
+  Receive: undefined
 }
 
 export type TabTwoParamList = {

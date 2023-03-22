@@ -19,6 +19,8 @@ import FrameworksScreen from "../screens/SettingsTab/Settings/FrameworksScreen"
 import LicenseScreen from "../screens/SettingsTab/Settings/LicenseScreen"
 // eslint-disable-next-line max-len
 import PrivacyPolicyScreen from "../screens/SettingsTab/Settings/PrivacyPolicyScreen"
+import Recieve from "../screens/WalletsTab/Receive"
+import Send from "../screens/WalletsTab/Send"
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
@@ -115,10 +117,20 @@ const TabOneStack = createStackNavigator<TabOneParamList>()
 
 const TabOneNavigator = (): JSX.Element => {
   return (
-    <TabOneStack.Navigator screenOptions={{ headerShown: false }}>
+    <TabOneStack.Navigator>
       <TabOneStack.Screen
         component={WalletsTab}
         name="WalletsTab"
+        options={{ title: "", headerShown: false }}
+      />
+      <TabOneStack.Screen
+        component={Recieve}
+        name="Receive"
+        options={{ title: "" }}
+      />
+      <TabOneStack.Screen
+        component={Send}
+        name="Send"
         options={{ title: "" }}
       />
     </TabOneStack.Navigator>

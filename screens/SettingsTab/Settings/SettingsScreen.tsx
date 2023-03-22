@@ -26,7 +26,7 @@ import { useNavigation } from "@react-navigation/native"
 type IconType = {
   name: string
   color: string
-  type: string
+  type?: string
 }
 const Icon = (props: IconType): JSX.Element => {
   if (props.type === "mci") {
@@ -77,7 +77,7 @@ const SettingsScreen = (): JSX.Element => {
                 <TouchableOpacity>
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="space-between"
                     margin="auto"
                     w="90%"
@@ -116,7 +116,7 @@ const SettingsScreen = (): JSX.Element => {
                 <TouchableOpacity style={{ width: "100%" }}>
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="center"
                     margin="auto"
                     w="90%"
@@ -141,7 +141,7 @@ const SettingsScreen = (): JSX.Element => {
                 <TouchableOpacity>
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="center"
                     margin="auto"
                     w="90%"
@@ -158,11 +158,7 @@ const SettingsScreen = (): JSX.Element => {
                       </Text>
                     </View>
                     <View style={styles.listItemRight}>
-                      <Icon
-                        color={pickedColor}
-                        name="arrow-forward"
-                        style={styles.align}
-                      />
+                      <Icon color={pickedColor} name="arrow-forward" />
                     </View>
                   </HStack>
                 </TouchableOpacity>
@@ -173,13 +169,11 @@ const SettingsScreen = (): JSX.Element => {
             <View style={[styles.box, { backgroundColor: boxColor }]}>
               <VStack divider={<Divider />} width="100%">
                 <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("ColorPickerScreen" as never)
-                  }
+                  onPress={() => navigation.navigate("ColorPickerScreen")}
                 >
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="center"
                     margin="auto"
                     w="90%"
@@ -200,7 +194,7 @@ const SettingsScreen = (): JSX.Element => {
                 <TouchableOpacity onPress={goToRating}>
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="space-between"
                     margin="auto"
                     w="90%"
@@ -219,11 +213,11 @@ const SettingsScreen = (): JSX.Element => {
                   </HStack>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("LicenseScreen" as never)}
+                  onPress={() => navigation.navigate("LicenseScreen")}
                 >
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="space-between"
                     margin="auto"
                     w="90%"
@@ -242,13 +236,11 @@ const SettingsScreen = (): JSX.Element => {
                   </HStack>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("PrivacyPolicyScreen" as never)
-                  }
+                  onPress={() => navigation.navigate("PrivacyPolicyScreen")}
                 >
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="space-between"
                     margin="auto"
                     w="90%"
@@ -271,13 +263,11 @@ const SettingsScreen = (): JSX.Element => {
                   </HStack>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("FrameworksScreen" as never)
-                  }
+                  onPress={() => navigation.navigate("FrameworksScreen")}
                 >
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="space-between"
                     margin="auto"
                     w="90%"
@@ -313,7 +303,7 @@ const SettingsScreen = (): JSX.Element => {
                 >
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="center"
                     margin="auto"
                     w="90%"
@@ -338,7 +328,7 @@ const SettingsScreen = (): JSX.Element => {
                 >
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="space-between"
                     margin="auto"
                     w="90%"
@@ -363,7 +353,7 @@ const SettingsScreen = (): JSX.Element => {
                 >
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="space-between"
                     margin="auto"
                     w="90%"
@@ -388,7 +378,7 @@ const SettingsScreen = (): JSX.Element => {
                 >
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="space-between"
                     margin="auto"
                     w="90%"
@@ -415,7 +405,7 @@ const SettingsScreen = (): JSX.Element => {
                 >
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="space-between"
                     margin="auto"
                     w="90%"
@@ -446,7 +436,7 @@ const SettingsScreen = (): JSX.Element => {
                 >
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="space-between"
                     margin="auto"
                     w="90%"
@@ -471,7 +461,7 @@ const SettingsScreen = (): JSX.Element => {
                 >
                   <HStack
                     alignItems="center"
-                    h={16}
+                    h={12}
                     justifyContent="space-between"
                     margin="auto"
                     w="90%"
@@ -496,10 +486,10 @@ const SettingsScreen = (): JSX.Element => {
         <View>
           <View style={{ margin: 30, backgroundColor: "transparent" }}>
             <View style={{ backgroundColor: "transparent" }}>
-              <Text style={{ textAlign: "center" }}>
+              <Text style={{ textAlign: "center", color: textColor }}>
                 Designed, devloped, and built
               </Text>
-              <Text style={{ textAlign: "center" }}>
+              <Text style={{ textAlign: "center", color: textColor }}>
                 by Colin Franceschini.
               </Text>
             </View>
