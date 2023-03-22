@@ -11,18 +11,33 @@ const WalletsTab = (): JSX.Element => {
     return true
   }
 
-  const { apiData, showAlert } = useContext(DataContext)
+  const { apiData, showAlert, pickedColor } = useContext(DataContext)
 
   return (
     <View style={styles.container}>
       {/* Wallet Picker */}
-      <View style={{ paddingBottom: 30, paddingTop: 30 }}>
+      <View
+        style={{
+          alignSelf: "flex-start",
+          // paddingBottom: 30,
+          // paddingTop: 30,
+          // backgroundColor: pickedColor,
+          width: "100%",
+          // height: "100%",
+        }}
+      >
         <WalletAmount isLoaded={apiData} />
       </View>
-      <View style={{ paddingBottom: 40 }}>
-        <WalletTransact openBottomSheetTransact={openBottomSheetTransact} />
+      <View>
+        <WalletTransact />
       </View>
-      <View style={{ justifyContent: "center", alignItems: "center" }}>
+      <View
+        style={{
+          // justifyContent: "center",
+          // justifyContent: "flex-end",
+          // alignSelf: "flex-end",
+        }}
+      >
         <LineGraph apiData={apiData} isLoaded={apiData} />
       </View>
       <Slide in={showAlert} placement="top">
@@ -54,8 +69,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
+    justifyContent: "space-between",
+    // padding: 20,
     position: "relative",
   },
   title: {

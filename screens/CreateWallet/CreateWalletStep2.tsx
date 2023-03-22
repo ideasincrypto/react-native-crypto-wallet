@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react"
-import { StyleSheet, View, Dimensions, useColorScheme } from "react-native"
+import { StyleSheet, View, Dimensions, useColorScheme, SafeAreaView, ScrollView } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { Button, Text, Alert, VStack, HStack } from "native-base"
 
@@ -21,50 +21,52 @@ const CreateWalletStep2 = ({
   }, [setSeed])
 
   return (
-    <View style={styles.container}>
-      <View style={styles.alertContainer}>
-        <Alert
-          colorScheme="error"
-          status="error"
-          variant="outline-light"
-          w="100%"
-        >
-          <VStack flexShrink={1} space={2} w="100%">
-            <HStack
-              alignItems="center"
-              flexShrink={1}
-              justifyContent="space-between"
-              space={2}
-            >
-              <HStack alignItems="center" flexShrink={1} space={2}>
-                <Alert.Icon />
-                <Text
-                  color={textColor}
-                  style={{ paddingLeft: 20, flex: 1, flexWrap: "wrap" }}
-                >
-                  Never share your secret seed phrase. Write this seed phrase
-                  down and put it in a safe and secure place.
-                </Text>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.alertContainer}>
+          <Alert
+            colorScheme="error"
+            status="error"
+            variant="outline-light"
+            w="100%"
+          >
+            <VStack flexShrink={1} space={2} w="100%">
+              <HStack
+                alignItems="center"
+                flexShrink={1}
+                justifyContent="space-between"
+                space={2}
+              >
+                <HStack alignItems="center" flexShrink={1} space={2}>
+                  <Alert.Icon />
+                  <Text
+                    color={textColor}
+                    style={{ paddingLeft: 20, flex: 1, flexWrap: "wrap" }}
+                  >
+                    Never share your secret seed phrase. Write this seed phrase
+                    down and put it in a safe and secure place.
+                  </Text>
+                </HStack>
               </HStack>
-            </HStack>
-          </VStack>
-        </Alert>
-      </View>
-      <View style={styles.seedContainer}>
-        {seed?.map((element, index) => (
-          <View key={element} style={styles.seedItemView}>
-            <View style={styles.seedItem}>
-              <Text>{`${index + 1}. ${element}`}</Text>
+            </VStack>
+          </Alert>
+        </View>
+        <View style={styles.seedContainer}>
+          {seed?.map((element, index) => (
+            <View key={element} style={styles.seedItemView}>
+              <View style={styles.seedItem}>
+                <Text>{`${index + 1}. ${element}`}</Text>
+              </View>
             </View>
-          </View>
-        ))}
+          ))}
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button onPress={() => navigation.navigate("CreateWalletStep3")}>
+            Continue
+          </Button>
+        </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <Button onPress={() => navigation.navigate("CreateWalletStep3")}>
-          Continue
-        </Button>
-      </View>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "flex-start",
     backgroundColor: "lightblue",
-    padding: 20,
+    padding: 10,
     borderRadius: 4,
     width: Dimensions.get("window").width / 2 - 30,
   },

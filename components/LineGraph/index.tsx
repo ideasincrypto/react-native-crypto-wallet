@@ -101,7 +101,6 @@ const LineGraph = ({ apiData, isLoaded }): JSX.Element => {
   const showHideCurrentPriceFunc = (): void => {
     setShowCurrentPrice(!showCurrentPrice)
   }
-
   return (
     <View style={styles.container}>
       <Skeleton isLoaded={isLoaded} marginBottom={1} w={screenWidth}>
@@ -129,7 +128,7 @@ const LineGraph = ({ apiData, isLoaded }): JSX.Element => {
             isLoaded={isLoaded}
             w={Dimensions.get("window").width}
           >
-            <LineChart height={250}>
+            <LineChart height={Dimensions.get("window").height < 800 ? 200 : 250}>
               <LineChart.Path color={pickedColor}>
                 <LineChart.Tooltip
                   at={max}
@@ -186,6 +185,7 @@ const styles = StyleSheet.create({
     // alignItems: "center",
     width: "100%",
     padding: 20,
+    paddingTop: 0,
   },
   buttonContainer: {
     flexDirection: "row",

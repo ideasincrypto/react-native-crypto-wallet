@@ -1,17 +1,16 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Button, Center, Tooltip } from "native-base"
-import { View, StyleSheet, Text, useColorScheme, Share } from "react-native"
+import { Button, Center, Tooltip, useContrastText } from "native-base"
+import { View, StyleSheet, Text, useColorScheme, Share, Dimensions } from "react-native"
 import QRCode from "react-native-qrcode-svg"
 import * as Clipboard from "expo-clipboard"
 import { DataContext } from "../../providers/DataProvider"
-import isDarkColor from "is-dark-color"
 
 const Recieve = (): JSX.Element => {
   const walletStr = "my4aAnuUSTPYiBVkhFd6EQ3Yss9D3ry32s"
   const [isOpen, setIsOpen] = useState(false)
   const { pickedColor } = useContext(DataContext)
   const textColor = useColorScheme() === "dark" ? "#fff" : "#000"
-  const buttonLeftText = isDarkColor(pickedColor) ? "#fff" : "#000"
+  const buttonLeftText = useContrastText(pickedColor)
 
   const copyOnPress = async (): Promise<void> => {
     await Clipboard.setStringAsync(walletStr)
@@ -34,7 +33,7 @@ const Recieve = (): JSX.Element => {
         <QRCode
           backgroundColor="transparent"
           color={pickedColor}
-          size={200}
+          size={Dimensions.get("window").height < 800 ? 150 : 200}
           value={walletStr}
         />
       </View>
@@ -52,7 +51,11 @@ const Recieve = (): JSX.Element => {
             placement="bottom"
             style={{ margin: "auto", alignSelf: "center" }}
           >
-            <Button.Group borderColor={pickedColor} isAttached>
+            <Button.Group
+              borderColor={pickedColor}
+              borderRadius={12}
+              isAttached
+            >
               <Button
                 _pressed={{ style: { backgroundColor: "#fff", color: "#000" } }}
                 _text={{ color: buttonLeftText }}
