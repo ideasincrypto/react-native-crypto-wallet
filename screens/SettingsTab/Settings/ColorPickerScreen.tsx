@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { View, StyleSheet, Text } from "react-native"
+import { View, StyleSheet } from "react-native"
 import ColorPicker, {
   Panel1,
   Swatches,
@@ -16,7 +16,7 @@ const ColorPickerScreen = (): JSX.Element => {
       <ColorPicker
         style={{ width: "70%" }}
         value={pickedColor}
-        onComplete={ ({ hex }) => setPickedColor(hex)}
+        onComplete={({ hex }) => setPickedColor(hex)}
       >
         <Preview hideInitialColor={true} />
         <Panel1 />

@@ -1,18 +1,8 @@
-import React, { useContext } from "react"
-import { StyleSheet, Button, View } from "react-native"
-import { Text } from "native-base"
-import { DataContext } from "../../providers/DataProvider"
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import React from "react"
+import { StyleSheet, View } from "react-native"
 import SettingsScreen from "./Settings/SettingsScreen"
 
 const SettingsTab = (): JSX.Element => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { wallets, setWallets } = useContext(DataContext)
-
-  const removeWallet = (): void => {
-    setWallets([])
-    AsyncStorage.setItem("wallets", JSON.stringify([]))
-  }
   return (
     <View style={styles.container}>
       <SettingsScreen />

@@ -1,43 +1,20 @@
 import { Ionicons } from "@expo/vector-icons"
-import React, { useContext } from "react"
+import { Button } from "native-base"
+import React from "react"
 import {
   View,
   StyleSheet,
   Text,
   SafeAreaView,
   FlatList,
-  Button,
   Linking,
 } from "react-native"
-import { TouchableOpacity } from "react-native-gesture-handler"
-import ColorPicker, {
-  Panel1,
-  Swatches,
-  Preview,
-  OpacitySlider,
-  HueSlider,
-} from "reanimated-color-picker"
-import { DataContext } from "../../../providers/DataProvider"
+import data from "./frameworks.json"
 
 const FrameworksScreen = (): JSX.Element => {
-  const data = [
-    { key: "React Native", src: "https://github.com/facebook/react-native" },
-    { key: "React", src: "https://github.com/facebook/react" },
-    { key: "Expo", src: "https://github.com/expo/expo" },
-    { key: "Native Base", src: "https://github.com/GeekyAnts/NativeBase" },
-    {
-      key: "React Native Wagmi Charts",
-      src: "https://github.com/coinjar/react-native-wagmi-charts",
-    },
-    {
-      key: "Bottom Sheet",
-      src: "https://github.com/gorhom/react-native-bottom-sheet",
-    },
-  ]
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ paddingHorizontal: 20, height: "100%" }}>
+      <View style={{ height: "100%" }}>
         <FlatList
           data={data}
           ListHeaderComponent={
@@ -49,25 +26,47 @@ const FrameworksScreen = (): JSX.Element => {
               </Text>
             </View>
           }
-          renderItem={({ item }) => {
+          renderItem={({ item, index }) => {
             return (
               <View
                 style={{
                   marginBottom: 10,
-                  flexDirection: "row",
+                  flexDirection: "column",
                   alignItems: "center",
+                  borderColor: "#000",
+                  borderWidth: 2,
+                  padding: 10,
+                  borderRadius: 10,
+                  ...(index === data.length - 1 && { marginBottom: 60 }),
                 }}
               >
-                <Text style={{ fontSize: 20 }}>{`\u2023 ${item.key}`}</Text>
-                <TouchableOpacity
-                  style={{ paddingLeft: 10 }}
+                <View>
+                  <Text style={{ fontSize: 20 }}>{item.key}</Text>
+                </View>
+                <View>
+                  <Text style={{ fontSize: 14 }}>{item.description}</Text>
+                </View>
+                <Button
+                  marginTop={4}
+                  size="sm"
+                  variant="outline"
                   onPress={async () => await Linking.openURL(item.src)}
                 >
-                  <Ionicons color={"blue"} name="link" size={24} />
-                </TouchableOpacity>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 10,
+                    }}
+                  >
+                    <Ionicons color={"lightblue"} name="link" size={24} />
+                    <Text>Link to source code</Text>
+                  </View>
+                </Button>
               </View>
             )
           }}
+          style={{ paddingHorizontal: 20 }}
         />
       </View>
     </SafeAreaView>

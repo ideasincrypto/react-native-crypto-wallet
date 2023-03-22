@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from "react"
-import { ColorSchemeName } from "react-native"
+import { ColorSchemeName, View } from "react-native"
 import {
   NavigationContainer,
   DefaultTheme,
   DarkTheme,
 } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
+import { Alert } from "native-base"
 
 import NotFoundScreen from "../screens/NotFoundScreen"
 import Loading from "../screens/Loading"
@@ -23,6 +24,7 @@ import {
 import { Ionicons } from "@expo/vector-icons"
 import * as Font from "expo-font"
 import * as SplashScreen from "expo-splash-screen"
+import { VStack, HStack, IconButton, CloseIcon } from "native-base"
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -69,7 +71,7 @@ export default Navigation
 const Stack = createStackNavigator<RootStackParamList>()
 
 const RootNavigator = (): JSX.Element => {
-  const { loading, wallets } = useContext(DataContext)
+  const { loading, wallets, showAlert } = useContext(DataContext)
   if (loading) {
     return (
       <Stack.Navigator>
@@ -92,11 +94,6 @@ const RootNavigator = (): JSX.Element => {
             component={BottomTabNavigator}
             name="Root"
             options={{ title: "Kaspa Wallet" }}
-          />
-          <Stack.Screen
-            component={NotFoundScreen}
-            name="NotFound"
-            options={{ title: "Oops!" }}
           />
         </>
       ) : (

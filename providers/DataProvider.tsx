@@ -18,12 +18,14 @@ type Interval = {
 }
 
 export type ApiType = {
-  currentPrice: string
-  day: Interval
-  week: Interval
-  month: Interval
-  year: Interval
-  all: Interval
+  error?: boolean
+  errorDescription?: string
+  currentPrice?: string
+  day?: Interval
+  week?: Interval
+  month?: Interval
+  year?: Interval
+  all?: Interval
 }
 
 // exposed context for doing awesome things directly in React
@@ -40,6 +42,9 @@ export const DataContext = createContext({
 
   apiData: undefined,
   setApiData: (data) => {},
+
+  showAlert: undefined,
+  setShowAlert: (data) => {},
 })
 
 export const DataProvider = ({ children }): JSX.Element => {
@@ -49,6 +54,7 @@ export const DataProvider = ({ children }): JSX.Element => {
   const [pickedColor, setPickedColor] = useState("#6a7ee7")
 
   const [apiData, setApiData] = useState<ApiType>()
+  const [showAlert, setShowAlert] = useState()
 
   const getData = async () => {
     const walletData = await AsyncStorage.getItem("wallets")
@@ -75,6 +81,9 @@ export const DataProvider = ({ children }): JSX.Element => {
 
         apiData,
         setApiData,
+
+        showAlert,
+        setShowAlert,
       }}
     >
       {children}

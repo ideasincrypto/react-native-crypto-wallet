@@ -1,0 +1,32 @@
+[
+  {
+    "key":"React Native",
+    "description":"React Native is an open-source JavaScript framework, designed for building apps on multiple platforms like iOS, Android, and also web applications, utilizing the very same code base. It is based on React, and it brings all its glory to mobile app development.",
+    "src":"https://github.com/facebook/react-native"
+  },
+  {
+    "key":"React",
+    "description":"React is a library for building composable user interfaces. It encourages the creation of reusable UI components, which present data that changes over time.",
+    "src":"https://github.com/facebook/react"
+  },
+  {
+    "key":"Expo",
+    "description": "Expo is an open-source framework for apps that run natively on Android, iOS, and the web. Expo brings together the best of mobile and the web and enables many important features for building and scaling an app.",
+    "src":"https://github.com/expo/expo"
+  },
+  {
+    "key":"Native Base",
+    "description": "NativeBase is an accessible, utility-first component library that helps you build consistent UI across Android, iOS and Web.",
+    "src":"https://github.com/GeekyAnts/NativeBase"
+  },
+  {
+    "key":"React Native Wagmi Charts",
+    "description": "A sweet & simple line chart library for React Native.",
+    "src":"https://github.com/coinjar/react-native-wagmi-charts"
+  },
+  {
+    "key":"Bottom Sheet",
+    "description": "A performant interactive bottom sheet with fully configurable options",
+    "src":"https://github.com/gorhom/react-native-bottom-sheet"
+  }
+]

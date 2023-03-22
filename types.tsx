@@ -11,18 +11,25 @@ export type RootStackParamList = {
 }
 
 export type BottomTabParamList = {
-  WalletsTab: undefined
-  TransactionsTab: undefined
+  TabOne: undefined
+  TabTwo: undefined
+  TabThree: undefined
 }
 
 export type TabOneParamList = {
   TabOneScreen: undefined
+  WalletsTab: undefined
 }
 
 export type TabTwoParamList = {
   TabTwoScreen: undefined
+  TransactionsTab: undefined
 }
 
 export type TabThreeParamList = {
-  TabThreeScreen: undefined
+  SettingsTab: undefined
+  ColorPickerScreen: undefined
+  FrameworksScreen: undefined
+  LicenseScreen: undefined
+  PrivacyPolicyScreen: undefined
 }

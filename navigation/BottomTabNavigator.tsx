@@ -17,11 +17,13 @@ import SettingsScreen from "../screens/SettingsTab/Settings/SettingsScreen"
 import ColorPickerScreen from "../screens/SettingsTab/Settings/ColorPickerScreen"
 import { Button } from "react-native"
 import FrameworksScreen from "../screens/SettingsTab/Settings/FrameworksScreen"
+import LicenseScreen from "../screens/SettingsTab/Settings/LicenseScreen"
+import PrivacyPolicyScreen from "../screens/SettingsTab/Settings/PrivacyPolicyScreen"
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
 
 const BottomTabNavigator = (): JSX.Element => {
-  const { pickedColor, setApiData } = useContext(DataContext)
+  const { pickedColor, setApiData, setShowAlert } = useContext(DataContext)
 
   const getApiData = async (): Promise<ApiType> => {
     try {
@@ -33,15 +35,22 @@ const BottomTabNavigator = (): JSX.Element => {
       return json
     } catch (error) {
       console.error(error)
-      return {}
+      return { error: true, errorDescription: "" }
     }
   }
 
   useEffect(() => {
     const getData = async (): Promise<void> => {
       const apiData = await getApiData()
-      if (apiData) {
+      if (apiData && !apiData.error) {
         setApiData(apiData)
+      }
+      if (apiData.error) {
+        setShowAlert({
+          description:
+            // eslint-disable-next-line max-len
+            "An error occurred while trying to fetch data for the wallet. Please close the app and try running the app again.",
+        })
       }
     }
     getData()
@@ -50,7 +59,7 @@ const BottomTabNavigator = (): JSX.Element => {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="WalletsTab"
+      initialRouteName="TabOne"
       screenOptions={{
         tabBarActiveTintColor: pickedColor,
         headerShown: false,
@@ -58,7 +67,7 @@ const BottomTabNavigator = (): JSX.Element => {
     >
       <BottomTab.Screen
         component={TabOneNavigator}
-        name="WalletTab"
+        name="TabOne"
         options={{
           title: "",
           tabBarIcon: ({ color }) => <TabBarIcon color={color} name="wallet" />,
@@ -92,7 +101,14 @@ const BottomTabNavigator = (): JSX.Element => {
 export default BottomTabNavigator
 
 const TabBarIcon = (props: { name: string; color: string }): JSX.Element => {
-  return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />
+  return (
+    <Ionicons
+      color={props.color}
+      name={props.name as any}
+      size={30}
+      style={{ marginBottom: -3 }}
+    />
+  )
 }
 
 const TabOneStack = createStackNavigator<TabOneParamList>()
@@ -136,6 +152,16 @@ const TabThreeNavigator = (): JSX.Element => {
       <TabThreeStack.Screen
         component={ColorPickerScreen}
         name="ColorPickerScreen"
+        options={{ title: "" }}
+      />
+      <TabThreeStack.Screen
+        component={LicenseScreen}
+        name="LicenseScreen"
+        options={{ title: "" }}
+      />
+      <TabThreeStack.Screen
+        component={PrivacyPolicyScreen}
+        name="PrivacyPolicyScreen"
         options={{ title: "" }}
       />
       <TabThreeStack.Screen

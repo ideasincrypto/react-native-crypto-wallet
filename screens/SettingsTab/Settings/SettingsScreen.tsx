@@ -1,10 +1,9 @@
-import React, { useContext, useLayoutEffect } from "react"
+import React, { useContext } from "react"
 import {
   StyleSheet,
   Linking,
   View,
   Text,
-  Dimensions,
   useColorScheme,
   ScrollView,
 } from "react-native"
@@ -12,7 +11,6 @@ import { VStack, Divider, HStack } from "native-base"
 
 import Constants from "expo-constants"
 
-import logo from "../../assets/images/makefg2.png"
 const version = Constants.manifest.version
 import * as StoreReview from "expo-store-review"
 
@@ -31,13 +29,33 @@ type IconType = {
   type: string
 }
 const Icon = (props: IconType): JSX.Element => {
-  if (props.type === "mci")
-    return <MaterialCommunityIcons size={30} {...props} />
-  if (props.type === "fa") return <FontAwesome5 size={30} {...props} />
-  return <Ionicons size={30} {...props} />
+  if (props.type === "mci") {
+    return (
+      <MaterialCommunityIcons
+        color={props.color}
+        name={props.name as any}
+        size={30}
+      />
+    )
+  }
+  if (props.type === "fa") {
+    return (
+      <FontAwesome5 color={props.color} name={props.name as any} size={30} />
+    )
+  }
+  return <Ionicons color={props.color} name={props.name as any} size={30} />
 }
 
-const screenWidth = Dimensions.get("window").width
+const goToRating = (): void => {
+  if (!StoreReview.isAvailableAsync()) {
+    Linking.openURL(
+      // eslint-disable-next-line max-len
+      "https://apps.apple.com/us/app/wallpaperqr/id1558057109?action=write-review"
+    )
+  } else {
+    StoreReview.requestReview()
+  }
+}
 
 const SettingsScreen = (): JSX.Element => {
   const navigation = useNavigation()
@@ -155,7 +173,9 @@ const SettingsScreen = (): JSX.Element => {
             <View style={[styles.box, { backgroundColor: boxColor }]}>
               <VStack divider={<Divider />} width="100%">
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("ColorPickerScreen")}
+                  onPress={() =>
+                    navigation.navigate("ColorPickerScreen" as never)
+                  }
                 >
                   <HStack
                     alignItems="center"
@@ -177,7 +197,7 @@ const SettingsScreen = (): JSX.Element => {
                     </View>
                   </HStack>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={goToRating}>
                   <HStack
                     alignItems="center"
                     h={16}
@@ -198,7 +218,9 @@ const SettingsScreen = (): JSX.Element => {
                     </View>
                   </HStack>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("LicenseScreen" as never)}
+                >
                   <HStack
                     alignItems="center"
                     h={16}
@@ -219,7 +241,11 @@ const SettingsScreen = (): JSX.Element => {
                     </View>
                   </HStack>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("PrivacyPolicyScreen" as never)
+                  }
+                >
                   <HStack
                     alignItems="center"
                     h={16}
@@ -245,7 +271,9 @@ const SettingsScreen = (): JSX.Element => {
                   </HStack>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("FrameworksScreen")}
+                  onPress={() =>
+                    navigation.navigate("FrameworksScreen" as never)
+                  }
                 >
                   <HStack
                     alignItems="center"
@@ -393,7 +421,11 @@ const SettingsScreen = (): JSX.Element => {
                     w="90%"
                   >
                     <View style={styles.listItemLeft}>
-                      <Icon color={pickedColor} name="facebook-square" type="fa" />
+                      <Icon
+                        color={pickedColor}
+                        name="facebook-square"
+                        type="fa"
+                      />
                     </View>
                     <View style={styles.listItemCenter}>
                       <Text style={{ fontSize: 18, color: textColor }}>
@@ -434,9 +466,7 @@ const SettingsScreen = (): JSX.Element => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={async () =>
-                    await Linking.openURL(
-                      "https://github.com/kaspanet"
-                    )
+                    await Linking.openURL("https://github.com/kaspanet")
                   }
                 >
                   <HStack
@@ -460,6 +490,37 @@ const SettingsScreen = (): JSX.Element => {
                   </HStack>
                 </TouchableOpacity>
               </VStack>
+            </View>
+          </View>
+        </View>
+        <View>
+          <View style={{ margin: 30, backgroundColor: "transparent" }}>
+            <View style={{ backgroundColor: "transparent" }}>
+              <Text style={{ textAlign: "center" }}>
+                Designed, devloped, and built
+              </Text>
+              <Text style={{ textAlign: "center" }}>
+                by Colin Franceschini.
+              </Text>
+            </View>
+            <View
+              style={{
+                alignItems: "center",
+                backgroundColor: "transparent",
+              }}
+            >
+              {/* <Thumbnail source={logo} small square /> */}
+            </View>
+            <View
+              style={{
+                backgroundColor: "transparent",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{ fontSize: 12, color: "grey" }}
+              >{`v${version}`}</Text>
             </View>
           </View>
         </View>
