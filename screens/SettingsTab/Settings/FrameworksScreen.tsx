@@ -3,7 +3,7 @@ import { Button } from "native-base"
 import React from "react"
 import {
   View,
-  StyleSheet,
+  // StyleSheet,
   Text,
   SafeAreaView,
   FlatList,
@@ -73,14 +73,14 @@ const FrameworksScreen = (): JSX.Element => {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    width: "100%",
-    padding: 20,
-  },
-})
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     // alignItems: 'center',
+//     // justifyContent: 'center',
+//     width: "100%",
+//     padding: 20,
+//   },
+// })
 
 export default FrameworksScreen

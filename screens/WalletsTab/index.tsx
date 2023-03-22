@@ -1,16 +1,6 @@
 import React, { useContext } from "react"
 import { StyleSheet, View } from "react-native"
-import {
-  Alert,
-  CloseIcon,
-  HStack,
-  WarningOutlineIcon,
-  VStack,
-  Text,
-  Slide,
-  Box,
-  CheckIcon,
-} from "native-base"
+import { HStack, WarningOutlineIcon, Text, Slide, Box } from "native-base"
 import WalletAmount from "../../components/WalletAmount"
 import WalletTransact from "../../components/WalletTransact"
 import { DataContext } from "../../providers/DataProvider"
@@ -21,7 +11,7 @@ const WalletsTab = (): JSX.Element => {
     return true
   }
 
-  const { apiData, showAlert, setShowAlert } = useContext(DataContext)
+  const { apiData, showAlert } = useContext(DataContext)
 
   return (
     <View style={styles.container}>
@@ -35,33 +25,6 @@ const WalletsTab = (): JSX.Element => {
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <LineGraph apiData={apiData} isLoaded={apiData} />
       </View>
-      {/* <Slide in={showAlert} placement="bottom">
-        <View style={{ height: "100%", width: "100%", position: "absolute", bottom: 20, left: 20, right: 20 }}>
-          <Alert status="error" w="100%">
-            <VStack flexShrink={1} space={2} w="100%">
-              <HStack flexShrink={1} justifyContent="space-between" space={2}>
-                <HStack flexShrink={1} space={2}>
-                  <Alert.Icon mt="1" />
-                  <Text color="coolGray.800" fontSize="md">
-                    {showAlert?.description || ""}
-                  </Text>
-                </HStack>
-                <IconButton
-                  _focus={{
-                    borderWidth: 0,
-                  }}
-                  _icon={{
-                    color: "coolGray.600",
-                  }}
-                  icon={<CloseIcon size="3" />}
-                  variant="unstyled"
-                  onPress={() => setShowAlert(null)}
-                />
-              </HStack>
-            </VStack>
-          </Alert>
-        </View>
-      </Slide> */}
       <Slide in={showAlert} placement="top">
         <Box
           alignItems="center"
@@ -73,7 +36,7 @@ const WalletsTab = (): JSX.Element => {
           w="100%"
           safeArea
         >
-          <HStack space={2} paddingLeft={5} paddingRight={5}>
+          <HStack paddingLeft={5} paddingRight={5} space={2}>
             <WarningOutlineIcon color="white" mt="1" size="4" />
             <Text color="white" fontWeight="medium" textAlign="center">
               {showAlert?.description}

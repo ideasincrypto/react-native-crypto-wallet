@@ -5,13 +5,7 @@ import React, {
   useMemo,
   useState,
 } from "react"
-import {
-  Dimensions,
-  StyleSheet,
-  useColorScheme,
-  View,
-  Text,
-} from "react-native"
+import { Dimensions, StyleSheet, useColorScheme, View } from "react-native"
 import { DataContext } from "../../providers/DataProvider"
 import { LineChart } from "./charts/line"
 import * as Haptics from "expo-haptics"
@@ -89,7 +83,7 @@ const LineGraph = ({ apiData, isLoaded }): JSX.Element => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
   }
 
-  const onCurrentIndexChange = useCallback((index: number) => {
+  const onCurrentIndexChange = useCallback(() => {
     invokeHaptic()
   }, [])
 

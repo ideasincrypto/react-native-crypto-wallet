@@ -12,12 +12,12 @@ import {
   TabTwoParamList,
 } from "../types"
 import { ApiType, DataContext } from "../providers/DataProvider"
-import SettingsTab from "../screens/SettingsTab"
 import SettingsScreen from "../screens/SettingsTab/Settings/SettingsScreen"
+// eslint-disable-next-line max-len
 import ColorPickerScreen from "../screens/SettingsTab/Settings/ColorPickerScreen"
-import { Button } from "react-native"
 import FrameworksScreen from "../screens/SettingsTab/Settings/FrameworksScreen"
 import LicenseScreen from "../screens/SettingsTab/Settings/LicenseScreen"
+// eslint-disable-next-line max-len
 import PrivacyPolicyScreen from "../screens/SettingsTab/Settings/PrivacyPolicyScreen"
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>()
